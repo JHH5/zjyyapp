@@ -1,6 +1,27 @@
 <template>
   <div class="content">
-    <Header-bar :message="'师资评价'"></Header-bar>
+     <mt-header fixed title="师资评价">
+      <router-link to="" slot="left">
+        <mt-button icon="back" @click="$router.back(-1)"></mt-button>
+      </router-link>
+    </mt-header>
+<div class="filter-boxs">
+      <ul class="filter-list">
+        <li>
+         <mt-cell title="选择专业基地" is-link v-on:click.native="handleShowRotation()">
+          <span style="color: #000">{{selectName}}</span>
+        </mt-cell>
+          
+        </li>
+      </ul>
+    </div>
+    <div class="main-box">
+      <div class="radar-box">
+       
+      </div>
+    </div>
+    <!-- 旧的HTML -->
+    <!-- <Header-bar :message="'师资评价'"></Header-bar> -->
     <!-- tab-container -->
     <mt-navbar v-model="selected">
       <mt-tab-item :id="index" v-for="(item,index) in singledata" :key="index">{{item.typename}}</mt-tab-item>
@@ -206,7 +227,8 @@
 
 <script>
 import "swiper/dist/css/swiper.css";
-import HeaderBar from "@/components/mainHeader";
+// import HeaderBar from "@/components/mainHeader";
+import { Header,Cell  } from "mint-ui";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import radar from "../../../components/mecharts/radar.vue";
 import appraise from "../../../components/appraise/appraise.vue";
@@ -222,11 +244,14 @@ import moment from "moment";
 
 export default {
   components: {
-    HeaderBar,
+    // HeaderBar,
     radar,
     swiper,
     swiperSlide,
-    appraise
+    appraise,
+    "mt-header": Header,
+    "mt-cell": Cell
+    
   },
   data() {
     const self = this;
@@ -552,6 +577,54 @@ export default {
 </script>
 
 <style scoped lang="less">
+.main-box{
+ padding-top: 1rem;
+}
+/deep/ .mint-cell-value{
+  font-size:0.15rem;
+font-weight:bold;
+color:rgba(0,0,0,1);
+}
+.mint-cell-title{
+color:rgba(0,0,0,1);
+
+}
+.mint-cell{
+  width: 3.75rem;
+    padding: 0rem 0rem 0rem 0.2rem;
+}
+.filter-boxs {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  background-color: #fff;
+  z-index: 50;
+  top: 0.34rem;
+  height: 0.6rem;
+  width: 3.75rem;
+  border-bottom: 1px solid #f2f2f3;
+}
+.filter-list {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 0.03rem;
+  left: 0;
+  background-color: #fff;
+ 
+}
+.mint-header {
+  background-color: #fff;
+  color: #000;
+  height: 44px;
+  border-bottom: 1px solid #f2f2f3;
+  z-index: 60;
+}
+/deep/ .mint-header-title {
+  font-size: 0.17rem;
+  font-weight: bold;
+}
+// 老的css
 .tabbar_right {
   display: flex;
   align-items: center;
