@@ -135,7 +135,7 @@
 
 <script>
 import "swiper/dist/css/swiper.css";
-// import HeaderBar from "@/components/mainHeader";
+import HeaderBar from "@/components/mainHeader";
 import { Header, Cell } from "mint-ui";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import radar from "../../../components/mecharts/radar.vue";
@@ -153,13 +153,13 @@ import moment from "moment";
 
 export default {
   components: {
-    // HeaderBar,
+    HeaderBar,
     radar,
     swiper,
     swiperSlide,
     appraise,
-    "mt-header": Header,
-    "mt-cell": Cell
+    Header,
+    Cell
   },
   data() {
     const self = this;
