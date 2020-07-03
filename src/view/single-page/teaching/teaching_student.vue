@@ -1,10 +1,86 @@
 <template>
-  <div>
-     <mt-header fixed title="带教学员">
-      <router-link to="" slot="left">
+  <div class="teaching-student">
+    <mt-header fixed title="带教学员">
+      <router-link to slot="left">
         <mt-button icon="back" @click="$router.back(-1)"></mt-button>
       </router-link>
     </mt-header>
+    <div class="main-box">
+      <mt-cell title="选择专业基地" is-link @click.native="openPopup('zyjdPopup')" value="带链接"></mt-cell>
+      <mt-cell title="选择科室"  is-link @click.native="openPopup(2)" value="带链接"></mt-cell>
+      <mt-cell title="选择时间"  is-link @click.native="openPopup(3)" value="带链接"></mt-cell>
+      <div class="main-content"> 
+        <div class="nav-bar">
+          <p class="main-title">{{'标题'}}</p>
+          <p class="main-title-sub">时间信息</p>
+        </div>
+        <div class="main-table">
+          <ul>
+              <li>教师</li>
+              <li>副主任医师</li>
+              <li>
+                <p>学生A</p>
+               
+              </li>
+            </ul>
+            <ul>
+              <li>教师</li>
+              <li>副主任医师</li>
+              <li>
+                <p>学生A</p>
+                <p>学生B</p>
+                <p>学生C</p>
+              </li>
+            </ul>
+        </div>
+      </div>
+    </div>
+    <mt-popup
+        v-model="zyjdPopup"
+        position="bottom" >
+        <div class="popup-box">
+          <div class="popup-close" @click="zyjdPopup = false">
+            <img src="@/assets/images/close.png" alt="">
+          </div>
+          <div class="popup-nav">
+             <mt-navbar v-model="selected">
+            <mt-tab-item id="1">专业基地</mt-tab-item>
+            <mt-tab-item id="2">所属科室</mt-tab-item>
+            <mt-tab-item id="3">选择时间</mt-tab-item>
+          </mt-navbar>
+          </div>
+          <div style="width:3.75rem;height:0.01rem;background:rgba(242,242,243,1);margin-top:0.1rem"></div>
+
+          <mt-tab-container v-model="selected">
+            <mt-tab-container-item id="1">
+              <ul class="popup-down-items">
+                <li>全部</li>
+                <li >已完成</li>
+               
+            
+              </ul>
+            </mt-tab-container-item>
+            <mt-tab-container-item id="2">
+               <mt-cell title="选择专业基地" is-link @click.native="openPopup('zyjdPopup')" value="带链接"></mt-cell>
+               <mt-cell title="选择科室"  is-link @click.native="openPopup(2)" value="带链接"></mt-cell>
+               <div class="s-picker">
+                 <mt-picker :slots="dateSlots" @change="onValuesChange"></mt-picker>
+               </div>
+               <div class="save">确定</div>
+            </mt-tab-container-item>
+            <mt-tab-container-item id="3">
+               <mt-cell title="选择专业基地" is-link @click.native="openPopup('zyjdPopup')" value="带链接"></mt-cell>
+               <mt-cell title="选择科室"  is-link @click.native="openPopup(2)" value="带链接"></mt-cell>
+               
+               <div class="s-picker">
+                 <mt-picker :slots="dateSlots" @change="onValuesChange"></mt-picker>
+               </div>
+               <div class="save">确定</div>
+            </mt-tab-container-item>
+          </mt-tab-container>
+        </div>
+        
+      </mt-popup>
     <!-- 老版本 -->
     <!-- <header-main :message="'带教学员'"></header-main> -->
     <!-- <div class="teaching_student">
@@ -12,7 +88,7 @@
         <u>专业基地</u>
       </div>
       <div id="teachingtop" :style="!openList ?'height: 0.68rem':'height: auto'" class="top">
-        <p
+        <p 
           @click="handleFirst(index,item.majorname,item.officelist[0].officeid,item.officelist[0].name)"
           :style="firstId == index ? 'color: #277FFF;':'color: #212121;'"
           v-for="(item, index) in alltype"
@@ -112,10 +188,29 @@ import {
   queryMajormanageOffice,
   queryTeacherTeachingdata
 } from "../../../api/teaching";
-
+import { Header, Cell,Popup,Picker,Navbar,TabItem    } from "mint-ui";
 export default {
   data() {
     return {
+       dateSlots: [
+        {
+          flex: 1,
+          values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'],
+          className: 'slot1',
+          textAlign: 'right'
+        }, {
+          divider: true,
+          content: '-',
+          className: 'slot2'
+        }, {
+          flex: 1,
+          values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'],
+          className: 'slot3',
+          textAlign: 'left'
+        }
+      ],
+      selected:"1",
+      zyjdPopup:false,
       selectWindow: false,
       openList: false,
       firstName: "内科",
@@ -277,6 +372,12 @@ export default {
     };
   },
   methods: {
+    openPopup(val){
+      this[val] = true
+    },
+    onZyjdPopupChange(value){
+      console.log(value)
+    },
     slectType() {
       this.secondName = this.choice1Name;
       this.thirdName = this.choice2Name;
@@ -480,8 +581,12 @@ export default {
     }
   },
   mounted() {
+    
     queryMajormanageOffice("").then(res => {
-      this.alltype = JSON.parse(res).majorlist;
+
+      let majorlist =  JSON.parse(res).majorlist;
+      console.log(JSON.parse(res).majorlist)
+      this.alltype = majorlist;
       this.firstName = JSON.parse(res).majorlist[0].majorname;
       this.secondName = JSON.parse(res).majorlist[0].officelist[0]
         ? JSON.parse(res).majorlist[0].officelist[0].name
@@ -504,12 +609,167 @@ export default {
     });
   },
   components: {
-    "header-main": mainHeader
+    // "header-main": mainHeader
+    "mt-header": Header,
+    "mt-cell": Cell,
+    "mt-popup":Popup,
+    "mt-picker":Picker,
+    "mt-navbar":Navbar,
+    "mt-tabitem":TabItem,
+
+    
   }
 };
 </script>
 
 <style lang="less" scoped>
+.s-picker{
+      margin-top: 0.51rem;
+}
+.save{
+  width:3.75rem;
+  line-height: 0.49rem;
+background:rgba(0,150,193,1);
+
+font-size:0.15rem;
+font-weight:bold;
+color:rgba(255,255,255,1);
+position: fixed;
+text-align: center;
+left: 0;
+bottom: 0;
+}
+
+.popup-down-items {
+  background: #fff;
+  width: 3.6rem;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  display: flex;
+  padding-bottom: 0.1rem;
+  padding-left: 0.15rem;
+  padding-top: 0.15rem;
+  flex-flow: wrap;
+  border-top: 1px solid #f2f2f3;
+}
+.popup-down-items li {
+  width: 0.8rem;
+  line-height: 0.44rem;
+  text-align: center;
+  border-radius: 0.06rem;
+  background: rgba(242, 242, 243, 1);
+  font-size: 0.13rem;
+  margin-right: 0.08rem;
+  margin-bottom: 0.1rem;
+}
+.popup-down-action {
+  color: rgba(0, 150, 193, 1);
+}
+/deep/ .mint-navbar .mint-tab-item.is-selected{
+font-size:0.13rem;
+font-weight:bold;
+color:rgba(0,150,193,1);
+line-height:0.18rem;
+    border-bottom: 2px solid rgba(0,150,193,1);;
+    margin-bottom: 2px;
+}
+/deep/ .mint-navbar .mint-tab-item{
+margin-left: 10px;
+    padding: 10px 0;
+    color: #595959;
+}
+/deep/.mint-tab-item-label{
+  font-size:0.13rem;
+font-weight:bold;
+line-height:0.18rem;
+
+
+}
+.popup-close{
+position: absolute;
+right: 0.15rem;
+top: 0.10rem;
+
+img{
+  width: 0.15rem;
+  height: 0.15rem;
+
+}
+}
+.popup-nav{
+  width: 2.8rem;
+  margin-top: 0.1rem;
+}
+  .popup-box{
+    width:3.75rem;
+height:5.22rem;
+background:rgba(255,255,255,1);
+position: relative;
+  }
+
+.main-content{
+  width:3.45rem;
+  margin: 0 auto;
+  margin-top: 0.15rem;
+  background: #fff;
+  .nav-bar{
+      height:0.64rem;
+      background:rgba(0,150,193,1);
+      border-radius:0.06rem 0.06rem 0rem 0rem;
+      color: #FFF;
+      padding-top: 1px;
+      .main-title{
+        margin-top: 0.12rem;
+        margin-left: 0.24rem;
+        font-size:0.15rem;
+        font-weight:bold;
+        line-height:0.21rem;
+      }
+      .main-title-sub{
+        margin-top: 0.04rem;
+        margin-left: 0.24rem;
+        font-size:0.11rem;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        line-height:0.16rem;
+      }
+  }
+   .main-table li{
+    width:1.1rem;
+    border-left:2px solid #f0f0f7 ;
+    line-height:0.44rem;
+    font-size:0.13rem;
+    text-align: center;
+    background:rgba(255,255,255,1);
+    display:inline-block;
+    vertical-align: middle;
+    }
+  .main-table ul{
+    border-bottom:2px solid #f0f0f7 ;
+  }
+  .main-table li:first-child{
+    border-left:0px !important;
+  }
+ 
+    
+}
+.main-box{
+  margin-top: 0.44rem;
+}
+/deep/ .mint-cell-value.is-link{
+  margin-right: 0.05rem;
+}
+/deep/ .mint-cell-wrapper{
+  padding: 0rem 0.3rem;
+}
+.mint-cell{
+  border-bottom: 1px solid #f2f2f3;
+}
+.teaching-student {
+  background: rgba(242, 242, 243, 1);
+  min-height: 100vh;
+  padding-top: 1px;
+}
 .mint-header {
   background-color: #fff;
   color: #000;
