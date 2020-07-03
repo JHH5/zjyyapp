@@ -28,10 +28,13 @@
             class="comment"
             v-for="(item, index) in swipeTopData"
             :key="index"
-            v-if="item.majorname=='骨科'"
+            v-if="item.majorsubjectid==datas"
           >
-            <radar ref="radars" :maintitle="item.majorname + '基地对老师评价雷达图'" :barnumber="rainbardata"></radar>
-
+            <radar
+              ref="radars"
+              :maintitle="item.majorname + '基地对老师评价雷达图'"
+              :barnumber="winrainbardata"
+            ></radar>
             <div class="teacher_radar_detial">
               <div class="rader_detial_left">
                 <div class="rader_detial_left_top">
@@ -58,61 +61,15 @@
           </div>
         </div>
       </div>
+      <div class="comment-box">
+        <div class="conbox_title">123</div>
+        <div class="comments_top">
+          <appraise v-if="showchildren" v-bind:singledata="singledata" style="margin-top:0.2rem"></appraise>
+        </div>
+      </div>
     </div>
 
-    <div class="comment-box">
-      <!-- <div class="comments_end">
-        <swiper
-          ref="mySwiper4"
-          style="width:3.5rem;height:0.5rem;"
-          class="student_top_box swiper-no-swiping"
-          :options="swiperOption4"
-        >
-          <swiper-slide v-for="(item, index) in swipeTopData" :key="index">
-            <p class="title">{{item.majorname}}</p>
-            <p class="number">好评度{{item.hpl}}</p>
-          </swiper-slide>
-        </swiper>
-      </div>-->
-      <!-- <swiper ref="mySwiper" class="student_main_box" :options="swiperOption">
-        <swiper-slide>
-          <div class="comment" v-for="(item, index) in swipeTopData" :key="index" >
-            <radar
-              v-if="flag"
-              ref="radars"
-              :maintitle="item.majorname + '基地对老师评价雷达图'"
-              :barnumber="rainbardata"
-            ></radar>
-            <div v-else style="width:100%;height:2rem;">
-              <p style="text-align: center; line-height: 2rem; color: #dddddd;">暂无数据</p>
-            </div>
-            <div class="teacher_radar_detial">
-              <div class="rader_detial_left">
-                <div class="rader_detial_left_top">
-                  <p class="title">评价得分率</p>
-                  <p class="number">{{(commentdata.pjpjf)*100}}%</p>
-                </div>
-                <div class="rader_detial_left_end">
-                  <p class="title">评价最低分</p>
-                  <p class="number">{{commentdata.zdf}}</p>
-                </div>
-              </div>
-              <div class="rader_detial_middle"></div>
-              <div class="rader_detial_right">
-                <div class="rader_detial_left_top">
-                  <p class="title">评价总次数</p>
-                  <p class="number">{{commentdata.pjzs}}</p>
-                </div>
-                <div class="rader_detial_left_end">
-                  <p class="title">评价表提交率</p>
-                  <p class="number">{{commentdata.tjl}}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </swiper-slide>
-      </swiper>-->
-    </div>
+    <div class="comment-box"></div>
     <div @click="handleHideRotation()" v-show="showRotation" class="rotation_wind">
       <div class="rotation_wind_main">
         <div class="jd">
@@ -181,6 +138,7 @@ export default {
       winteacherdata: "",
       teachername: "王老师",
       selectName: "教学部",
+      selectmajorlist: "",
       datas: 0,
       singledata: [],
       showchildren: false,
@@ -237,76 +195,6 @@ export default {
         }
       ],
       closeid: 99,
-      swiperOption4: {
-        slidesPerView: 3,
-        spaceBetween: 3,
-        loop: true,
-        centeredSlides: true,
-        noSwiping: true,
-        speed: 500,
-        on: {
-          transitionStart: function(event) {
-            self.openmore = false;
-            queryMajorTeacherevaluatedata(
-              self.swipeTopData[this.activeIndex].majorsubjectid,
-              self.moment
-            ).then(res => {
-              self.radardata1 = JSON.parse(res).majordimensionevaluatelist;
-              var arrs = [];
-              for (let i = 0; i < self.radardata1.length; i++) {
-                arrs.push({
-                  name:
-                    self.radardata1[i].typename +
-                    "\n" +
-                    self.radardata1[i].averagescore,
-                  value: parseFloat(self.radardata1[i].averagescore)
-                });
-              }
-              self.commentdata = JSON.parse(res).majorevaluateoverview;
-              self.teacherdata = JSON.parse(res).teacherevaluatelatelydata;
-              if (
-                arrs[0].value == 1 &&
-                arrs[1].value == 1 &&
-                arrs[2].value == 1 &&
-                arrs[3].value == 1 &&
-                arrs[4].value == 1 &&
-                arrs[5].value == 1
-              ) {
-                self.flag = false;
-              } else {
-                self.flag = true;
-                self.rainbardata = arrs;
-                setTimeout(() => {
-                  self.$refs.radars[this.activeIndex].drawLine();
-                }, 1000);
-              }
-              Indicator.close();
-            });
-          }
-        }
-      },
-      swiperOption: {
-        centeredSlides: true,
-        loop: false,
-        speed: 500,
-        longSwipes: false,
-        on: {
-          transitionEnd: function(event) {
-            if (this.activeIndex == self.closeid) {
-              Indicator.close();
-            }
-          },
-          transitionStart: function(event) {
-            self.$refs.mySwiper4.swiper.slideToLoop(
-              this.activeIndex,
-              500,
-              false
-            );
-            self.closeid = this.activeIndex;
-            Indicator.open("加载中...");
-          }
-        }
-      },
       radardata1: [
         {
           name: "学员满意",
@@ -382,63 +270,44 @@ export default {
       this.datas = name.majorsubjectid;
       let add = [];
       add.push(this.datas);
-
-      queryMajorFavorablerate(2, add, this.moment).then(res => {
-        console.log(JSON.parse(res));
-        this.swipeTopData = JSON.parse(res).major;
-        this.firstid = JSON.parse(res).major[0].majorsubjectid;
+      getmajor(add, this.moment).then(res => {
+        this.swipeTopData = JSON.parse(res).majorlist;
+        this.firstid = JSON.parse(res).majorlist[0].majorsubjectid;
         this.showtab = true;
         Indicator.close();
       });
+      queryMajorTeacherevaluatedata(this.firstid, this.moment, this.datas).then(
+        res => {
+          this.winrainbardata = JSON.parse(res).majordimensionevaluatelist;
+          this.commentdata = JSON.parse(res).majorevaluateoverview;
+          // console.log(this.winrainbardata)
+          var arrsd = [];
+          for (
+            let i = 0;
+            i < JSON.parse(res).majordimensionevaluatelist.length;
+            i++
+          ) {
+            arrsd.push({
+              name:
+                JSON.parse(res).majordimensionevaluatelist[i].typename +
+                "\n" +
+                JSON.parse(res).majordimensionevaluatelist[i].averagescore,
+              value: parseFloat(
+                JSON.parse(res).majordimensionevaluatelist[i].averagescore
+              )
+            });
+          }
+
+            this.winrainbardata = arrsd;
+            // this.winflag = true;
+            // this.$refs.winradars.drawLine();
+  console.log(arrsd)
+          Indicator.close();
+        }
+      );
     },
     handleClickSelect() {
       this.showModal = true;
-    },
-    handleOpenWind(ids, id, name) {
-      Indicator.open("加载中...");
-      (this.openWind = true), (this.teachername = name), this.noScroll();
-      queryMajorTeacherevaluatedataitem(ids, id, this.moment).then(res => {
-        // console.log(this.moment);
-        this.windata = JSON.parse(res);
-        this.wincommentdata = JSON.parse(res).majorevaluateoverview;
-        this.winteacherdata = JSON.parse(res).teacherevaluatewords;
-        var arrsd = [];
-        for (
-          let i = 0;
-          i < JSON.parse(res).majordimensionevaluatelist.length;
-          i++
-        ) {
-          arrsd.push({
-            name:
-              JSON.parse(res).majordimensionevaluatelist[i].typename +
-              "\n" +
-              JSON.parse(res).majordimensionevaluatelist[i].averagescore,
-            value: parseFloat(
-              JSON.parse(res).majordimensionevaluatelist[i].averagescore
-            )
-          });
-        }
-        if (
-          arrsd[0].value == 0 &&
-          arrsd[1].value == 0 &&
-          arrsd[2].value == 0 &&
-          arrsd[3].value == 0 &&
-          arrsd[4].value == 0 &&
-          arrsd[5].value == 0
-        ) {
-          this.winflag = false;
-        } else {
-          this.winrainbardata = arrsd;
-          this.winflag = true;
-          setTimeout(() => {
-            this.$refs.winradars.drawLine();
-          }, 1000);
-        }
-        Indicator.close();
-      });
-    },
-    hideWind() {
-      (this.openWind = false), this.canScroll();
     }
   },
   mounted() {
@@ -448,13 +317,7 @@ export default {
       // console.log(JSON.parse(res));
       this.firstid = JSON.parse(res).major[0].majorsubjectid;
     });
-    queryMajorTeacherevaluatedata(this.firstid).then(res => {
-      // console.log(JSON.parse(res));
-      this.radardata1 = JSON.parse(res).majordimensionevaluatelist;
-      this.commentdata = JSON.parse(res).majorevaluateoverview;
-      // this.teacherdata = JSON.parse(res).majorevaluateoverview
-      this.flag = true;
-    });
+
     getmajor().then(res => {
       // console.log(JSON.parse(res));
       this.selectmajorlist = JSON.parse(res).majorlist;
@@ -467,7 +330,6 @@ export default {
       });
     });
     getoffice().then(res => {
-      // console.log(JSON.parse(res));
       this.selectdata = JSON.parse(res).officelist;
       let ads = [];
       for (let i = 0; i < JSON.parse(res).officelist[0].length; i++) {
@@ -503,7 +365,6 @@ export default {
   height: 100%;
 }
 .tabbar_right {
-  // border-bottom: 1px solid #f2f2f2;
   height: 0.5rem;
   line-height: 0.5rem;
   width: 90%;
@@ -713,6 +574,7 @@ export default {
 
 .comment-box {
   // position: absolute;
+  border-radius: 0.2rem 0.2rem 0rem 0rem;
 }
 .comment_top {
   display: flex;
@@ -1120,5 +982,10 @@ export default {
       }
     }
   }
+}
+.conbox_title {
+  height: 0.6rem;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 0.2rem 0.2rem 0rem 0rem;
 }
 </style>

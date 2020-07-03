@@ -47,6 +47,7 @@ export default {
   right: 0;
   z-index: 9999;
   border-bottom: 1px solid #f2f2f3;
+  background: #fff;
   .backicon {
     width: 0.14rem;
     height: 0.17rem;

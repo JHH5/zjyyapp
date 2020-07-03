@@ -264,7 +264,7 @@
                 </swiper-slide>
                 <!-- 师资绩效-->
                 <swiper-slide>
-                  <div @click="handleTeachingStudent" class="student_exam boxshadow">
+                  <div @click="handleTeachingStudent()" class="student_exam boxshadow">
                     <div class="student_train_top box2_top">
                       <p style="margin-right:0.1rem" class="title">师资绩效</p>
                       <p class="more">更多</p>
@@ -509,12 +509,12 @@
                             >
                               <div class="left">
                                 <p style="color:#00C290">{{item.zszs}}</p>
-                                <div :style="{ 'height': item.zszs*0.001 + 'rem' }" class="block"></div>
+                                <div :style="{ 'height': item.zszs*0.0015 + 'rem' }" class="block"></div>
                               </div>
                               <div class="right">
                                 <p style="color:#FF9B00">{{item.jqzyzss}}</p>
                                 <div
-                                  :style="{ 'height': item.jqzyzss*0.001 + 'rem' }"
+                                  :style="{ 'height': item.jqzyzss*0.0015 + 'rem' }"
                                   class="block"
                                 ></div>
                               </div>

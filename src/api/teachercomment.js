@@ -44,11 +44,11 @@ export const queryMajorFavorablerate = (time) => {
     })
 }
 
-export const queryMajorTeacherevaluatedata = (id,time) => {
+export const queryMajorTeacherevaluatedata = (id,time,datas) => {
     return axios.request({
         url: '/doctor_train/rest/H5Management/querymajorteacherevaluatedata.do',
         data:{
-            majorsubjectid:id,
+            majorsubjectid:datas,
             starttime:year+"-"+time +"-01 00:00:00",
             endtime:year+"-"+time +"-"+ moment(year + "-" + time,"YYYY-MM").daysInMonth() +" 23:59:59",
         },
