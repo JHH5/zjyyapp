@@ -24,9 +24,14 @@
       <hr style="backgroud:#f2f2f2;border:1px solid #f2f2f2;" />
       <div class="jdraderbox">
         <div class="jdrader">
-          <div class="comment"  v-for="(item, index) in swipeTopData" :key="index" v-if="item.majorname=='骨科'">
-            <radar  ref="radars" :maintitle="item.majorname + '基地对老师评价雷达图'" :barnumber="rainbardata"></radar>
-          
+          <div
+            class="comment"
+            v-for="(item, index) in swipeTopData"
+            :key="index"
+            v-if="item.majorname=='骨科'"
+          >
+            <radar ref="radars" :maintitle="item.majorname + '基地对老师评价雷达图'" :barnumber="rainbardata"></radar>
+
             <div class="teacher_radar_detial">
               <div class="rader_detial_left">
                 <div class="rader_detial_left_top">
@@ -106,7 +111,7 @@
             </div>
           </div>
         </swiper-slide>
-      </swiper> -->
+      </swiper>-->
     </div>
     <div @click="handleHideRotation()" v-show="showRotation" class="rotation_wind">
       <div class="rotation_wind_main">
@@ -130,7 +135,8 @@
 
 <script>
 import "swiper/dist/css/swiper.css";
-import HeaderBar from "@/components/mainHeader";
+// import HeaderBar from "@/components/mainHeader";
+import { Header, Cell } from "mint-ui";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import radar from "../../../components/mecharts/radar.vue";
 import appraise from "../../../components/appraise/appraise.vue";
@@ -147,11 +153,13 @@ import moment from "moment";
 
 export default {
   components: {
-    HeaderBar,
+    // HeaderBar,
     radar,
     swiper,
     swiperSlide,
-    appraise
+    appraise,
+    "mt-header": Header,
+    "mt-cell": Cell
   },
   data() {
     const self = this;
@@ -374,9 +382,9 @@ export default {
       this.datas = name.majorsubjectid;
       let add = [];
       add.push(this.datas);
- 
+
       queryMajorFavorablerate(2, add, this.moment).then(res => {
-           console.log(JSON.parse(res));
+        console.log(JSON.parse(res));
         this.swipeTopData = JSON.parse(res).major;
         this.firstid = JSON.parse(res).major[0].majorsubjectid;
         this.showtab = true;

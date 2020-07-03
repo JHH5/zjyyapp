@@ -1,12 +1,108 @@
 <template>
   <div>
-    <header-main :message="'今日直通'"></header-main>
+    <mt-header fixed title="今日直通">
+      <router-link to="" slot="left">
+        <mt-button icon="back" @click="$router.back(-1)"></mt-button>
+      </router-link>
+    </mt-header>
+    <div class="filter-boxs">
+      <ul class="filter-list">
+        <li @click="onOpneColseFilter(1)">
+          工作类型
+          <img v-if="filterPopType == 2" src="@/assets/images/todaywork/t.png" alt />
+          <img v-if="filterPopType == 1" src="@/assets/images/todaywork/d.png" alt />
+        </li>
+        <li @click="onOpneColseFilter(2)">
+          完成状态
+          <img v-if="filterPopStatus == 2" src="@/assets/images/todaywork/t.png" alt />
+          <img v-if="filterPopStatus != 2" src="@/assets/images/todaywork/d.png" alt />
+        </li>
+        <li @click="selectThird(thirdid == 1?2:1)">
+          时间排序
+          <img
+            v-if="thirdid == 1"
+            src="@/assets/images/todaywork/p.png"
+            alt
+            style="width: 0.08rem; height: 0.16rem;vertical-align: middle;display: inline-block; margin-left: 0.01rem;"
+          />
+          <img
+            v-if="thirdid == 2"
+            src="@/assets/images/todaywork/np.png"
+            alt
+            style="width: 0.08rem; height: 0.16rem;vertical-align: middle;display: inline-block; margin-left: 0.01rem;"
+          />
+        </li>
+      </ul>
+      <div class="pop-down" @click="onColseFilter" v-show="isFilterPop">
+        <ul class="pop-down-items" v-if="filterPopNumber == 1">
+          <li :class="firstid == item.ids ? 'pop-down-action':''" v-for="(item, index) in selecttab" :key="index" @click="selectFirst(item.ids,item.name)">{{item.name}}</li>
+        </ul>
+        <ul class="pop-down-items" v-if="filterPopNumber == 2">
+          <li :class="secoendname == '全部' ? 'pop-down-action':''" @click="selectSecond('全部')">全部</li>
+          <li :class="secoendname == '已完成' ? 'pop-down-action':''" @click="selectSecond('已完成')">已完成</li>
+          <li :class="secoendname == '进行中' ? 'pop-down-action':''" @click="selectSecond('进行中')">进行中</li>
+          <li :class="secoendname == '未开始' ? 'pop-down-action':''" @click="selectSecond('未开始')">未开始</li>
+      
+        </ul>
+    
+      </div>
+    </div>
+    <div class="main-boxs" >
+      <div class="main-item" v-for="(item, index) in tabledata" :key="index">
+        <div class="main-item-top">
+          <div class="main-item-top-left">
+            <p class="main-item-title">{{item.title}}</p>
+            <ul class="main-info">
+              <li>
+                <p class="main-info-title">开始时间</p>
+                <p class="main-info-content">
+                  <img src="@/assets/images/todaywork/date.png" alt />
+                  {{ String(item.starttime).substring(0,String(item.starttime).length - 3)}}
+                </p>
+                <div class="hr-y"></div>
+              </li>
+              <li>
+                <p class="main-info-title">参加人数</p>
+                <p class="main-info-content">
+                  <i></i>
+                  {{item.cjrs}}
+                </p>
+                <div class="hr-y" v-if=" item.qdl != '不需要签到'"></div>
+              </li>
+              <li v-if="item.qdl != '不需要签到'">
+                <p class="main-info-title">签到率</p>
+                <p class="main-info-content">{{item.qdl}}</p>
+              </li>
+            </ul>
+          </div>
+          <div class="main-item-top-right">
+            <img v-if="item.state == '已完成'" src="@/assets/images/todaywork/ywc.png" alt />
+            <img v-if="item.state == '未开始'" src="@/assets/images/todaywork/wks.png" alt />
+            <img v-if="item.state == '进行中'" src="@/assets/images/todaywork/jxz.png" alt />
+          </div>
+        </div>
+        <div class="taps">
+          <ul>
+            <li class="taps-info">{{item.tasktype}}</li>
+          </ul>
+        </div>
+        <div class="main-item-bottom">
+          <img src="@/assets/images/todaywork/l.png" alt />
+          <span>{{item.addressname}}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 老版本 -->
+
+    <!-- <header-main :message="'今日直通'"></header-main>
     <div class="todaywork">
       <div class="todaywork_top">
         <p class="title">今日工作</p>
         <p @click="handleSelect()" class="select">筛选</p>
         <img @click="handleSelect()" src="../../../assets/images/todaywork/select.png" alt />
       </div>
+      
       <div style="width:100%;height:4rem;display:none">
         <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
       </div>
@@ -69,16 +165,22 @@
           <p>确定</p>
         </div>
       </div>
-    </div>
+    </div>-->
   </div>
 </template>
 
 <script>
-import mainHeader from "../../../components/mainHeader.vue";
-import { workToday } from "../../../api/main"
+// import mainHeader from "../../../components/mainHeader.vue";
+import { Header } from "mint-ui";
+import { workToday } from "../../../api/main";
 export default {
   data() {
     return {
+      filterPopSort: 1,
+      filterPopStatus: 1,
+      filterPopType: 1,
+      isFilterPop: false,
+      filterPopNumber: 1,
       tabledata: [
         {
           name: "住培大纲“鼻咽部疾病”解读（一）",
@@ -105,128 +207,376 @@ export default {
           percent: "80%"
         }
       ],
-      selecttab:[
+      selecttab: [
         {
-          ids:0,
-          name:"全部"
+          ids: 0,
+          name: "全部"
         },
         {
-          ids:1,
-          name:"理论培训"
+          ids: 1,
+          name: "理论培训"
         },
         {
-          ids:2,
-          name:"技能培训"
+          ids: 2,
+          name: "技能培训"
         },
         {
-          ids:3,
-          name:"小讲课"
+          ids: 3,
+          name: "小讲课"
         },
         {
-          ids:4,
-          name:"病例讨论"
+          ids: 4,
+          name: "病例讨论"
         },
         {
-          ids:5,
-          name:"教学查房"
+          ids: 5,
+          name: "教学查房"
         },
         {
-          ids:7,
-          name:"入科教育"
+          ids: 7,
+          name: "入科教育"
         },
         {
-          ids:9,
-          name:"阅片会"
+          ids: 9,
+          name: "阅片会"
         },
         {
-          ids:10,
-          name:"教学会诊"
+          ids: 10,
+          name: "教学会诊"
         },
         {
-          ids:11,
-          name:"读书报告"
+          ids: 11,
+          name: "读书报告"
         },
         {
-          ids:12,
-          name:"岗前培训"
+          ids: 12,
+          name: "岗前培训"
         },
         {
-          ids:13,
-          name:"会议"
+          ids: 13,
+          name: "会议"
         },
         {
-          ids:14,
-          name:"师资培训"
+          ids: 14,
+          name: "师资培训"
         },
         {
-          ids:99,
-          name:"考试"
+          ids: 99,
+          name: "考试"
         }
       ],
       selectWindow: false,
-      realfirstid:0,
-      realsecondname:"全部",
-      realthirdid:1,
-      firstid:0,
-      secoendname:"全部",
-      thirdid:1,
-      thirdname:"全部",
-      selectname:"全部"
+      realfirstid: 0,
+      realsecondname: "全部",
+      realthirdid: 1,
+      firstid: 0,
+      secoendname: "全部",
+      thirdid: 1,
+      thirdname: "全部",
+      selectname: "全部"
     };
   },
   methods: {
+    onColseFilter(){
+      this.isFilterPop = false
+       this.filterPopType = 1;
+        this.filterPopStatus = 1;
+    },
+    //打开or关闭筛选pop
+    onOpneColseFilter(val) {
+      if(val != 3){
+           if (val == 1) {
+              if (!this.isFilterPop) {
+                this.filterPopType = 2;
+                this.filterPopStatus = 1;
+              } else {
+                this.filterPopType = 1;
+                this.filterPopStatus = 1;
+              }
+            }
+            if (val == 2) {
+              if (!this.isFilterPop) {
+                this.filterPopType = 1;
+                this.filterPopStatus = 2;
+              } else {
+                this.filterPopType = 1;
+                this.filterPopStatus = 1;
+              }
+            }
+
+            if(this.filterPopNumber != val){
+              if (val == 1) {
+              if (this.isFilterPop) {
+                this.filterPopType = 2;
+                this.filterPopStatus = 1;
+              }
+            }
+            if (val == 2) {
+              if (!this.isFilterPop) {
+                this.filterPopType = 1;
+                this.filterPopStatus = 2;
+              } else {
+                this.filterPopType = 1;
+                this.filterPopStatus = 1;
+              }
+            }
+            }
+
+            this.filterPopNumber = val;
+            this.isFilterPop = !this.isFilterPop;
+      }else{
+        //排序
+        
+      }
+     
+    },
     slectType() {
-      this.canScroll()
+      this.canScroll();
       this.selectWindow = false;
       this.realfirstid = this.firstid;
       this.realsecondname = this.secoendname;
       this.realthirdid = this.thirdid;
       this.thirdname = this.selectname;
       if (this.thirdid == 1) {
-        workToday("",this.firstid).then(res => {
-          this.tabledata = JSON.parse(res).worktodaylist
-        })
-      }else{
-        workToday("desc",this.firstid).then(res => {
-          this.tabledata = JSON.parse(res).worktodaylist
-        })
+        workToday("", this.firstid).then(res => {
+          this.tabledata = JSON.parse(res).worktodaylist;
+        });
+      } else {
+        workToday("desc", this.firstid).then(res => {
+          this.tabledata = JSON.parse(res).worktodaylist;
+        });
       }
     },
-    closeWind(){
+    closeWind() {
       this.firstid = this.realfirstid;
       this.secoendname = this.realsecondname;
       this.thirdid = this.realthirdid;
       this.selectWindow = false;
-      this.canScroll()
+      this.canScroll();
     },
-    selectFirst(id,name) {
-      this.firstid = id,
-      this.selectname = name
+    selectFirst(id, name) {
+      (this.firstid = id), (this.selectname = name);
+      this.slectType()
     },
     selectSecond(name) {
-      this.secoendname = name
+      this.secoendname = name;
+     this.slectType()
     },
     selectThird(id) {
-      this.thirdid = id
+      this.thirdid = id;
+     this.slectType()
     },
     handleSelect() {
-      this.noScroll()
-      this.selectWindow = true
+      this.noScroll();
+      this.selectWindow = true;
       
     }
   },
   mounted() {
-    workToday("","","").then(res => {
-     this.tabledata = JSON.parse(res).worktodaylist
-    })
+    workToday("", "", "").then(res => {
+      this.tabledata = JSON.parse(res).worktodaylist;
+    });
   },
   components: {
-    "header-main": mainHeader
+    // "header-main": mainHeader
+    "mt-header": Header
   }
 };
 </script>
 
 <style lang="less" scoped>
+.main-item-bottom {
+  height: 0.18rem;
+  font-size: 0.13rem;
+  font-weight: 400;
+  color: rgba(89, 89, 89, 1);
+  line-height: 0.18rem;
+  margin-left: 0.25rem;
+  margin-top: 0.1rem;
+  img {
+    width: 0.16rem;
+    height: 0.16rem;
+    vertical-align: middle;
+    display: inline-block;
+    margin-right: 0.05rem;
+  }
+}
+.taps {
+  margin-top: 0.1rem;
+  margin-left: 0.25rem;
+}
+.taps-info {
+  width: 0.7rem;
+  text-align: center;
+  border-radius: 0.03rem;
+  border: 0.01rem solid #0096c1;
+  font-size: 0.13rem;
+  color: rgba(0, 150, 193, 1);
+  line-height: 0.18rem;
+}
+.main-item-top {
+  position: relative;
+}
+.main-item-top-right {
+  background-color: #eee;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 5px;
+  position: absolute;
+  right: 0.2rem;
+  top: 0.35rem;
+}
+.main-item-top-right img {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 5px;
+}
+.hr-y {
+  width: 0.02rem;
+  height: 0.3rem;
+  background: rgba(242, 242, 243, 1);
+  position: absolute;
+  right: 0;
+  top: 0.06rem;
+}
+.main-info-title {
+  font-size: 0.13rem;
+  color: rgba(140, 140, 140, 1);
+  line-height: 0.18rem;
+  margin-bottom: 0.05rem;
+}
+.main-info-content {
+  font-size: 0.13rem;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 1);
+  line-height: 0.18rem;
+  img {
+    width: 0.16rem;
+    height: 0.16rem;
+    vertical-align: middle;
+    display: inline-block;
+    margin-right: 0.01rem;
+  }
+}
+.main-info li {
+  display: inline-block;
+  text-align: center;
+  position: relative;
+  width: 0.8rem;
+}
+.main-info {
+  margin-top: 0.1rem;
+  margin-left: 0.1rem;
+}
+.main-item-title {
+  font-size: 0.17rem;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 1);
+  line-height: 0.24rem;
+  margin-left: 0.25rem;
+  margin-top: 0.15rem;
+}
+.pop-down {
+  position: absolute;
+  height: 100vh;
+  width: 3.75rem;
+  background: #fff;
+  top: 0.6rem;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.1);
+}
+// .pop-down{
+//   position: absolute;
+//   min-height: 1.4rem;
+//   width: 3.75rem;
+//   background: #FFF;
+//   border-bottom-right-radius: 10px;
+//   border-bottom-left-radius: 10px;
+// }
+.pop-down-items {
+  background: #fff;
+  width: 3.6rem;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  display: flex;
+  padding-bottom: 0.1rem;
+  padding-left: 0.15rem;
+  padding-top: 0.15rem;
+  flex-flow: wrap;
+  border-top: 1px solid #f2f2f3;
+}
+.pop-down-items li {
+  width: 0.8rem;
+  line-height: 0.44rem;
+  text-align: center;
+  border-radius: 0.06rem;
+  background: rgba(242, 242, 243, 1);
+  font-size: 0.13rem;
+  margin-right: 0.08rem;
+  margin-bottom: 0.1rem;
+}
+.pop-down-action {
+  color: rgba(0, 150, 193, 1);
+}
+.filter-boxs {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  background-color: #fff;
+  z-index: 50;
+  top: 0.34rem;
+  height: 0.6rem;
+  width: 3.75rem;
+  border-bottom: 1px solid #f2f2f3;
+}
+.filter-list {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 0.03rem;
+  left: 0;
+  background-color: #fff;
+}
+.filter-list li {
+  width: 1.25rem;
+  text-align: center;
+  font-size: 0.13rem;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 1);
+  line-height: 0.44rem;
+  img {
+    width: 0.12rem;
+    height: 0.08rem;
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: 0.01rem;
+  }
+}
+.main-boxs {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+.main-item {
+  padding: 1px;
+  width: 3.35rem;
+  height: 1.66rem;
+  margin: 0 auto;
+  margin-top: 0.1rem;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0rem 0rem 0.05rem 0.01rem rgba(0, 0, 0, 0.06);
+  border-radius: 0.06rem;
+}
+.mint-header {
+  background-color: #fff;
+  color: #000;
+  height: 44px;
+  border-bottom: 1px solid #f2f2f3;
+  z-index: 60;
+}
+/deep/ .mint-header-title {
+  font-size: 0.17rem;
+  font-weight: bold;
+}
 .disalign {
   display: flex;
   align-items: center;
@@ -332,14 +682,14 @@ export default {
         color: #212121;
         letter-spacing: 0;
         line-height: 0.16rem;
-            width: 2.3rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+        width: 2.3rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
         // width: 3rem;
       }
-      .right{
-        margin-left:  auto;
+      .right {
+        margin-left: auto;
         font-size: 0.13rem;
         color: #212121;
         width: 0.55rem;
@@ -466,8 +816,8 @@ export default {
       border-radius: 20px;
       display: block;
       margin: 0 auto;
-          margin-top: 0.3rem;
-    margin-bottom: 0.2rem;
+      margin-top: 0.3rem;
+      margin-bottom: 0.2rem;
       p {
         font-family: PingFangSC-Regular;
         font-size: 0.16rem;
