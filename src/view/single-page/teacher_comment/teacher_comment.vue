@@ -1,65 +1,36 @@
 <template>
   <div class="content">
     <Header-bar :message="'师资评价'"></Header-bar>
-    <!-- tab-container -->
-    <mt-navbar v-model="selected">
+
+    <!-- <mt-navbar v-model="selected">
       <mt-tab-item :id="index" v-for="(item,index) in singledata" :key="index">{{item.typename}}</mt-tab-item>
-    </mt-navbar>
-    <!-- tab-container -->
-    <mt-tab-container v-model="selected" v-for="(item,index) in singledata" :key="index">
+    </mt-navbar>-->
+    <!-- <mt-tab-container v-model="selected" v-for="(item,index) in singledata" :key="index">
       <mt-tab-container-item :id="index">
-        <div class="tabbar_right">
-          <span>选择科室：</span>
-          <p @click="handleShowRotation()">{{selectName}}</p>
-        </div>
+       
         <div class="comment-box">
           <div class="comments_top">
             <appraise v-if="showchildren" v-bind:singledata="singledata" style="margin-top:0.2rem"></appraise>
           </div>
         </div>
       </mt-tab-container-item>
-    </mt-tab-container>
-    <div class="comment-box">
-       <div class="comment_top">
-              <div class="comment_top_left" style="margin-left:0.2rem">
-                <p>各专业基地师资评价</p>
-              </div>
-            </div>
-      <div class="comments_end">
-        <swiper
-          ref="mySwiper4"
-          style="width:3.5rem;height:0.5rem;"
-          class="student_top_box swiper-no-swiping"
-          :options="swiperOption4"
-        >
-          <swiper-slide v-for="(item, index) in swipeTopData" :key="index">
-            <p class="title">{{item.majorname}}</p>
-            <p class="number">好评度{{item.hpl}}</p>
-          </swiper-slide>
-        </swiper>
+    </mt-tab-container>-->
+
+    <div class="bannerbox">
+      <div class="tabbar_right">
+        <span>选择专业基地</span>
+        <span class="title" @click="handleShowRotation()">{{selectName}}></span>
       </div>
-      <swiper ref="mySwiper" class="student_main_box" :options="swiperOption">
-        <swiper-slide v-for="(item, index) in swipeTopData" :key="index">
-          <div class="comment">
-            <!-- <div class="comment_top">
-              <div class="comment_top_left">
-                <p>师资评价</p>
-              </div>
-            </div> -->
-            <radar
-              v-if="flag"
-              ref="radars"
-              :maintitle="item.majorname + '基地对老师评价雷达图'"
-              :barnumber="rainbardata"
-            ></radar>
-            <div v-else style="width:100%;height:2rem;">
-              <p style="text-align: center; line-height: 2rem; color: #dddddd;">暂无数据</p>
-            </div>
+      <hr style="backgroud:#f2f2f2;border:1px solid #f2f2f2;" />
+      <div class="jdraderbox">
+        <div class="jdrader">
+          <div class="comment"  v-for="(item, index) in swipeTopData" :key="index" v-if="item.majorname=='骨科'">
+            <radar  ref="radars" :maintitle="item.majorname + '基地对老师评价雷达图'" :barnumber="rainbardata"></radar>
+          
             <div class="teacher_radar_detial">
               <div class="rader_detial_left">
                 <div class="rader_detial_left_top">
                   <p class="title">评价得分率</p>
-                  <!-- <p class="desc">(满分100)</p> -->
                   <p class="number">{{(commentdata.pjpjf)*100}}%</p>
                 </div>
                 <div class="rader_detial_left_end">
@@ -79,126 +50,79 @@
                 </div>
               </div>
             </div>
-            <!--                                <div class="comment_table">-->
-            <!--                                    <p class="title">-->
-            <!--                                        {{item.majorname}}基地老师评价表-->
-            <!--                                        <span>（最近一次）</span>-->
-            <!--                                    </p>-->
-            <!--                                    <div :style="openmore == true ?'height:auto':'height:2rem'" class="table">-->
-            <!--                                        <div class="table_top">-->
-            <!--                                            <p>排名</p>-->
-            <!--                                            <p>分数</p>-->
-            <!--                                            <p>姓名</p>-->
-            <!--                                            <p>科室</p>-->
-            <!--                                            <p>评价人数</p>-->
-            <!--                                        </div>-->
-            <!--                                        <div-->
-            <!--                                                v-for="(item, index) in teacherdata"-->
-            <!--                                                :key="index+'e'"-->
-            <!--                                                @click="handleOpenWind(item.personid,item.officeid,item.personname)"-->
-            <!--                                                class="table_single"-->
-            <!--                                        >-->
-            <!--                                            <p>{{index + 1}}</p>-->
-            <!--                                            <p style="color: #277FFF;">{{item.pjf}}</p>-->
-            <!--                                            <p>{{item.personname}}</p>-->
-            <!--                                            <p>{{item.officename}}</p>-->
-            <!--                                            <p>{{item.pjrs}}</p>-->
-            <!--                                        </div>-->
-            <!--                                    </div>-->
-            <!--                                    <p v-show="!openmore" @click="openmore = true" class="showmore">展开更多…</p>-->
-            <!--                                </div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comment-box">
+      <!-- <div class="comments_end">
+        <swiper
+          ref="mySwiper4"
+          style="width:3.5rem;height:0.5rem;"
+          class="student_top_box swiper-no-swiping"
+          :options="swiperOption4"
+        >
+          <swiper-slide v-for="(item, index) in swipeTopData" :key="index">
+            <p class="title">{{item.majorname}}</p>
+            <p class="number">好评度{{item.hpl}}</p>
+          </swiper-slide>
+        </swiper>
+      </div>-->
+      <!-- <swiper ref="mySwiper" class="student_main_box" :options="swiperOption">
+        <swiper-slide>
+          <div class="comment" v-for="(item, index) in swipeTopData" :key="index" >
+            <radar
+              v-if="flag"
+              ref="radars"
+              :maintitle="item.majorname + '基地对老师评价雷达图'"
+              :barnumber="rainbardata"
+            ></radar>
+            <div v-else style="width:100%;height:2rem;">
+              <p style="text-align: center; line-height: 2rem; color: #dddddd;">暂无数据</p>
+            </div>
+            <div class="teacher_radar_detial">
+              <div class="rader_detial_left">
+                <div class="rader_detial_left_top">
+                  <p class="title">评价得分率</p>
+                  <p class="number">{{(commentdata.pjpjf)*100}}%</p>
+                </div>
+                <div class="rader_detial_left_end">
+                  <p class="title">评价最低分</p>
+                  <p class="number">{{commentdata.zdf}}</p>
+                </div>
+              </div>
+              <div class="rader_detial_middle"></div>
+              <div class="rader_detial_right">
+                <div class="rader_detial_left_top">
+                  <p class="title">评价总次数</p>
+                  <p class="number">{{commentdata.pjzs}}</p>
+                </div>
+                <div class="rader_detial_left_end">
+                  <p class="title">评价表提交率</p>
+                  <p class="number">{{commentdata.tjl}}</p>
+                </div>
+              </div>
+            </div>
           </div>
         </swiper-slide>
-      </swiper>
-    </div>
-    <div v-show="openWind" class="wind">
-      <div class="open_window">
-        <div class="win_top">
-          <p class="win_title">{{teachername}}老师评价详情</p>
-          <img @click="hideWind()" src="../../../assets/images/close.png" alt />
-        </div>
-        <radar v-if="winflag" ref="winradars" :barnumber="winrainbardata"></radar>
-        <div v-else style="width:100%;height:2rem;">
-          <p style="text-align: center; line-height: 2rem; color: #dddddd;">暂无数据</p>
-        </div>
-        <!-- <radar v-if="flag" ref="radars" :maintitle="item.majorname + '基地对老师评价雷达图'" :barnumber="rainbardata"></radar> -->
-        <div class="teacher_radar_detial">
-          <div class="rader_detial_left">
-            <div class="rader_detial_left_top">
-              <p class="title">评价得分率</p>
-              <!-- <p class="desc">(满分100)</p> -->
-              <p class="number">{{wincommentdata.pjpjf}}</p>
-            </div>
-            <div class="rader_detial_left_end">
-              <p class="title">评价最低分</p>
-              <p class="number">{{wincommentdata.zdf}}</p>
-            </div>
-          </div>
-          <div class="rader_detial_middle"></div>
-          <div class="rader_detial_right">
-            <div class="rader_detial_left_top">
-              <p class="title">评价总次数</p>
-              <p class="number">{{wincommentdata.pjzs}}</p>
-            </div>
-            <div class="rader_detial_left_end">
-              <p class="title">评价表提交率</p>
-              <p class="number">{{wincommentdata.tjl}}</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="win_end">
-          <p class="win_title">评论项</p>
-          <div class="win_end_block">
-            <div v-for="(item, index) in winteacherdata" :key="index" class="win_end_block_single">
-              <div class="top">
-                <div class="block"></div>
-                <p>{{item.days}}-{{item.officename}}</p>
-              </div>
-              <div class="middle">
-                <p>{{item.wordsvalue}}</p>
-              </div>
-            </div>
-            <!-- <div class="win_end_block_single">
-                                          <div class="top">
-                                            <div class="block"></div>
-                                            <p>09月20日-内科</p>
-                                          </div>
-                                          <div class="middle">
-                                            <p>王老师带教过程中认真负责，有耐心王老师带教过程中认真负责，有耐心过程中认真负责，有耐心过程中认真负责，有耐心</p>
-                                          </div>
-                                        </div>
-                                        <div class="win_end_block_single">
-                                          <div class="top">
-                                            <div class="block"></div>
-                                            <p>09月20日-内科</p>
-                                          </div>
-                                          <div class="middle">
-                                            <p>王老师带教过程中认真负责，有耐心王老师带教过程中认真负责，有耐心过程中认真负责，有耐心过程中认真负责，有耐心</p>
-                                          </div>
-                                        </div>
-                                        <div class="win_end_block_single">
-                                          <div class="top">
-                                            <div class="block"></div>
-                                            <p>09月20日-内科</p>
-                                          </div>
-                                          <div class="middle">
-                                            <p>王老师带教过程中认真负责，有耐心</p>
-                                          </div>
-            </div>-->
-          </div>
-        </div>
-        <!-- </div> -->
-      </div>
+      </swiper> -->
     </div>
     <div @click="handleHideRotation()" v-show="showRotation" class="rotation_wind">
       <div class="rotation_wind_main">
-        <p
-          @click="handleSelectName(index,item,item.officelist)"
-          v-for="(item, index) in selectdata"
-          :style="selectId == index?'color: #277fff':'color: #212121'"
-          :key="index"
-        >{{item.name}}</p>
+        <div class="jd">
+          <div class="title">
+            请选择基地
+            <p @click="showRotation">X</p>
+          </div>
+          <div
+            class="jdbox"
+            @click="handleSelectName(index,item,item.majorlist)"
+            v-for="(item, index) in selectmajorlist"
+            :style="selectId == index?'color: #0096C1':'color: #212121'"
+            :key="index"
+          >{{item.majorname}}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -216,7 +140,8 @@ import {
   queryMajorTeacherevaluatedata,
   queryMajorTeacherevaluatedataitem,
   getoffice,
-  queryTeachereValuationitem
+  queryTeachereValuationitem,
+  getmajor
 } from "../../../api/teachercomment";
 import moment from "moment";
 
@@ -332,12 +257,12 @@ export default {
               self.commentdata = JSON.parse(res).majorevaluateoverview;
               self.teacherdata = JSON.parse(res).teacherevaluatelatelydata;
               if (
-                arrs[0].value == 0 &&
-                arrs[1].value == 0 &&
-                arrs[2].value == 0 &&
-                arrs[3].value == 0 &&
-                arrs[4].value == 0 &&
-                arrs[5].value == 0
+                arrs[0].value == 1 &&
+                arrs[1].value == 1 &&
+                arrs[2].value == 1 &&
+                arrs[3].value == 1 &&
+                arrs[4].value == 1 &&
+                arrs[5].value == 1
               ) {
                 self.flag = false;
               } else {
@@ -445,13 +370,15 @@ export default {
     handleSelectName(index, name, datas) {
       Indicator.open("加载中...");
       this.selectId = index;
-      this.selectName = name.name;
-      this.datas = name.officeid;
+      this.selectName = name.majorname;
+      this.datas = name.majorsubjectid;
       let add = [];
       add.push(this.datas);
-      queryTeachereValuationitem(2, add, this.moment).then(res => {
-        // console.log(JSON.parse(res));
-        this.singledata = JSON.parse(res).teacherevaluationitem;
+ 
+      queryMajorFavorablerate(2, add, this.moment).then(res => {
+           console.log(JSON.parse(res));
+        this.swipeTopData = JSON.parse(res).major;
+        this.firstid = JSON.parse(res).major[0].majorsubjectid;
         this.showtab = true;
         Indicator.close();
       });
@@ -520,6 +447,17 @@ export default {
       // this.teacherdata = JSON.parse(res).majorevaluateoverview
       this.flag = true;
     });
+    getmajor().then(res => {
+      // console.log(JSON.parse(res));
+      this.selectmajorlist = JSON.parse(res).majorlist;
+      queryTeachereValuationitem(1, 1, this.moment).then(res => {
+        // console.log(JSON.parse(res));
+        this.singledata = JSON.parse(res).teacherevaluationitem;
+        this.showchildren = true;
+        this.showtab = true;
+        Indicator.close();
+      });
+    });
     getoffice().then(res => {
       // console.log(JSON.parse(res));
       this.selectdata = JSON.parse(res).officelist;
@@ -527,6 +465,7 @@ export default {
       for (let i = 0; i < JSON.parse(res).officelist[0].length; i++) {
         ads.push(JSON.parse(res).officelist[i].name);
       }
+
       queryTeachereValuationitem(1, 1, this.moment).then(res => {
         // console.log(JSON.parse(res));
         this.singledata = JSON.parse(res).teacherevaluationitem;
@@ -552,21 +491,28 @@ export default {
 </script>
 
 <style scoped lang="less">
+.content {
+  height: 100%;
+}
 .tabbar_right {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-  position: absolute;
-  z-index: 2;
-  right: 0.2rem;
-
+  // border-bottom: 1px solid #f2f2f2;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  width: 90%;
+  margin: auto;
+  .title {
+    margin-left: auto;
+    float: right;
+  }
   img {
     width: 0.16rem;
     height: 0.16rem;
     margin-left: 0.05rem;
   }
 }
-
+.bannerbox {
+  height: 100%;
+}
 .rotation_wind {
   width: 100%;
   height: 100%;
@@ -585,26 +531,56 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    padding-top: 0.29rem;
+    // padding-top: 0.19rem;
     padding-bottom: 0.11rem;
-    height: 3rem;
+    height: 6rem;
     overflow: scroll;
 
-    p {
-      font-family: PingFangSC-Regular;
-      font-size: 0.16rem;
-      color: #212121;
-      text-align: center;
-      line-height: 0.17rem;
-      margin-bottom: 0.18rem;
-    }
-
     .active {
-      color: #277fff;
+      color: #0096c1;
     }
   }
 }
-
+.jd {
+  width: 96%;
+  margin: auto;
+  .title {
+    font-size: 0.13rem;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 1);
+    border-bottom: 1px solid #f2f2f2;
+    line-height: 0.4rem;
+    p {
+      float: right;
+    }
+  }
+}
+.jdbox {
+  width: 0.8rem;
+  height: 0.44rem;
+  background: rgba(242, 242, 243, 1);
+  border-radius: 0.06rem;
+  display: inline-block;
+  margin: 5px;
+  text-align: center;
+  line-height: 0.44rem;
+  font-size: 0.13rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 1);
+  overflow: hidden;
+}
+.jdraderbox {
+  background: #f2f2f2;
+  height: 3.8rem;
+  padding: 0.15rem;
+}
+.jdrader {
+  height: 3.76rem;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 0.06rem;
+}
 .comments_top {
   // position: absolute;
   width: 3.55rem;
@@ -682,25 +658,6 @@ export default {
   /*}*/
 }
 
-.comment {
-  width: 3.55rem;
-  margin: 0 auto;
-  background: #ffffff;
-  box-shadow: 0 0 0.12rem 0 rgba(0, 0, 0, 0.08);
-  border-radius: 5px;
-  border-radius: 5px;
-  padding-bottom: 0.2rem;
-  // span {
-  //   color: #474c63;
-  //   // padding-top: 0.15rem;
-  //   // padding-bottom: 0.2rem;
-  //   // padding-right: 0.18rem;
-  //   display: block;
-  //   text-align: right;
-  //   margin-left: auto;
-  // }
-}
-
 /deep/ .mint-tab-item {
   height: auto !important;
 }
@@ -746,20 +703,9 @@ export default {
   overflow: inherit;
 }
 
-// .comment-box {
-//   p{
-//         position: absolute;
-//             top: 0.16rem;
-//         display: block;
-//         /* margin: 0 auto; */
-//         text-align: center;
-//         left: 0;
-//         right: 0;
-//         bottom: 0;
-//         margin: auto;
-//         font-size: 0.1rem;
-//   }
-// }
+.comment-box {
+  // position: absolute;
+}
 .comment_top {
   display: flex;
   align-items: center;

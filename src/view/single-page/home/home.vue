@@ -133,7 +133,19 @@
                         <p @click.stop="changeValue('年度',3)">年度</p>
                       </mt-tab-item>
                     </mt-tabbar>-->
-
+                    <div class="montent">
+                      <ul>
+                        <li>
+                          <p @click.stop="changeValue('月度',1)">月度</p>
+                        </li>
+                        <li>
+                          <p @click.stop="changeValue('季度',2)">季度</p>
+                        </li>
+                        <li>
+                          <p @click.stop="changeValue('年度',3)">年度</p>
+                        </li>
+                      </ul>
+                    </div>
                     <div class="teacher_radar">
                       <radar
                         v-if="flag1"
@@ -141,14 +153,14 @@
                         :maintitle="'对老师评价雷达图'"
                         :barnumber="radardata1"
                       ></radar>
-                      <div v-else style="width:100%;height:2rem;">
+                      <div v-else style="width:100%;height:2rem;width:3rem">
                         <p style="text-align: center; line-height: 2rem; color: #dddddd;">暂无数据</p>
                       </div>
                       <div class="teacher_radar_detial">
                         <div>
                           <div class="blockbg">
-                            <p class="number">{{teacherValuate.pjpjf}}</p>
-                            <p class="title">评价平均分</p>
+                            <p class="number">{{((teacherValuate.pjpjf)*100).toFixed(2)}}%</p>
+                            <p class="title">评价得分率</p>
                             <!-- <p class="desc">(满分{{teacherValuate.zdmf}})</p> -->
                           </div>
                           <div class="blockbg2">
@@ -186,27 +198,17 @@
                     <div style="margin-top:0.25rem" v-if="showteacherString">
                       <div class="teacherrs">
                         <p class="title">老师总数量（人）</p>
-                        <p class="number">{{teacherDatalist.lssl}}</p>
+                        <p class="number">{{ teacherDatalist[4].rs}}</p>
                       </div>
                       <div class="teacherlistplan">
                         <ul>
-                          <li>
-                            <p class="number">{{teacherDatalist.zrys}}</p>
-                            <p class="title">主任医师</p>
-                          </li>
-                          <li>
-                            <p class="number">{{teacherDatalist.fzrys}}</p>
-                            <p class="title">副主任医师</p>
-                          </li>
-                        </ul>
-                        <ul>
-                          <li style="border-radius: 0rem 0rem 0rem 0.1rem;">
-                            <p class="number">{{teacherDatalist.zzys}}</p>
-                            <p class="title">主治医师</p>
-                          </li>
-                          <li style="border-radius: 0rem 0rem 0.1rem 0rem;">
-                            <p class="number">0</p>
-                            <p class="title">其他</p>
+                          <li
+                            v-for="(item,index) in teacherDatalist"
+                            :key="index"
+                            v-if="item.professionaltitle !='999'"
+                          >
+                            <p class="number">{{item.rs}}</p>
+                            <p class="title">{{item.professionaltitle}}</p>
                           </li>
                         </ul>
                       </div>
@@ -275,11 +277,11 @@
                     <!-- 师资绩效内容 -->
                     <div style="margin-top:0.25rem">
                       <div class="teachernumjx">
-                        <p class="title">带教学员数量</p>
-                        <p class="number">{{teacherWorkData.djxysl}}</p>
+                        <p class="title">本月入科数量</p>
+                        <p class="number">{{teacherWorkData.byrksl}}</p>
                       </div>
                       <div class="teachernum2">
-                        <p class="title">带教学员数量</p>
+                        <p class="title">教学活动数量</p>
                         <p class="number">{{teacherWorkData.djhds}}</p>
                         <span class="bfb">教学活动好评度</span>
                         <span class="bfbnum">
@@ -398,10 +400,6 @@
                       </div>
                       <div class="bannerright">
                         <ul>
-                          <li>
-                            总人数
-                            <span>{{studenttrain.trainrjcs.zrs}}</span>
-                          </li>
                           <li>
                             一年级
                             <span>{{studenttrain.trainljrc.ynjrc}}</span>
@@ -565,7 +563,7 @@
                         <div class="score_main_single">
                           <p class="title">评价平均分</p>
                           <p class="title">（满分{{studentvalue.evaluateoverview.zdmf}}）</p>
-                          <p class="answer">{{studentvalue.evaluateoverview.pjpjf}}</p>
+                          <p class="answer">{{((studentvalue.evaluateoverview.pjpjf)*100).toFixed(2)}}%</p>
                         </div>
                         <div class="score_main_single">
                           <p class="title">各角色对学员评价最低分</p>
@@ -1251,24 +1249,24 @@ export default {
               });
             }
             // console.log(arrsp);
-            if (arrsp[0].value <= 10) {
-              arrsp[0].value = arrsp[0].value * 10;
-            }
-            if (arrsp[1].value <= 10) {
-              arrsp[1].value = arrsp[1].value * 10;
-            }
-            if (arrsp[2].value <= 10) {
-              arrsp[2].value = arrsp[2].value * 10;
-            }
-            if (arrsp[3].value <= 10) {
-              arrsp[3].value = arrsp[3].value * 10;
-            }
-            if (arrsp[4].value <= 10) {
-              arrsp[4].value = arrsp[4].value * 10;
-            }
-            if (arrsp[5].value <= 10) {
-              arrsp[5].value = arrsp[5].value * 10;
-            }
+            // if (arrsp[0].value <= 10) {
+            //   arrsp[0].value = arrsp[0].value * 10;
+            // }
+            // if (arrsp[1].value <= 10) {
+            //   arrsp[1].value = arrsp[1].value * 10;
+            // }
+            // if (arrsp[2].value <= 10) {
+            //   arrsp[2].value = arrsp[2].value * 10;
+            // }
+            // if (arrsp[3].value <= 10) {
+            //   arrsp[3].value = arrsp[3].value * 10;
+            // }
+            // if (arrsp[4].value <= 10) {
+            //   arrsp[4].value = arrsp[4].value * 10;
+            // }
+            // if (arrsp[5].value <= 10) {
+            //   arrsp[5].value = arrsp[5].value * 10;
+            // }
 
             if (
               arrsp[0].value == 0 &&
@@ -1614,6 +1612,7 @@ export default {
     }),
       teacherWorkload(this.moment).then(res => {
         if (JSON.parse(res).code == 1) {
+          console.log(JSON.parse(res));
           this.teacherWorkData = JSON.parse(res).teacherworkload;
           this.teachertraintypeworkload = JSON.parse(
             res
@@ -4256,7 +4255,7 @@ export default {
   margin-top: 0.06rem;
 }
 .jnbottom ul li {
-  width: 1rem;
+  width: 0.9rem;
   height: 0.6rem;
   padding: 20px;
   margin-top: 0.06rem;
@@ -4277,6 +4276,21 @@ export default {
     font-weight: bold;
     color: rgba(89, 89, 89, 1);
     line-height: 0.24rem;
+  }
+}
+.montent {
+  width: 2.1rem;
+  height: 0.28rem;
+  background: rgba(118, 118, 128, 0.12);
+  border-radius: 0.08rem;
+  ul{
+    display: flex;
+  }
+  li {
+    width: 0.7rem;
+    height: 0.24rem;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 0.08rem;
   }
 }
 </style>

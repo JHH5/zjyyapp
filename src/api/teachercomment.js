@@ -15,8 +15,6 @@ export const queryTeachereValuationitem = (time,datas) => {
         data:{
             starttime:year+"-"+ time +"-01 00:00:00",
             endtime:year+"-"+ time +"-"+ moment(year + "-" + time,"YYYY-MM").daysInMonth() +" 23:59:59",
-            // starttime: "2019-12-01 00:00:00",
-            // endtime: "2019-12-31 23:59:59"
             officeid:datas
         },
         method: 'post'
@@ -40,8 +38,7 @@ export const queryMajorFavorablerate = (time) => {
         data:{
             starttime:year+"-"+time +"-01 00:00:00",
             endtime:year+"-"+time +"-"+ moment(year + "-" + time,"YYYY-MM").daysInMonth() +" 23:59:59",
-            // starttime: "2019-12-01 00:00:00",
-            // endtime: "2019-12-31 23:59:59"
+      
         },
         method: 'post'
     })
@@ -52,8 +49,6 @@ export const queryMajorTeacherevaluatedata = (id,time) => {
         url: '/doctor_train/rest/H5Management/querymajorteacherevaluatedata.do',
         data:{
             majorsubjectid:id,
-            // starttime: "2019-12-01 00:00:00",
-            // endtime: "2019-12-31 23:59:59"
             starttime:year+"-"+time +"-01 00:00:00",
             endtime:year+"-"+time +"-"+ moment(year + "-" + time,"YYYY-MM").daysInMonth() +" 23:59:59",
         },
@@ -80,6 +75,16 @@ export const queryMajorTeacherevaluatedataitem = (ids,id,time) => {
 export const getoffice = () => {             //筛选科室
     return axios.request({
         url: '/doctor_train/rest/H5Management/queryoffice.do',
+        // data: {
+        //     officeid: ids
+        // },
+        method: 'post'
+    })
+}
+
+export const getmajor = () => {             //筛选基地
+    return axios.request({
+        url: '/doctor_train/rest/H5Management/querymajormanageoffice.do',
         // data: {
         //     officeid: ids
         // },

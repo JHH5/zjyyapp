@@ -19,7 +19,7 @@
               <div class="end_desc">
                 <!-- <p>{{item.pjf}}分，</p> -->
                 <!-- <img src="../../assets/images/appraise/redarrow.png" alt /> -->
-                <p>满分{{itemtext.itemff}}分，平均{{itemtext.pjf}}分，{{itemtext.zz}}</p>
+                <p>满分{{itemtext.itemff}}分，得分{{itemtext.pjf}}%率，{{itemtext.zz}}</p>
                  <!-- <p>{{item.pjf}}分，{{item.zz}}，该项有人{{item.bhgrs}}人评分低于60分</p> -->
               </div>
             </div>
@@ -234,7 +234,7 @@ export default {
     teacherFunc(){
       
         this.selectdata = this.singledata;
-        // console.log(this.selectdata)
+        console.log(this.selectdata)
       // queryTeachereValuationitem(0,this.moment).then(res => {
       //   // console.log(JSON.p  arse(this.users));
       //   this.selectdata = JSON.parse(res).teacherevaluationitem

@@ -8,93 +8,11 @@
       <mt-navbar v-model="selected">
         <mt-tab-item id="1">退培学员清单</mt-tab-item>
         <mt-tab-item id="2">轮转学员清单</mt-tab-item>
-        <mt-tab-item id="3">未入科的学员清单</mt-tab-item>
+        <mt-tab-item id="3">本月未入科清单</mt-tab-item>
+        <mt-tab-item id="4">轮转异常人员</mt-tab-item>
       </mt-navbar>
       <mt-tab-container v-model="selected">
         <mt-tab-container-item id="1">
-          <!-- <div style="width:100%;height:4rem;display:none">
-            <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
-          </div>
-          <div class="rotation_top">
-            <div class="bluetitle"></div>
-            <p>{{this.selectName}}</p>
-            <img
-              @click="handleShowRotation()"
-              src="../../../assets/images/on_rotation/tabulation.png"
-              alt
-            />
-          </div>
-          <div class="rotation_middle">-->
-          <!-- <p>
-              总人数：
-              <span>{{majorlists.zrs}}</span>
-            </p>
-            <p>
-              当前正常轮转人数：
-              <span>{{majorlists.lzrs}}</span>
-            </p>
-            <p>
-              当前请假人数：
-              <span style="color:#E28A4A">{{majorlists.qjrs}}</span>
-            </p>
-            <p>
-              当前未按计划轮转人数：
-              <span>{{majorlists.wajhlz}}</span>
-            </p>
-            <p>
-              年度退陪人数：
-              <span>{{majorlists.tprs}}</span>
-          </p>-->
-          <!-- <div class="flex middle1">
-          <p>正常轮转人数：</p>
-          <span>961</span>
-        </div>
-        <div class="flex middle2">
-          <p>
-            （总数：
-            <span>985</span>）
-          </p>
-        </div>
-        <div class="flex middle3">
-          <p>请假人数：</p>
-          <span>24</span>
-        </div>
-        <div class="flex middle4">
-          <p>未按计划轮转人数：</p>
-          <span>0</span>
-        </div>
-        <div class="flex middle5">
-          <p>退培人数：</p>
-          <span>0</span>
-          </div>-->
-          <!-- </div>
-          <div class="rotation_main">-->
-          <!-- <p>科室轮转人数（全科室）</p> -->
-          <!-- <img src="../../../assets/images/on_rotation/on_rotation.png" alt=""> -->
-          <!-- <div class="yraybar">
-              <p class="title">科室轮转人数（全科室）</p>
-              <div class="bartop">
-                <p class="yray">0</p>
-                <p class="xray">饱和人数</p>
-              </div>
-              <div class="barmiddle_center">
-                <div class="barleft">
-                  <div v-for="(item, index) in traindata" :key="index" class="barleft_block">
-                    <p>{{item.officename}}</p>
-                  </div>
-                </div>
-                <div class="barmiddle">
-                  <div v-for="(item2, index2) in traindata" :key="index2" class="barmiddle_single">
-          <div :style="{ 'width': item2.lzrs*0.025 + 'rem' }" class="block">-->
-          <!-- <p style="margin-top: 0.05rem;margin-left:0.15rem">当前:{{item2.before}}</p>
-          <p style="margin-left:0.15rem">标准:{{item2.now}}</p>-->
-          <!-- </div>
-                    <p>{{item2.lzrs}}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>-->
           <div class="end">
             <div class="end_end">
               <div class="end_th">
@@ -148,10 +66,33 @@
                 <p>学员姓名</p>
               </div>
               <div class="endtable">
-                <div v-for="(item, index) in selectdata2" :key="index" class="end_td" >
+                <div v-for="(item, index) in selectdata2" :key="index" class="end_td">
                   <p>{{item.name}}</p>
                   <p style="border-left:1px solid #f0f0f7">
-                    <span v-for="(studentname,index) in item.studentlist" :key="index" >
+                    <span v-for="(studentname,index) in item.studentlist" :key="index">
+                      {{studentname.personname}}
+                      <span>
+                        <br />
+                      </span>
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mt-tab-container-item>
+        <mt-tab-container-item id="4">
+          <div class="end">
+            <div class="end_end">
+              <div class="end_th">
+                <p>科室名称</p>
+                <p>学员姓名</p>
+              </div>
+              <div class="endtable">
+                <div v-for="(item, index) in selectdata" :key="index" class="end_td">
+                  <p>{{item.majorname}}</p>
+                  <p style="border-left:1px solid #f0f0f7">
+                    <span v-for="(studentname,index) in item.studentlist" :key="index">
                       {{studentname.personname}}
                       <span>
                         <br />
@@ -166,7 +107,7 @@
       </mt-tab-container>
     </div>
     <div @click="handleHideRotation()" v-show="showRotation" class="rotation_wind">
-      <div class="rotation_wind_main">  
+      <div class="rotation_wind_main">
         <p
           @click="handleSelectName(index,item.majorname,item.officelist)"
           v-for="(item, index) in selectdata"
@@ -302,7 +243,7 @@ export default {
     selected(val) {
       // console.log(val);
       queryMajorstudentrounddata(val).then(res => {
-        // console.log(JSON.parse(res));
+        console.log(JSON.parse(res));
         this.selectdata = JSON.parse(res).majorlist;
         this.selectdata2 = JSON.parse(res).officelist;
       });
