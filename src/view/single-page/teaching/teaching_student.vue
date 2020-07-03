@@ -1,7 +1,13 @@
 <template>
   <div>
-    <header-main :message="'带教学员'"></header-main>
-    <div class="teaching_student">
+     <mt-header fixed title="带教学员">
+      <router-link to="" slot="left">
+        <mt-button icon="back" @click="$router.back(-1)"></mt-button>
+      </router-link>
+    </mt-header>
+    <!-- 老版本 -->
+    <!-- <header-main :message="'带教学员'"></header-main> -->
+    <!-- <div class="teaching_student">
       <div style="background:#f0f0f7; text-align: center;border-radius: 5px 5px 0px 0px;">
         <u>专业基地</u>
       </div>
@@ -96,7 +102,7 @@
           <p>确定</p>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -504,6 +510,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.mint-header {
+  background-color: #fff;
+  color: #000;
+  height: 44px;
+  border-bottom: 1px solid #f2f2f3;
+  z-index: 60;
+}
+/deep/ .mint-header-title {
+  font-size: 0.17rem;
+  font-weight: bold;
+}
+//老版本
 .teaching_student {
   position: absolute;
   width: 3.55rem;
