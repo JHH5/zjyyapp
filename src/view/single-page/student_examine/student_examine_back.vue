@@ -1,151 +1,263 @@
 <template>
-  <div  class="student_examine">
-    <mt-header fixed title="考核">
-      <router-link to slot="left">
-        <mt-button icon="back" @click="$router.back(-1)"></mt-button>
-      </router-link>
-    </mt-header>
-
-    <div class="main-box">
-      <div class="tab-page-btn">
-        <span style="    border-left: 2px solid #0096c1;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;" :class="selected == 1?'tab-action':''" @click="selected = 1">出科考试</span>
-        <span style="border-right: 2px solid #0096c1;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;" :class="selected == 2?'tab-action':''" @click="selected = 2">日常考试</span>
+  <div>
+   
+    <header-main :message="'考核'"></header-main>
+    <div class="examine_top">
+      <mt-navbar v-model="selected">
+        <mt-tab-item id="1">出科考试</mt-tab-item>
+        <mt-tab-item id="2">日常考试</mt-tab-item>
+        <!-- <mt-tab-item  id="3">结业考试</mt-tab-item> -->
+      </mt-navbar>
+      <div style="width:100%;height:2rem;display:none">
+        <p style="text-align: center; line-height: 2rem; color: #dddddd;">暂无数据</p>
       </div>
-    </div>
-    <div class="sum-content">
-      <div v-for="(item,index) in topSwipeData" :key="index">
-        
-         <div class="sumks-item" v-if="item.typename == '理论'">
-        <div >
-          <p class="sum-item">理论考试</p>
-        <div class="sum-left" style="    margin-bottom: 0.10rem;">
-          <p>参加人次：<span style="color:#0096C1">{{item.zrc}}</span></p>
-          <p style="margin-top: 0.1rem;">得分率：&#12288;<span style="color:#0096C1;">{{(item.dfl2).toFixed(2)}}%</span></p>
-
-        </div>
-        <div class="sum-right"  >
-          <cycle
+      <mt-tab-container class="containter" v-model="selected" swipeable>
+        <mt-tab-container-item id="1">
+          <div class="examine1">
+            <div class="examine1_left" v-for="(item,index) in topSwipeData" :key="index">
+              <p class="examine1_left_top">{{item.typename}}考试</p>
+              <div class="examine1_left_end">
+                <div class="endleft">
+                  <p style="color: #277FFF;" class="number">{{item.zrc}}</p>
+                  <p class="desc">参加人次</p>
+                </div>
+                <cycle
                   v-if="showcycle"
+                  :cycleName="'得分率'"
                   :cycleValue="(item.dfl2).toFixed(2)"
                   :cyclewidth="cyclewidth"
-                  cycleColor="#0096C1"
-                  :borderWidth="8"
-                  :isShowBgBorder="true"
                 ></cycle>
-        </div>
-        </div>
-        
-      </div>
-      <div v-if="index == 0" style="width:3.35rem;height:0.01rem;background:rgba(242,242,243,1);margin: 0.12rem auto;"></div>
-        
-        <div class="sumks-item" v-if="item.typename == '技能'">
-        <p class="sum-item" style="border-left: 4px solid #FF9B00;margin-top:0">技能考试</p>
-        <div class="sum-left">
-         <p>参加人次：<span style="color:#FF9B00">{{item.zrc}}</span></p>
-         <p  style="margin-top: 0.1rem;">得分率：&#12288;<span style="color:#FF9B00;">{{(item.dfl2).toFixed(2)}}%</span></p>
-        </div>
-        <div class="sum-right" >
-          <cycle
+              </div>
+            </div>
+          </div>
+        </mt-tab-container-item>
+        <mt-tab-container-item id="2">
+          <div class="examine1">
+            <div class="examine1_left" v-for="(item,index) in topSwipeData" :key="index">
+              <p class="examine1_left_top">{{item.typename}}考试</p>
+              <div class="examine1_left_end">
+                <div class="endleft">
+                  <p style="color: #277FFF;" class="number">{{item.zrc}}</p>
+                  <p class="desc">参加人次</p>
+                </div>
+                <cycle
                   v-if="showcycle"
+                  :cycleName="'得分率'"
                   :cycleValue="(item.dfl2).toFixed(2)"
                   :cyclewidth="cyclewidth"
-                  cycleColor="#FF9B00"
-                  :borderWidth="8"
-                  :isShowBgBorder="true"
                 ></cycle>
-        </div>
-      </div>
-      </div>
-     
-      
+              </div>
+            </div>
+          </div>
+        </mt-tab-container-item>
+        <!-- <mt-tab-container-item id="3">
+          <div class="examine1">
+            <div class="examine1_left">
+              <p class="examine1_left_top">理论考试</p>
+              <div class="examine1_left_end">
+                <div class="endleft">
+                  <p style="color: #277FFF;" class="number">{{topSwipeData.llrs}}</p>
+                  <p class="desc">参加人数</p>
+                </div>
+                <cycle  v-if="showcycle" :cycleName="'通过率'"  :cycleValue="topSwipeData.lltgl2 == '0'?0:(topSwipeData.lltgl2*100).toFixed(2)" :cyclewidth="cyclewidth"></cycle>
+              </div>
+            </div>
+            <div class="examine1_left">
+              <p class="examine1_left_top">技能考试</p>
+              <div class="examine1_left_end">
+                <div class="endleft">
+                  <p style="color: #7ED5BC;" class="number">{{topSwipeData.jnrs}}</p>
+                  <p class="desc">参加人数</p>
+                </div>
+                <cycle  v-if="showcycle" :cycleName="'通过率'"  :cycleValue="topSwipeData.jntgl2 == '0'?0:(topSwipeData.jntgl2*100).toFixed(2)" :cyclewidth="cyclewidth"></cycle>
+              </div>
+            </div>
+          </div>
+        </mt-tab-container-item>-->
+      </mt-tab-container>
     </div>
 
-    <div class="info-content">
-      <mt-cell title="选择专业基地"  is-link @click.native="openPopup(1)" :value="firstName"></mt-cell>
-
-      <div class="screen-tap-box">
-        <p class="screen-tap" @click="openPopup(2)">{{secondName}}</p>
-        <p class="screen-tap" @click="openPopup(3)">{{String(new Date().getFullYear())+'年'+thirdName}}  </p>
-
+    <div class="examine_middle">
+      <div style="width:100%;height:4rem;display:none">
+        <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
       </div>
-      <div class="main-content"> 
-        
-        <div class="main-table">
-          <div class="nav-bar">
-          <p class="main-title">
-            {{firstName}}
+      <div class="examine_middle_top">
+        <div class="black_block"></div>
+        <div class="tops">
+          <p class="title">各基地{{endName}}</p>
+          <!-- <img @click="selectWindow = true" src="../../../assets/images/change.png" alt /> -->
+        </div>
+        <div :style="openList == false ? 'height: 0.68rem;':''" class="top">
+          <p
+            @click="handleFirst(item.majorsubjectid,item.majorname,item.officelist)"
+            :style="firstId == item.majorsubjectid ? 'color: #277FFF;':'color: #212121;'"
+            v-for="(item, index) in typeDate1"
+            :key="index"
+          >{{item.majorname}}</p>
+          <div class="open">
+            <div class="flex" v-show="!openList" @click="handleOpenList(1)">
+              <p>展开</p>
+              <img src="../../../assets/images/downarrow.png" alt />
+            </div>
+            <div class="flex" @click="handleOpenList(2)" v-show="openList">
+              <p>收起</p>
+              <img src="../../../assets/images/uparrow.png" alt />
+            </div>
+          </div>
+        </div>
+        <div class="middle">
+          <div v-show="showSecond" class="single">
+            <p>{{secondName}}</p>
+            <img @click="closeSecond()" src="../../../assets/images/blueclose.png" alt />
+          </div>
+          <div v-show="showThird" class="single">
+            <p>{{thirdName}}</p>
+            <img @click="closeThird()" src="../../../assets/images/blueclose.png" alt />
+          </div>
+          <div class="right">
+            <p>筛选</p>
+            <img @click="selectWindow = true" src="../../../assets/images/todaywork/select.png" alt />
+          </div>
+        </div>
+        <div
+          v-for="(item, index) in singlelistData"
+          :key="index"
+          v-show="item.zs != 0"
+          class="single_block"
+        >
+          <div class="single_top">
+            <p class="single_title">
+              {{firstName}}
               <span v-show="showSecond">{{secondName}}</span>
               <span v-show="showThird">{{thirdName}}</span>
-          </p>
-          <p class="main-title-sub">{{String(new Date().getFullYear())+'年'+thirdName}}</p>
+              {{endName}}
+            </p>
+            <p class="single_time">{{item.year}}年{{thirdName}}</p>
+          </div>
+          <div class="end">
+            <div class="end_end">
+              <div class="end_th">
+                <p>学员姓名</p>
+                <p>理论成绩</p>
+                <p>技能成绩</p>
+              </div>
+              <div class="endtable">
+                <div v-for="(item, index) in singlelistData2" :key="index" class="end_td">
+                  <p>{{item.personname}}</p>
+                  <p>{{item.finishtheoryscore}}</p>
+                  <p>{{item.finishskillscore}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="single_middle">
+            <p>参加人数：{{item.zs}}</p>
+            <p>通过率：{{item.tgl}}</p>
+            <p>
+              未通过人数：
+              <span @click="openPeopleDetial(item.wtgpersonids)">{{item.wtgrs}} （查看）</span>
+            </p>
+          </div>
+          <div class="examine1">
+            <div class="examine1_left">
+              <div class="examine1_left_end2">
+                <div class="endleft">
+                  <p class="number">{{item.llrs}}分</p>
+                  <p class="desc">理论考试平均分</p>
+                </div>
+                <cycle
+                  v-if="showcycle"
+                  :cycleName="'通过率'"
+                  :cycleValue="changeNumber(item.lltgl2)"
+                  :cyclewidth="cyclewidth"
+                ></cycle>
+              </div>
+            </div>
+            <div class="examine1_left">
+              <div class="examine1_left_end2">
+                <div class="endleft">
+                  <p class="number">{{item.jnrs}}分</p>
+                  <p class="desc">技能考试平均分</p>
+                </div>
+                <cycle
+                  v-if="showcycle"
+                  :cycleName="'通过率'"
+                  :cycleValue="changeNumber(item.jntgl2)"
+                  :cyclewidth="cyclewidth"
+                ></cycle>
+              </div>
+            </div>
+          </div>-->
         </div>
-          <ul class="head-table">
-              <li>教师</li>
-              <li>理论成绩</li>
-              <li>
-                技能成绩
-              </li>
-            </ul>
-            <ul v-for="(item, index) in singlelistData2" :key="index">
-              <li > {{item.personname}}</li>
-              <li>{{item.finishtheoryscore}}</li>
-              <li>
-                {{item.finishskillscore}}
-              </li>
-            </ul>
+        <div v-show="isshowdata(singlelistData)" class="single_block">
+          <p class="no_data">暂无数据</p>
         </div>
       </div>
     </div>
-
-     <mt-popup v-model="zyjdPopup" position="bottom">
-      <div class="popup-box">
-        <div class="popup-close" @click="zyjdPopup = false">
-          <img src="@/assets/images/close.png" alt />
+    <!-- <div v-show="peopledetial" class="single_window">
+      <div
+        @click="hidePeopleDetial()"
+        style=" background: rgba(0, 0, 0, 0.5);"
+        class="single_window"
+      ></div>
+      <div class="single_window_main">
+        <div class="window_top">
+          <p>
+            {{firstName}}
+            <span v-show="showSecond">{{secondName}}</span>
+            <span v-show="showThird">{{thirdName}}</span>
+            {{endName}}未通过人员名单
+          </p>
         </div>
-        <div class="popup-nav">
-          <mt-navbar v-model="selected1">
-            <mt-tab-item id="1">专业基地</mt-tab-item>
-            <mt-tab-item id="2">所属科室</mt-tab-item>
-            <mt-tab-item id="3">选择时间</mt-tab-item>
-          </mt-navbar>
+        <div class="window_middle">
+          <p>姓名</p>
+          <p>工号</p>
+          <p>未通过项</p>
         </div>
-        <div style="width:3.75rem;height:0.01rem;background:rgba(242,242,243,1);margin-top:0.1rem"></div>
-
-        <mt-tab-container v-model="selected1">
-          <mt-tab-container-item id="1">
-            <ul class="popup-down-items">
-              <li
-                :class="firstId == item.majorsubjectid ? 'popup-down-action':''"
-                v-for="(item, index) in typeDate1"
-                :key="index"
-                @click="handleFirst(item.majorsubjectid,item.majorname,item.officelist)"
-              >{{item.majorname}}</li>
-            </ul>
-          </mt-tab-container-item>
-          <mt-tab-container-item id="2"> 
-            <mt-cell title="专业基地" :value="firstName"></mt-cell>
-            <mt-cell :title="firstName+'科室'" :value="secondName"></mt-cell>
-            <div class="s-picker">
-              <mt-picker :slots="[{values:typeDate2}]" valueKey="officename" @change="onZyjdChange"></mt-picker>
-            </div>
-          </mt-tab-container-item>
-          <mt-tab-container-item id="3">
-            <mt-cell title="专业基地" :value="firstName"></mt-cell>
-            <mt-cell :title="firstName+'科室'" :value="secondName"></mt-cell>
-            <div class="s-picker">
-              <mt-picker :slots="popDate" valueKey="number" @change="onValuesChange"></mt-picker>
-            </div>
-            <div class="save" @click="onSave()">确定</div>
-          </mt-tab-container-item>
-        </mt-tab-container>
+        <div class="window_tab">
+          <div v-for="(item, index) in winlistdata" :key="index" class="window_tab_single">
+            <p>{{item.personname}}</p>
+            <p>{{item.jobnum}}</p>
+            <p>{{item.phoneno}}</p>
+          </div>
+        </div>
       </div>
-    </mt-popup>
+    </div>-->
 
-   
+    <div v-show="selectWindow" class="select_main">
+      <div @click="hideWindow()" style="height: 100%;width: 1.75rem;" class="select_window_black"></div>
+      <div class="select_window">
+        <div class="select_window_main">
+          <div class="select_window_first">
+            <p class="title">{{firstName}}科室：</p>
+            <div class="flex">
+              <p
+                @click="choice1(item2.officeid,item2.officename)"
+                :style="item2.officename.length > 6 ? 'line-height: 0.14rem;':''"
+                :class="choice1Id == item2.officeid ? 'active':'less'"
+                v-for="(item2, index) in typeDate2"
+                :key="index"
+              >{{item2.officename}}</p>
+            </div>
+          </div>
+          <div class="select_window_third">
+            <p class="title">选择时间：</p>
+            <div class="flex2">
+              <p
+                @click="choice2(index,item3.number)"
+                :class="choice2Id == index ? 'active':'less'"
+                v-for="(item3, index) in typeDate3"
+                :key="index"
+              >20/{{item3.number}}</p>
+            </div>
+          </div>
+        </div>
+        <div @click="slectType()" class="select_window_btn">
+          <p>确定</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -159,78 +271,11 @@ import {
   queryNotpassstudentdata
 } from "../../../api/studentexame";
 import moment from "moment";
-import { Header, Cell,Popup,Picker,Navbar,TabItem    } from "mint-ui";
 export default {
   data() {
     return {
-      popDate: [
-        {
-          flex: 1,
-          values: [String(new Date().getFullYear()) + "年"],
-          className: "slot1",
-          textAlign: "center"
-        },
-        {
-          flex: 1,
-          values: [
-            {
-              number: "12月",
-              index: 0
-            },
-            {
-              number: "11月",
-              index: 1
-            },
-            {
-              number: "10月",
-              index: 2
-            },
-            {
-              number: "9月",
-              index: 3
-            },
-            {
-              number: "8月",
-              index: 4
-            },
-            {
-              number: "7月",
-              index: 5
-            },
-            {
-              number: "6月",
-              index: 6
-            },
-            {
-              number: "5月",
-              index: 7
-            },
-            {
-              number: "4月",
-              index: 8
-            },
-            {
-              number: "3月",
-              index: 9
-            },
-            {
-              number: "2月",
-              index: 10
-            },
-            {
-              number: "1月",
-              index: 11
-            }
-          ],
-          className: "number",
-          textAlign: "center"
-        }
-      ],
-      selected1:'1',
-      zyjdPopup:false,
-        tabActionIndex:1,
       selected: "1",
-      cyclewidth: "0.8rem",
+      cyclewidth: "0.7rem",
       peopledetial: false,
       selectWindow: false,
       sumscore: "",
@@ -354,7 +399,6 @@ export default {
     };
   },
   watch: {
-      
     selected(val) {
       // Indicator.open("加载中...");
       this.moment = moment().month() + 1;
@@ -409,29 +453,6 @@ export default {
     }
   },
   methods: {
-    onZyjdChange(p, v) {
-      console.log(p.getValues());
-      if (p.getValues()[0]) {
-        
-        this.choice1(p.getValues()[0].officeid,p.getValues()[0].officename)
-        this.slectType();
-      }
-    },
-    onValuesChange(p, v) {
-      //s改变
-      console.log(p.getValues());
-      this.choice2(p.getValues()[1].index, p.getValues()[1].number);
-      this.slectType();
-    },
-    openPopup(val) {
-      this.zyjdPopup = true;
-      this.selected1 = String(val);
-    },
-  
-    onSave() {
-      this.zyjdPopup = false;
-      this.slectType();
-    },
     slectType() {
       this.secondName = this.choice1Name;
       this.thirdName = this.choice2Name;
@@ -702,18 +723,6 @@ export default {
     }
   },
   mounted() {
-    
-  },
-  created() {
-    if (moment().date() < 20) {
-      if (moment().month() == 0) {
-        this.moment = 12;
-      } else {
-        this.moment = moment().month();
-      }
-    } else {
-      this.moment = moment().month() + 1;
-    }
     // this.moment = moment().month() + 1
     queryStudentexamdata(1).then(res => {
       // console.log(JSON.parse(res));
@@ -747,272 +756,25 @@ export default {
       }
     });
   },
+  created() {
+    if (moment().date() < 20) {
+      if (moment().month() == 0) {
+        this.moment = 12;
+      } else {
+        this.moment = moment().month();
+      }
+    } else {
+      this.moment = moment().month() + 1;
+    }
+  },
   components: {
     "header-main": mainHeader,
-    cycle,
-    Header, Cell,Popup,Picker,Navbar,TabItem
+    cycle
   }
 };
 </script>
 
 <style lang="less" scoped>
-.s-picker {
-  margin-top: 0.51rem;
-}
-.save {
-  width: 3.75rem;
-  line-height: 0.49rem;
-  background: rgba(0, 150, 193, 1);
-
-  font-size: 0.15rem;
-  font-weight: bold;
-  color: rgba(255, 255, 255, 1);
-  position: fixed;
-  text-align: center;
-  left: 0;
-  bottom: 0;
-}
-
-.popup-down-items {
-  background: #fff;
-  width: 3.6rem;
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-  display: flex;
-  padding-bottom: 0.1rem;
-  padding-left: 0.15rem;
-  padding-top: 0.15rem;
-  flex-flow: wrap;
-  border-top: 1px solid #f2f2f3;
-}
-.popup-down-items li {
-  width: 0.8rem;
-  line-height: 0.44rem;
-  text-align: center;
-  border-radius: 0.06rem;
-  background: rgba(242, 242, 243, 1);
-  font-size: 0.13rem;
-  margin-right: 0.08rem;
-  margin-bottom: 0.1rem;
-}
-.popup-down-action {
-  color: rgba(0, 150, 193, 1);
-}
-/deep/ .mint-navbar .mint-tab-item.is-selected {
-  font-size: 0.13rem;
-  font-weight: bold;
-  color: rgba(0, 150, 193, 1);
-  line-height: 0.18rem;
-  border-bottom: 2px solid rgba(0, 150, 193, 1);
-  margin-bottom: 2px;
-}
-/deep/ .mint-navbar .mint-tab-item {
-  margin-left: 10px;
-  padding: 10px 0;
-  color: #595959;
-}
-/deep/.mint-tab-item-label {
-  font-size: 0.13rem;
-  font-weight: bold;
-  line-height: 0.18rem;
-}
-.popup-close {
-  position: absolute;
-  right: 0.15rem;
-  top: 0.1rem;
-
-  img {
-    width: 0.15rem;
-    height: 0.15rem;
-  }
-}
-.popup-nav {
-  width: 2.8rem;
-  margin-top: 0.1rem;
-}
-.popup-box {
-  width: 3.75rem;
-  height: 5.22rem;
-  background: rgba(255, 255, 255, 1);
-  position: relative;
-}
-.screen-tap-box{
-  width: 3.3rem;
-  margin: 0.1rem auto;
-  .screen-tap{
-    display: inline-block;
-    padding: 0.05rem 0.1rem;
-    background:rgba(255,255,255,1);
-    border-radius:0.03rem;
-    border:0.01rem solid rgba(0,150,193,1);
-  margin-right: 0.08rem;
-  font-size:0.13rem;
-  color:rgba(0,150,193,1);
-  line-height:0.18rem;
-  }
-}
-.main-content{
-  width:3.45rem;
-  margin: 0 auto;
-  margin-top: 0.1rem;
-  background: #fff;
-  .nav-bar{
-      height:0.64rem;
-      border-radius:0.06rem 0.06rem 0rem 0rem;
-      color: #0096C1;
-      padding-top: 1px;
-      border-bottom:2px solid #f0f0f7 ;
-      .main-title{
-        margin-top: 0.12rem;
-        margin-left: 0.24rem;
-        font-size:0.15rem;
-        font-weight:bold;
-        line-height:0.21rem;
-      }
-      .main-title-sub{
-        margin-top: 0.04rem;
-        margin-left: 0.24rem;
-        font-size:0.11rem;
-        font-weight:400;
-        color:#0096C1;
-        line-height:0.16rem;
-      }
-  }
-  .main-table{
-    border:3px solid #f0f0f7 ;
-  }
-   .main-table li{
-    width:1.1rem;
-    border-left:2px solid #f0f0f7 ;
-    line-height:0.44rem;
-    font-size:0.13rem;
-    text-align: center;
-    background:rgba(255,255,255,1);
-    display:inline-block;
-    vertical-align: middle;
-    
-    }
-  .main-table ul{
-    border-bottom:2px solid #f0f0f7 ;
-  }
-  .main-table li:first-child{
-    border-left:0px !important;
-  }
-  .main-table ul:last-child{
-    border-bottom:0px !important;
-  }
-  .head-table li{
-    color: #0096C1;
-  }
-    
-}
-/deep/ .mint-cell-value.is-link{
-  margin-right: 0.05rem;
-  color: #000;
-  font-weight: bold;
-  font-size:0.15rem;
-}
-/deep/ .mint-cell-wrapper{
-  padding: 0rem 0.3rem;
-}
-.mint-cell{
-  border-bottom: 1px solid #f2f2f3;
-}
-.info-content{
-  width:3.55rem;
-background:rgba(255,255,255,1);
-border-radius:0.03rem;
-margin: 0.1rem auto;
-padding-bottom: 0.1rem;
-
-}
-.sumks-item{
-  position: relative;
-}
-.sum-right{
-  position: absolute;
-    width: 0.8rem;
-    height: 0.8rem;
-    
-    display: inline-block;
-    right: 0.33rem;
-    top: 0.09rem;
-}
-.sum-left{
-  width: 2.2rem;
-  display: inline-block;
-  margin-top: 0.2rem;
-  margin-left: 0.2rem;
-
-  p{
-font-size:0.13rem;
-font-weight:400;
-color:rgba(89,89,89,1);
-line-height:0.18rem;
-  }
-}
-.sum-item{
-font-size:0.13rem;
-font-weight:bold;
-color:rgba(0,0,0,1);
-line-height:0.18rem;
-border-left: 4px solid #0096C1;
-margin: 0.2rem 0rem 0 0.1rem;
-padding-left: 0.10rem;
-}
-.sum-content{
-  padding-top: 1px;
-  width:3.55rem;
-  height:2.5rem;
-  background:rgba(255,255,255,1);
-  border-radius:0.03rem;
-  margin: 0 auto;
-  margin-top: 0.1rem;
-}
-
-.main-box{
-  margin-top: 0.54rem;
-}
-.tab-page-btn{
-  margin: 0 auto;
-  line-height: 0.44rem;
-  border-radius: 10px;
-  width: 2.96rem;
-    font-size:0.15rem;
-    font-weight:bold;
-    color:rgba(0,150,193,1);
-  span{
-    width: 1.46rem;
-    display: inline-block;
-    text-align: center;
-    border-top: 2px solid #0096c1;
-    border-bottom: 2px solid #0096c1;
-    background: #FFF;
-  }
-}
- .tab-action{
-  background: rgba(0,150,193,1) !important;
-  color: #FFF;
-}
-.mint-header {
-  background-color: #fff;
-  color: #000;
-  height: 44px;
-  border-bottom: 1px solid #f2f2f3;
-  z-index: 60;
-}
-/deep/ .mint-header-title {
-  font-size: 0.17rem;
-  font-weight: bold;
-}
-.student_examine{
-  background: rgba(242, 242, 243, 1);
-  min-height: 100vh;
-  padding-top: 1px;
-}
-
-
-
 // 列表开始
 .end {
   background: #ffffff;
@@ -1081,6 +843,7 @@ padding-left: 0.10rem;
 }
 // 列表结束
 .examine_top {
+  position: absolute;
   left: 0.1rem;
   right: 0.1rem;
   background: #ffffff;
@@ -1157,7 +920,7 @@ padding-left: 0.10rem;
   }
 }
 .examine_middle {
-  
+  position: absolute;
   top: 2.6rem;
   background: #ffffff;
   width: 100%;
@@ -1346,6 +1109,322 @@ padding-left: 0.10rem;
 /deep/ .mint-tab-item-label {
   position: relative;
 }
+.single_block {
+  width: 3.55rem;
+  height: 1.73rem;
+  margin: 0 auto;
+  background: #ffffff;
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
+  border-radius: 5px;
+  margin-top: 0.15rem;
+  .no_data {
+    line-height: 1.73rem;
+    text-align: center;
+    color: #dddddd;
+  }
+  .single_top {
+    display: flex;
+    align-items: center;
+    padding-top: 0.15rem;
+    .single_title {
+      font-family: PingFangSC-Medium;
+      font-size: 0.15rem;
+      color: #212121;
+      letter-spacing: 0;
+      // line-height: 15px;
+      border-left: 3px solid #277fff;
+      margin-left: 0.1rem;
+      padding-left: 0.05rem;
+    }
+    .single_time {
+      font-family: PingFangSC-Regular;
+      font-size: 0.13rem;
+      color: #9397ad;
+      letter-spacing: 0;
+      text-align: right;
+      margin-left: auto;
+      margin-right: 0.15rem;
+      // line-height: 13px;
+    }
+  }
+  .single_middle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+    margin-left: 0.1rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.25rem;
+    p {
+      font-family: PingFangSC-Regular;
+      font-size: 0.13rem;
+      color: #212121;
+      letter-spacing: 0;
+      // line-height: 13px;
+    }
+    span {
+      color: #277fff;
+    }
+  }
+}
+.single_window {
+  position: fixed;
 
-
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+  top: 0;
+  .single_window_main {
+    background: #ffffff;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-radius: 10px 10px 0 0;
+    border-radius: 10px 10px 0px 0px;
+    z-index: 99999;
+    height: 3rem;
+    overflow: auto;
+    .window_top {
+      display: flex;
+      align-items: center;
+      margin-top: 0.17rem;
+      margin-bottom: 0.17rem;
+      p {
+        font-family: PingFangSC-Regular;
+        font-size: 0.16rem;
+        color: #212121;
+        letter-spacing: 0;
+        text-align: center;
+        margin: 0 auto;
+        // line-height: 16px;
+      }
+    }
+    .window_middle {
+      display: flex;
+      align-items: center;
+      width: 3.45rem;
+      height: 0.4rem;
+      background: #f0f0f7;
+      margin: 0 auto;
+      justify-content: space-around;
+      p {
+        font-family: PingFangSC-Regular;
+        font-size: 0.16rem;
+        color: #212121;
+        letter-spacing: 0;
+        line-height: 0.4rem;
+      }
+      // p:nth-child(1) {
+      //   padding-left: 0.15rem;
+      // }
+      // p:nth-child(2) {
+      //   padding-left: 0.52rem;
+      //   padding-right: 0.93rem;
+      // }
+    }
+    .window_tab {
+      .window_tab_single {
+        display: flex;
+        align-items: center;
+        margin: 0 auto;
+        margin-top: 0.2rem;
+        width: 3.45rem;
+        justify-content: space-around;
+        p {
+          font-family: PingFangSC-Regular;
+          font-size: 0.16rem;
+          color: #212121;
+          letter-spacing: 0;
+          line-height: 0.4rem;
+        }
+        // p:nth-child(1) {
+        //   padding-left: 0.15rem;
+        // }
+        // p:nth-child(2) {
+        //    padding-left: 0.52rem;
+        //    padding-right: 0.93rem;
+        // }
+      }
+    }
+  }
+}
+.select_main {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  .select_window {
+    width: 2rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: #ffffff;
+    .select_window_main {
+      margin-top: 0.15rem;
+      margin-left: 0.15rem;
+      margin-right: 0.13rem;
+      .title {
+        font-family: PingFangSC-Regular;
+        font-size: 0.13rem;
+        color: #212121;
+        letter-spacing: 0;
+        line-height: 0.18rem;
+        margin-bottom: 0.15rem;
+      }
+      .flex {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        p {
+          font-family: PingFangSC-Regular;
+          font-size: 0.13rem;
+          color: #212121;
+          letter-spacing: 0;
+          // line-height: 0.18rem;
+          height: 0.18rem;
+          background: #f0f0f7;
+          border-radius: 2px;
+          border-radius: 2px;
+          // padding-top: 0.04rem;
+          // padding-bottom: 0.06rem;
+          // padding-left: 0.08rem;
+          // padding-right: 0.08rem;
+          // margin-right: 0.1rem;
+          margin-bottom: 0.1rem;
+          width: 0.8rem;
+          height: 0.28rem;
+          line-height: 0.28rem;
+          text-align: center;
+        }
+        .active {
+          background: rgba(33, 135, 255, 0.15);
+          color: #2187ff;
+        }
+      }
+      .select_window_first {
+        margin-bottom: 0.1rem;
+        border-bottom: 1px solid #f0f0f7;
+      }
+      .select_window_second {
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
+        border-top: 1px solid #f0f0f7;
+        border-bottom: 1px solid #f0f0f7;
+      }
+      .select_window_third {
+        margin-top: 0.15rem;
+        .flex2 {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-around;
+          p {
+            font-family: PingFangSC-Regular;
+            font-size: 0.13rem;
+            color: #212121;
+            letter-spacing: 0;
+            // line-height: 0.18rem;
+            height: 0.18rem;
+            background: #f0f0f7;
+            border-radius: 2px;
+            border-radius: 2px;
+            // padding-top: 0.04rem;
+            // padding-bottom: 0.06rem;
+            // padding-left: 0.08rem;
+            // padding-right: 0.08rem;
+            // margin-right: 0.1rem;
+            margin-bottom: 0.1rem;
+            width: 0.5rem;
+            height: 0.28rem;
+            line-height: 0.28rem;
+            text-align: center;
+          }
+          .active {
+            background: rgba(33, 135, 255, 0.15);
+            color: #2187ff;
+          }
+        }
+      }
+    }
+    .select_window_btn {
+      width: 1.6rem;
+      height: 0.4rem;
+      background: #277fff;
+      border-radius: 20px;
+      border-radius: 20px;
+      display: block;
+      margin: 0 auto;
+      position: absolute;
+      bottom: 0.2rem;
+      right: 0.2rem;
+      left: 0.2rem;
+      p {
+        font-family: PingFangSC-Regular;
+        font-size: 0.16rem;
+        color: #ffffff;
+        letter-spacing: 0;
+        line-height: 0.4rem;
+        text-align: center;
+      }
+    }
+  }
+}
+.middle {
+  display: flex;
+  align-items: center;
+  height: 0.45rem;
+  background: #ffffff;
+  padding-left: 0.15rem;
+  padding-right: 0.15rem;
+  border-bottom: 1px solid #f0f0f7;
+  .single {
+    display: flex;
+    align-items: center;
+    background: rgba(39, 127, 255, 0.15);
+    border-radius: 2px;
+    border-radius: 2px;
+    padding-left: 0.05rem;
+    padding-top: 0.04rem;
+    padding-bottom: 0.04rem;
+    margin-right: 0.1rem;
+    p {
+      font-family: PingFangSC-Regular;
+      font-size: 0.13rem;
+      color: #277fff;
+      letter-spacing: 0;
+      margin-right: 0.05rem;
+      // line-height: 18px;
+    }
+    img {
+      width: 0.1rem;
+      height: 0.1rem;
+      margin-right: 0.05rem;
+    }
+  }
+  .right {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    p {
+      font-family: PingFangSC-Regular;
+      font-size: 0.15rem;
+      color: #474c63;
+      letter-spacing: 0;
+      text-align: right;
+      // line-height: 15px;
+    }
+    img {
+      width: 0.16rem;
+      height: 0.16rem;
+      margin-left: 0.05rem;
+    }
+  }
+}
 </style>
