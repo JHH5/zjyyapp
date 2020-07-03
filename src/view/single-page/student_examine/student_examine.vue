@@ -8,76 +8,144 @@
 
     <div class="main-box">
       <div class="tab-page-btn">
-        <span class="tab-action">出科考试</span>
-        <span>日常考试</span>
+        <span style="    border-left: 2px solid #0096c1;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;" :class="selected == 1?'tab-action':''" @click="selected = 1">出科考试</span>
+        <span style="border-right: 2px solid #0096c1;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;" :class="selected == 2?'tab-action':''" @click="selected = 2">日常考试</span>
       </div>
     </div>
     <div class="sum-content">
-      
-      <div class="sumks-item">
-        <p class="sum-item">理论考试</p>
+      <div v-for="(item,index) in topSwipeData" :key="index">
+        
+         <div class="sumks-item" v-if="item.typename == '理论'">
+        <div >
+          <p class="sum-item">理论考试</p>
         <div class="sum-left" style="    margin-bottom: 0.10rem;">
-          <p>参加人次：<span style="color:#0096C1">895445</span></p>
-          <p style="margin-top: 0.1rem;">得分率：&#12288;<span style="color:#0096C1;">134222%</span></p>
+          <p>参加人次：<span style="color:#0096C1">{{item.zrc}}</span></p>
+          <p style="margin-top: 0.1rem;">得分率：&#12288;<span style="color:#0096C1;">{{(item.dfl2).toFixed(2)}}%</span></p>
 
         </div>
-        <div class="sum-right"  style="background: #0096C1;">
-
+        <div class="sum-right"  >
+          <cycle
+                  v-if="showcycle"
+                  :cycleValue="(item.dfl2).toFixed(2)"
+                  :cyclewidth="cyclewidth"
+                  cycleColor="#0096C1"
+                  :borderWidth="8"
+                  :isShowBgBorder="true"
+                ></cycle>
         </div>
+        </div>
+        
       </div>
-      <div style="width:3.35rem;height:0.01rem;background:rgba(242,242,243,1);margin: 0.12rem auto;"></div>
-      <div class="sumks-item">
+      <div v-if="index == 0" style="width:3.35rem;height:0.01rem;background:rgba(242,242,243,1);margin: 0.12rem auto;"></div>
+        
+        <div class="sumks-item" v-if="item.typename == '技能'">
         <p class="sum-item" style="border-left: 4px solid #FF9B00;margin-top:0">技能考试</p>
         <div class="sum-left">
-         <p>参加人次：<span style="color:#FF9B00">895445</span></p>
-         <p  style="margin-top: 0.1rem;">得分率：&#12288;<span style="color:#FF9B00;">134222%</span></p>
+         <p>参加人次：<span style="color:#FF9B00">{{item.zrc}}</span></p>
+         <p  style="margin-top: 0.1rem;">得分率：&#12288;<span style="color:#FF9B00;">{{(item.dfl2).toFixed(2)}}%</span></p>
         </div>
-        <div class="sum-right" style="background: #ff9b00;">
+        <div class="sum-right" >
+          <cycle
+                  v-if="showcycle"
+                  :cycleValue="(item.dfl2).toFixed(2)"
+                  :cyclewidth="cyclewidth"
+                  cycleColor="#FF9B00"
+                  :borderWidth="8"
+                  :isShowBgBorder="true"
+                ></cycle>
         </div>
       </div>
+      </div>
+     
+      
     </div>
 
     <div class="info-content">
-      <mt-cell title="选择时间"  is-link @click.native="openPopup(3)" value="带链接"></mt-cell>
+      <mt-cell title="选择专业基地"  is-link @click.native="openPopup(1)" :value="firstName"></mt-cell>
 
       <div class="screen-tap-box">
-        <p class="screen-tap">2020-10-20 <img src="" alt=""></p>
+        <p class="screen-tap" @click="openPopup(2)">{{secondName}}</p>
+        <p class="screen-tap" @click="openPopup(3)">{{String(new Date().getFullYear())+'年'+thirdName}}  </p>
+
       </div>
       <div class="main-content"> 
         
         <div class="main-table">
           <div class="nav-bar">
-          <p class="main-title">{{'标题'}}</p>
-          <p class="main-title-sub">时间信息</p>
+          <p class="main-title">
+            {{firstName}}
+              <span v-show="showSecond">{{secondName}}</span>
+              <span v-show="showThird">{{thirdName}}</span>
+          </p>
+          <p class="main-title-sub">{{String(new Date().getFullYear())+'年'+thirdName}}</p>
         </div>
           <ul class="head-table">
               <li>教师</li>
-              <li>副主任医师</li>
+              <li>理论成绩</li>
               <li>
-                <p>学生A</p>
-               
+                技能成绩
               </li>
             </ul>
-            <ul>
-              <li>教师</li>
-              <li>副主任医师</li>
+            <ul v-for="(item, index) in singlelistData2" :key="index">
+              <li > {{item.personname}}</li>
+              <li>{{item.finishtheoryscore}}</li>
               <li>
-                <p>学生A</p>
-               
-              </li>
-            </ul>
-            <ul>
-              <li>教师</li>
-              <li>副主任医师</li>
-              <li>
-                <p>学生A</p>
-                <p>学生B</p>
-                <p>学生C</p>
+                {{item.finishskillscore}}
               </li>
             </ul>
         </div>
       </div>
     </div>
+
+     <mt-popup v-model="zyjdPopup" position="bottom">
+      <div class="popup-box">
+        <div class="popup-close" @click="zyjdPopup = false">
+          <img src="@/assets/images/close.png" alt />
+        </div>
+        <div class="popup-nav">
+          <mt-navbar v-model="selected1">
+            <mt-tab-item id="1">专业基地</mt-tab-item>
+            <mt-tab-item id="2">所属科室</mt-tab-item>
+            <mt-tab-item id="3">选择时间</mt-tab-item>
+          </mt-navbar>
+        </div>
+        <div style="width:3.75rem;height:0.01rem;background:rgba(242,242,243,1);margin-top:0.1rem"></div>
+
+        <mt-tab-container v-model="selected1">
+          <mt-tab-container-item id="1">
+            <ul class="popup-down-items">
+              <li
+                :class="firstId == item.majorsubjectid ? 'popup-down-action':''"
+                v-for="(item, index) in typeDate1"
+                :key="index"
+                @click="handleFirst(item.majorsubjectid,item.majorname,item.officelist)"
+              >{{item.majorname}}</li>
+            </ul>
+          </mt-tab-container-item>
+          <mt-tab-container-item id="2"> 
+            <mt-cell title="专业基地" :value="firstName"></mt-cell>
+            <mt-cell :title="firstName+'科室'" :value="secondName"></mt-cell>
+            <div class="s-picker">
+              <mt-picker :slots="[{values:typeDate2}]" valueKey="officename" @change="onZyjdChange"></mt-picker>
+            </div>
+          </mt-tab-container-item>
+          <mt-tab-container-item id="3">
+            <mt-cell title="专业基地" :value="firstName"></mt-cell>
+            <mt-cell :title="firstName+'科室'" :value="secondName"></mt-cell>
+            <div class="s-picker">
+              <mt-picker :slots="popDate" valueKey="number" @change="onValuesChange"></mt-picker>
+            </div>
+            <div class="save" @click="onSave()">确定</div>
+          </mt-tab-container-item>
+        </mt-tab-container>
+      </div>
+    </mt-popup>
+
+   
   </div>
 </template>
 
@@ -95,8 +163,74 @@ import { Header, Cell,Popup,Picker,Navbar,TabItem    } from "mint-ui";
 export default {
   data() {
     return {
+      popDate: [
+        {
+          flex: 1,
+          values: [String(new Date().getFullYear()) + "年"],
+          className: "slot1",
+          textAlign: "center"
+        },
+        {
+          flex: 1,
+          values: [
+            {
+              number: "12月",
+              index: 0
+            },
+            {
+              number: "11月",
+              index: 1
+            },
+            {
+              number: "10月",
+              index: 2
+            },
+            {
+              number: "9月",
+              index: 3
+            },
+            {
+              number: "8月",
+              index: 4
+            },
+            {
+              number: "7月",
+              index: 5
+            },
+            {
+              number: "6月",
+              index: 6
+            },
+            {
+              number: "5月",
+              index: 7
+            },
+            {
+              number: "4月",
+              index: 8
+            },
+            {
+              number: "3月",
+              index: 9
+            },
+            {
+              number: "2月",
+              index: 10
+            },
+            {
+              number: "1月",
+              index: 11
+            }
+          ],
+          className: "number",
+          textAlign: "center"
+        }
+      ],
+      selected1:'1',
+      zyjdPopup:false,
+        tabActionIndex:1,
       selected: "1",
-      cyclewidth: "0.7rem",
+      cyclewidth: "0.8rem",
       peopledetial: false,
       selectWindow: false,
       sumscore: "",
@@ -220,6 +354,7 @@ export default {
     };
   },
   watch: {
+      
     selected(val) {
       // Indicator.open("加载中...");
       this.moment = moment().month() + 1;
@@ -274,6 +409,29 @@ export default {
     }
   },
   methods: {
+    onZyjdChange(p, v) {
+      console.log(p.getValues());
+      if (p.getValues()[0]) {
+        
+        this.choice1(p.getValues()[0].officeid,p.getValues()[0].officename)
+        this.slectType();
+      }
+    },
+    onValuesChange(p, v) {
+      //s改变
+      console.log(p.getValues());
+      this.choice2(p.getValues()[1].index, p.getValues()[1].number);
+      this.slectType();
+    },
+    openPopup(val) {
+      this.zyjdPopup = true;
+      this.selected1 = String(val);
+    },
+  
+    onSave() {
+      this.zyjdPopup = false;
+      this.slectType();
+    },
     slectType() {
       this.secondName = this.choice1Name;
       this.thirdName = this.choice2Name;
@@ -544,6 +702,18 @@ export default {
     }
   },
   mounted() {
+    
+  },
+  created() {
+    if (moment().date() < 20) {
+      if (moment().month() == 0) {
+        this.moment = 12;
+      } else {
+        this.moment = moment().month();
+      }
+    } else {
+      this.moment = moment().month() + 1;
+    }
     // this.moment = moment().month() + 1
     queryStudentexamdata(1).then(res => {
       // console.log(JSON.parse(res));
@@ -577,17 +747,6 @@ export default {
       }
     });
   },
-  created() {
-    if (moment().date() < 20) {
-      if (moment().month() == 0) {
-        this.moment = 12;
-      } else {
-        this.moment = moment().month();
-      }
-    } else {
-      this.moment = moment().month() + 1;
-    }
-  },
   components: {
     "header-main": mainHeader,
     cycle,
@@ -597,6 +756,86 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.s-picker {
+  margin-top: 0.51rem;
+}
+.save {
+  width: 3.75rem;
+  line-height: 0.49rem;
+  background: rgba(0, 150, 193, 1);
+
+  font-size: 0.15rem;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 1);
+  position: fixed;
+  text-align: center;
+  left: 0;
+  bottom: 0;
+}
+
+.popup-down-items {
+  background: #fff;
+  width: 3.6rem;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  display: flex;
+  padding-bottom: 0.1rem;
+  padding-left: 0.15rem;
+  padding-top: 0.15rem;
+  flex-flow: wrap;
+  border-top: 1px solid #f2f2f3;
+}
+.popup-down-items li {
+  width: 0.8rem;
+  line-height: 0.44rem;
+  text-align: center;
+  border-radius: 0.06rem;
+  background: rgba(242, 242, 243, 1);
+  font-size: 0.13rem;
+  margin-right: 0.08rem;
+  margin-bottom: 0.1rem;
+}
+.popup-down-action {
+  color: rgba(0, 150, 193, 1);
+}
+/deep/ .mint-navbar .mint-tab-item.is-selected {
+  font-size: 0.13rem;
+  font-weight: bold;
+  color: rgba(0, 150, 193, 1);
+  line-height: 0.18rem;
+  border-bottom: 2px solid rgba(0, 150, 193, 1);
+  margin-bottom: 2px;
+}
+/deep/ .mint-navbar .mint-tab-item {
+  margin-left: 10px;
+  padding: 10px 0;
+  color: #595959;
+}
+/deep/.mint-tab-item-label {
+  font-size: 0.13rem;
+  font-weight: bold;
+  line-height: 0.18rem;
+}
+.popup-close {
+  position: absolute;
+  right: 0.15rem;
+  top: 0.1rem;
+
+  img {
+    width: 0.15rem;
+    height: 0.15rem;
+  }
+}
+.popup-nav {
+  width: 2.8rem;
+  margin-top: 0.1rem;
+}
+.popup-box {
+  width: 3.75rem;
+  height: 5.22rem;
+  background: rgba(255, 255, 255, 1);
+  position: relative;
+}
 .screen-tap-box{
   width: 3.3rem;
   margin: 0.1rem auto;
@@ -606,7 +845,7 @@ export default {
     background:rgba(255,255,255,1);
     border-radius:0.03rem;
     border:0.01rem solid rgba(0,150,193,1);
-
+  margin-right: 0.08rem;
   font-size:0.13rem;
   color:rgba(0,150,193,1);
   line-height:0.18rem;
@@ -730,21 +969,15 @@ padding-left: 0.10rem;
   margin: 0 auto;
   margin-top: 0.1rem;
 }
-.tab-action{
-  background: rgba(0,150,193,1);
-  color: #FFF;
-}
+
 .main-box{
   margin-top: 0.54rem;
 }
 .tab-page-btn{
   margin: 0 auto;
   line-height: 0.44rem;
-  border: 2px solid #0096C1;
   border-radius: 10px;
-  width: 2.92rem;
-  background: #FFF;
-  overflow: hidden;
+  width: 2.96rem;
     font-size:0.15rem;
     font-weight:bold;
     color:rgba(0,150,193,1);
@@ -752,7 +985,14 @@ padding-left: 0.10rem;
     width: 1.46rem;
     display: inline-block;
     text-align: center;
+    border-top: 2px solid #0096c1;
+    border-bottom: 2px solid #0096c1;
+    background: #FFF;
   }
+}
+ .tab-action{
+  background: rgba(0,150,193,1) !important;
+  color: #FFF;
 }
 .mint-header {
   background-color: #fff;
@@ -770,4 +1010,342 @@ padding-left: 0.10rem;
   min-height: 100vh;
   padding-top: 1px;
 }
+
+
+
+// 列表开始
+.end {
+  background: #ffffff;
+  margin-top: 0.09rem;
+  padding-bottom: 0.1rem;
+
+  .end_top {
+    border-left: 3px solid #277fff;
+    margin-left: 0.15rem;
+    padding-left: 0.05rem;
+    margin-bottom: 0.1rem;
+
+    p {
+      font-family: PingFangSC-Medium;
+      font-size: 0.16rem;
+      color: #474c63;
+      letter-spacing: 0;
+      // line-height: 18px;
+    }
+  }
+
+  .end_end {
+    width: 3.25rem;
+    margin: 0 auto;
+
+    .end_th {
+      display: flex;
+      align-items: center;
+
+      p {
+        font-family: PingFangSC-Medium;
+        font-size: 0.13rem;
+        color: #212121;
+        letter-spacing: 0;
+        // line-height: 16px;
+        border: 1px solid #f0f0f7;
+        height: 0.35rem;
+        line-height: 0.35rem;
+        width: 2rem;
+        text-align: center;
+      }
+    }
+
+    .end_td {
+      display: flex;
+      align-items: center;
+
+      p {
+        font-family: PingFangSC-Regular;
+        font-size: 0.13rem;
+        color: #212121;
+        letter-spacing: 0;
+        // line-height: 16px;
+        border: 1px solid #f0f0f7;
+        height: 0.35rem;
+        line-height: 0.35rem;
+        width: 1.61rem;
+        text-align: center;
+      }
+    }
+  }
+}
+.endtable {
+  overflow: auto;
+  // height: 4rem;
+}
+// 列表结束
+.examine_top {
+  left: 0.1rem;
+  right: 0.1rem;
+  background: #ffffff;
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
+  border-radius: 5px;
+  overflow: hidden;
+  .containter {
+    border-top: 1px solid #f0f0f7;
+  }
+}
+.examine1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 0.26rem;
+  background: #ffffff;
+  .examine1_left_top {
+    font-family: PingFangSC-Regular;
+    font-size: 0.15rem;
+    color: #212121;
+    letter-spacing: 0;
+    text-align: center;
+    // line-height: 15px;
+    margin-top: 0.14rem;
+    margin-bottom: 0.25rem;
+  }
+}
+.examine1_left_end {
+  display: flex;
+  align-items: center;
+  .endleft {
+    margin-right: 0.15rem;
+    .number {
+      font-family: PingFangSC-Medium;
+      font-size: 0.3rem;
+      // color: #277FFF;
+      letter-spacing: 0;
+      text-align: center;
+      // line-height: 30px;
+    }
+    .desc {
+      font-family: PingFangSC-Regular;
+      font-size: 0.13rem;
+      color: #212121;
+      letter-spacing: 0;
+      text-align: center;
+      // line-height: 13px;
+    }
+  }
+}
+.examine1_left_end2 {
+  display: flex;
+  align-items: center;
+  .endleft {
+    margin-right: 0.15rem;
+    .number {
+      font-family: PingFangSC-Medium;
+      font-size: 0.15rem;
+      // color: #277FFF;
+      letter-spacing: 0;
+      text-align: center;
+      margin-bottom: 0.1rem;
+      // line-height: 30px;
+    }
+    .desc {
+      font-family: PingFangSC-Regular;
+      font-size: 0.13rem;
+      color: #212121;
+      letter-spacing: 0;
+      text-align: center;
+      // line-height: 13px;
+    }
+  }
+}
+.examine_middle {
+  
+  top: 2.6rem;
+  background: #ffffff;
+  width: 100%;
+  .end_top {
+    display: -webkit-flex;
+    // justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 3.55rem;
+    height: 0.8rem;
+    margin: 0 auto;
+    background: #f0f0f7;
+    border-radius: 2px;
+    border-radius: 2px;
+    position: relative;
+    p {
+      font-family: PingFangSC-Regular;
+      font-size: 0.13rem;
+      color: #212121;
+      letter-spacing: 0;
+      // line-height: 13px;
+      margin-left: 0.1rem;
+      margin-right: 0.1rem;
+      line-height: 0.4rem;
+    }
+  }
+  .end_button {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    right: 0.12rem;
+    p {
+      font-family: PingFangSC-Regular;
+      font-size: 0.13rem;
+      color: #277fff;
+      letter-spacing: 0;
+      margin: 0;
+      // line-height: 13px;
+    }
+  }
+  .examine_middle_top {
+    .black_block {
+      width: 100%;
+      height: 0.1rem;
+      background: #f0f0f7;
+    }
+    .tops {
+      display: flex;
+      align-items: center;
+      margin-top: 0.2rem;
+      margin-bottom: 0.1rem;
+      img {
+        width: 0.16rem;
+        height: 0.16rem;
+        position: absolute;
+        right: 0.2rem;
+      }
+    }
+    .top {
+      background: #f0f0f7;
+      display: -webkit-flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      // padding-top: 0.15rem;
+      padding-bottom: 0.08rem;
+      border-radius: 5px 5px 0px 0px;
+      padding-left: 0.05rem;
+      width: 3.55rem;
+      margin: 0 auto;
+
+      overflow: hidden;
+      position: relative;
+      background: #f0f0f7;
+      p {
+        font-family: PingFangSC-Regular;
+        font-size: 0.13rem;
+        color: #212121;
+        letter-spacing: 0;
+        text-align: center;
+        margin: 0 0.1rem;
+        margin-top: 0.15rem;
+        // line-height: 15px;
+      }
+      .open {
+        display: flex;
+        align-items: center;
+        // margin-left: auto;
+        // margin-right: 0.15rem;
+        color: #277fff;
+        margin-top: 0.15rem;
+        position: absolute;
+        bottom: 0.1rem;
+        right: 0.1rem;
+        background: #f0f0f7;
+        p {
+          margin: 0;
+          color: #277fff;
+        }
+        span {
+          font-size: 0.1rem;
+          margin-left: 0.05rem;
+        }
+        img {
+          width: 0.1rem;
+          height: 0.1rem;
+          margin-left: 0.05rem;
+        }
+        .flex {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+    .title {
+      font-family: PingFangSC-Regular;
+      font-size: 0.15rem;
+      color: #212121;
+      letter-spacing: 0;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      // line-height: 15px;
+    }
+  }
+}
+.mint-navbar {
+  // width: 3.55rem;
+  margin: 0 auto;
+  background: #fff;
+  border-top-left-radius: 0.05rem;
+  border-top-right-radius: 0.05rem;
+  .mint-tab-item:nth-child(1) {
+    // width: 1.1rem;
+  }
+  .mint-tab-item:nth-child(2) {
+    // width: 1.6rem;
+  }
+  .mint-tab-item:nth-child(3) {
+    // width: 1rem;
+    overflow: hidden;
+  }
+}
+
+/deep/.mint-tab-item-label {
+  color: #9397ad;
+  font-size: 0.15rem;
+  height: 0.45rem;
+  line-height: 0.45rem;
+  span {
+    font-size: 0.12rem;
+    color: #9397ad;
+    letter-spacing: 0;
+    text-align: center;
+    line-height: 0.12rem;
+    opacity: 0.5;
+  }
+}
+/deep/ .is-selected .mint-tab-item-label {
+  font-size: 0.18rem;
+  color: #212121;
+  span {
+    color: #9397ad;
+    opacity: 1;
+  }
+}
+
+.mint-navbar {
+  position: relative;
+  box-sizing: border-box;
+  padding: 0 0.1rem;
+}
+
+/deep/ .mint-navbar .mint-tab-item {
+  // width: 1.3rem;
+  padding: 0;
+  // height: 0.48rem;
+  background: transparent;
+  // margin-bottom: 0.01rem;
+  margin-bottom: 0;
+  // flex: initial;
+}
+/deep/ .mint-tab-container {
+  overflow: inherit;
+}
+/deep/ .mint-tab-item-label {
+  position: relative;
+}
+
+
 </style>

@@ -27,8 +27,20 @@ export default {
     },
     cycleName:{
       type:String,
-      required:true
-    }
+      required:false
+    },
+    cycleColor:{
+      type:String,
+      required:false
+    },
+    borderWidth:{
+      type:Number,
+      required:false
+    },
+    isShowBgBorder:{
+      type:Boolean,
+      required:false
+    },
   },
   watch:{
     cycleValue(val){
@@ -59,9 +71,9 @@ export default {
               value: 100 - vm.cycleValue,
               itemStyle: {
                 normal: {
-                  color: "#ebecf0", //外圈背景颜色
-                  borderWidth: 1,
-                  borderColor: "#dddddd" //外圈边框颜色
+                  color: !vm.isShowBgBorder? 'transparent' :"#efefef", //外圈背景颜色
+                  borderWidth: vm.borderWidth?vm.borderWidth-3:1,
+                  borderColor: !vm.isShowBgBorder? 'transparent' :"#efefef" //外圈边框颜色
                 }
               }
             },
@@ -85,10 +97,14 @@ export default {
                       fontSize: 13
                     }
                   },
-                  formatter: function(params) {        
-                    return (
-                      "{b|" + vm.cycleName + "}\n\n" + "{a|" + params.value + "}" + " {c|%}"
-                    );
+                  formatter: function(params) {
+                    let  t = ''
+                    if(vm.cycleName) {
+                      t=  "{b|" + vm.cycleName + "}\n\n" + "{a|" + params.value + "}" + " {c|%}"
+                    }else{
+                       t="{a|" + params.value + "}" + " {c|%}"
+                    }
+                    return t;
                   },
                   position: "center",
                   show: true,
@@ -101,9 +117,9 @@ export default {
               },
               itemStyle: {
                 normal: {
-                  color: "#239eff",
-                  borderWidth: 2,
-                  borderColor: "#239eff"
+                  color: vm.cycleColor?vm.cycleColor: "#239eff",
+                  borderWidth: vm.borderWidth?vm.borderWidth:2,
+                  borderColor: vm.cycleColor?vm.cycleColor: "#239eff"
                 }
               }
             }
