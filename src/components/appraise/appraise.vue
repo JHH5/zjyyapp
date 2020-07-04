@@ -158,7 +158,7 @@ export default {
     },
     teacherFunc() {
       this.selectdata = this.singledata;
-      console.log(this.selectdata);
+      // console.log(this.selectdata);
       // queryTeachereValuationitem(0,this.moment).then(res => {
       //   // console.log(JSON.p  arse(this.users));
       //   this.selectdata = JSON.parse(res).teacherevaluationitem

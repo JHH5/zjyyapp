@@ -18,6 +18,16 @@ export default {
       elId: ""
     };
   },
+  //数据自动刷新，必然需要一个监听机制告诉Echarts重新设置数据
+    watch: {
+      //观察option的变化
+      barnumber: {
+        handler(newVal, oldVal) {
+          this.drawLine();
+        },
+        deep: true //对象内部属性的监听，关键。
+      }
+    },
   created() {
     this.elId = uuidv1(); //获取随机id
     // console.log(this.elId);

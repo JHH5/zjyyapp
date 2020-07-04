@@ -7,7 +7,7 @@
           <!-- <div @click="regist = true" class="login_top">
             <p>{{firstData}}</p>
             <img src="../../assets/images/login/select.png" alt />
-          </div> -->
+          </div>-->
           <div class="centerimg">
             <img src="../../assets/images/imag_logo.png" alt />
           </div>
@@ -16,7 +16,7 @@
           </div>
           <div class="login_center_top" @click="popupVisible=true">
             <img src="../../assets/images/icon_yiyuan.png" alt />
-            <input  type="text" placeholder="选择基地" :value="firstData" disabled />
+            <input type="text" placeholder="选择基地" :value="firstData" disabled />
           </div>
           <div class="login_center_top">
             <img src="../../assets/images/icon_zhanghao.png" alt />
@@ -45,16 +45,16 @@
     </div>
     <!-- 旧版登陆 -->
     <!-- <div v-show="regist == true" @click="regist = false" class="registblock">
-      <div class="registblock_main"> -->
-        <!-- <p style="color:#277FFF;margin-bottom:0.25rem">丽水基地</p>
-        <p>浙二基地</p>-->
-        <!-- <p
+    <div class="registblock_main">-->
+    <!-- <p style="color:#277FFF;margin-bottom:0.25rem">丽水基地</p>
+    <p>浙二基地</p>-->
+    <!-- <p
           :style="firstId == index ? 'color: #277FFF;':''"
           @click="selectScl(index,item.name,item.portalurl)"
           v-for="(item, index) in schData"
           :key="index"
         >{{item.name}}</p>
-      </div> -->
+    </div>-->
     <!-- </div> -->
     <!-- 基地选择 -->
     <mt-popup v-model="popupVisible" position="bottom">
@@ -68,7 +68,7 @@
 import { login, trainHospital } from "../../api/user";
 import sha1 from "../../config/SHA1";
 import Cookies from "js-cookie";
-import { Actionsheet, Popup, Picker,Switch  } from "mint-ui";
+import { Actionsheet, Popup, Picker, Switch } from "mint-ui";
 export default {
   data() {
     return {
@@ -76,13 +76,13 @@ export default {
       schData: [],
       firstData: "",
       firstId: 0,
-      index:"",
-      box:false,
+      index: "",
+      box: false,
       shaPwd: "",
       popupVisible: false,
       userid: "",
       userpwd: "",
-      hospitalname:'',
+      hospitalname: "",
       docmHeight:
         document.documentElement.clientHeight || document.body.clientHeight,
       showHeight:
@@ -130,23 +130,13 @@ export default {
         }
       });
     },
-    selectScl(id, name, url) {
-      (this.firstData = name), (this.firstId = id);
-      Cookies.set("hos_name", name, {
-        expires: 1
-      });
-      Cookies.set("top_url", url, {
-        expires: 1
-      });
-      // console.log(id, name, url)
-    },
+   
     onValuesChange(picker, values) {
       this.hospitalname = values[0];
-      
     },
-    getSlotValue(){
+    getSlotValue() {
       this.schData.forEach(item => {
-        if(item.name == this.hospitalname){
+        if (item.name == this.hospitalname) {
           (this.firstData = item.name), (this.firstId = item.id);
           Cookies.set("hos_name", item.name, {
             expires: 1
@@ -155,8 +145,8 @@ export default {
             expires: 1
           });
         }
-      })
-      this.popupVisible =false;
+      });
+      this.popupVisible = false;
       // console.log(this.schData);
     }
   },
@@ -184,7 +174,7 @@ export default {
 
     // this.hex_sha1("abcd1234")
     // console.log(this.shaPwd);
-  },
+  }
 };
 </script>
 <style lang="less" scoped>

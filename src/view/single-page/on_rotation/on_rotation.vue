@@ -3,6 +3,12 @@
     <header-main :message="'轮转'"></header-main>
 
     <!-- tab-container -->
+       <!-- <mt-cell title="标题文字" is-link>
+      <span style="color: green">这里是元素</span>
+      
+      <span style="color: green">这里是元素</span>
+      <span style="color: green">这里是元素</span>
+    </mt-cell> -->
 
     <div class="rotation">
       <mt-navbar v-model="selected">

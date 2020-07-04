@@ -1,26 +1,10 @@
 <template>
   <div class="content">
     <Header-bar :message="'师资评价'"></Header-bar>
-
-    <!-- <mt-navbar v-model="selected">
-      <mt-tab-item :id="index" v-for="(item,index) in singledata" :key="index">{{item.typename}}</mt-tab-item>
-    </mt-navbar>-->
-    <!-- <mt-tab-container v-model="selected" v-for="(item,index) in singledata" :key="index">
-      <mt-tab-container-item :id="index">
-       
-        <div class="comment-box">
-          <div class="comments_top">
-            <appraise v-if="showchildren" v-bind:singledata="singledata" style="margin-top:0.2rem"></appraise>
-          </div>
-        </div>
-      </mt-tab-container-item>
-    </mt-tab-container>-->
-
     <div class="bannerbox">
-      <div class="tabbar_right">
-        <span>选择专业基地</span>
-        <span class="title" @click="handleShowRotation()">{{selectName}}></span>
-      </div>
+      <mt-cell title="选择专业基地" :value="selectName">
+        <span @click="handleShowRotation()">{{selectName}}</span>
+      </mt-cell>
       <hr style="backgroud:#f2f2f2;border:1px solid #f2f2f2;" />
       <div class="jdraderbox">
         <div class="jdrader">
@@ -36,25 +20,26 @@
               :barnumber="winrainbardata"
             ></radar>
             <div class="teacher_radar_detial">
-              <div class="rader_detial_left">
-                <div class="rader_detial_left_top">
-                  <p class="title">评价得分率</p>
-                  <p class="number">{{(commentdata.pjpjf)*100}}%</p>
+              <div class="raderbottom">
+                <div class="btmtop">
+                  <div class="btombox">
+                    <p class="botmnum">{{(commentdata.pjpjf)*100}}%</p>
+                    <p class="botmtxt">评价得分率</p>
+                  </div>
+                  <div class="btombox">
+                    <p class="botmnum">{{commentdata.zdf}}</p>
+                    <p class="botmtxt">评价最低分</p>
+                  </div>
                 </div>
-                <div class="rader_detial_left_end">
-                  <p class="title">评价最低分</p>
-                  <p class="number">{{commentdata.zdf}}</p>
-                </div>
-              </div>
-              <div class="rader_detial_middle"></div>
-              <div class="rader_detial_right">
-                <div class="rader_detial_left_top">
-                  <p class="title">评价总次数</p>
-                  <p class="number">{{commentdata.pjzs}}</p>
-                </div>
-                <div class="rader_detial_left_end">
-                  <p class="title">评价表提交率</p>
-                  <p class="number">{{commentdata.tjl}}</p>
+                <div class="btmtop">
+                  <div class="btombox">
+                    <p class="botmnum">{{commentdata.tjl}}</p>
+                    <p class="botmtxt">评价表提交率</p>
+                  </div>
+                  <div class="btombox">
+                    <p class="botmnum">{{commentdata.pjzs}}</p>
+                    <p class="botmtxt">评价总次数</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -62,13 +47,35 @@
         </div>
       </div>
       <div class="comment-box">
-        <div class="conbox_title">123</div>
+        <div class="conbox_title">
+          <p class="pjtop">基地老师评分细则</p>
+          <mt-cell title="请选择科室">
+            <span @click="popupVisible=true">{{firstData}}</span>
+          </mt-cell>
+        </div>
+        <div class="yqtop" @click="popupVisiblemid=true">
+          <mt-cell>
+            <mt-cell v-for="(item,index) in singledata" :key="index">
+              <span>{{item.typename}}</span>
+            </mt-cell>
+          </mt-cell>
+        </div>
         <div class="comments_top">
           <appraise v-if="showchildren" v-bind:singledata="singledata" style="margin-top:0.2rem"></appraise>
         </div>
       </div>
     </div>
-
+    <!-- <mt-popup v-model="popupVisiblemid" position="bottom">
+      <div class="ksbox"></div>
+    </mt-popup>-->
+    <mt-popup v-model="popupVisible" position="bottom">
+      <div class="ksbox">
+        <mt-cell title="请选择科室">
+          <p class="poptext" @click="getSlotValue(index)">确定</p>
+        </mt-cell>
+        <mt-picker :slots="slots" @change="onValuesChange"></mt-picker>
+      </div>
+    </mt-popup>
     <div class="comment-box"></div>
     <div @click="handleHideRotation()" v-show="showRotation" class="rotation_wind">
       <div class="rotation_wind_main">
@@ -91,13 +98,11 @@
 </template>
 
 <script>
-import "swiper/dist/css/swiper.css";
 import HeaderBar from "@/components/mainHeader";
-import { Header, Cell } from "mint-ui";
+import { Header, Cell, Indicator, Navbar, TabItem, Popup } from "mint-ui";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import radar from "../../../components/mecharts/radar.vue";
 import appraise from "../../../components/appraise/appraise.vue";
-import { Indicator, Navbar, TabItem } from "mint-ui";
 import {
   queryMajorFavorablerate,
   queryMajorTeacherevaluatedata,
@@ -123,6 +128,8 @@ export default {
     return {
       selected: 0,
       showRotation: false,
+      popupVisible: false,
+      popupVisiblemid: false,
       openmore: false,
       openWind: false,
       swipeTopData: "",
@@ -137,9 +144,11 @@ export default {
       wincommentdata: "",
       winteacherdata: "",
       teachername: "王老师",
-      selectName: "教学部",
+      selectName: "麻醉科",
       selectmajorlist: "",
       datas: 0,
+      index: "",
+      firstData: "教学部",
       singledata: [],
       showchildren: false,
       winrainbardata: [
@@ -251,6 +260,14 @@ export default {
         {
           name: "放射科基地"
         }
+      ],
+      slots: [
+        {
+          flex: 1,
+          values: [""],
+          className: "slot1",
+          textAlign: "center"
+        }
       ]
     };
   },
@@ -270,17 +287,22 @@ export default {
       this.datas = name.majorsubjectid;
       let add = [];
       add.push(this.datas);
+      queryTeachereValuationitem(99, this.moment).then(res => {
+        this.singledata = JSON.parse(res).teacherevaluationitem;
+        Indicator.close();
+      });
       getmajor(add, this.moment).then(res => {
+        //基地
         this.swipeTopData = JSON.parse(res).majorlist;
-        this.firstid = JSON.parse(res).majorlist[0].majorsubjectid;
         this.showtab = true;
         Indicator.close();
       });
-      queryMajorTeacherevaluatedata(this.firstid, this.moment, this.datas).then(
+      queryMajorTeacherevaluatedata(this.datas, this.moment).then(
+        //雷达图
         res => {
+          // console.log(this.firstid, this.datas);
           this.winrainbardata = JSON.parse(res).majordimensionevaluatelist;
           this.commentdata = JSON.parse(res).majorevaluateoverview;
-          // console.log(this.winrainbardata)
           var arrsd = [];
           for (
             let i = 0;
@@ -297,52 +319,71 @@ export default {
               )
             });
           }
-
-            this.winrainbardata = arrsd;
-            // this.winflag = true;
-            // this.$refs.winradars.drawLine();
-  console.log(arrsd)
+          this.winrainbardata = arrsd;
+          //  console.log(this.winrainbardata)
           Indicator.close();
         }
       );
     },
-    handleClickSelect() {
-      this.showModal = true;
+    onValuesChange(picker, values) {
+      this.hospitalname = values[0];
+      // console.log(this.hospitalname);
+    },
+    getSlotValue() {
+      this.selectdata.forEach(item => {
+        if (item.name == this.hospitalname) {
+          (this.firstData = item.name), (this.officeid = item.officeid);
+          // console.log(item);
+          queryTeachereValuationitem(this.officeid, this.moment).then(res => {
+            // console.log(JSON.parse(res));
+            this.singledata = JSON.parse(res).teacherevaluationitem;
+            this.showchildren = true;
+            this.showtab = true;
+            Indicator.close();
+          });
+        }
+      });
+      this.popupVisible = false;
     }
   },
   mounted() {
     Indicator.open("加载中...");
     queryMajorFavorablerate(this.moment).then(res => {
       this.swipeTopData = JSON.parse(res).major;
-      // console.log(JSON.parse(res));
-      this.firstid = JSON.parse(res).major[0].majorsubjectid;
     });
-
-    getmajor().then(res => {
-      // console.log(JSON.parse(res));
+    getmajor(this.moment).then(res => {
       this.selectmajorlist = JSON.parse(res).majorlist;
-      queryTeachereValuationitem(1, 1, this.moment).then(res => {
-        // console.log(JSON.parse(res));
-        this.singledata = JSON.parse(res).teacherevaluationitem;
-        this.showchildren = true;
-        this.showtab = true;
+      this.selectName = JSON.parse(res).majorlist[0].majorname;
+      this.datas = JSON.parse(res).majorlist[0].majorsubjectid;
+      queryMajorTeacherevaluatedata(this.datas, this.moment).then(res => {
+        this.winrainbardata = JSON.parse(res).majordimensionevaluatelist;
+        this.commentdata = JSON.parse(res).majorevaluateoverview;
+        var arrsd = [];
+        for (
+          let i = 0;
+          i < JSON.parse(res).majordimensionevaluatelist.length;
+          i++
+        ) {
+          arrsd.push({
+            name:
+              JSON.parse(res).majordimensionevaluatelist[i].typename +
+              "\n" +
+              JSON.parse(res).majordimensionevaluatelist[i].averagescore,
+            value: parseFloat(
+              JSON.parse(res).majordimensionevaluatelist[i].averagescore
+            )
+          });
+        }
+        this.winrainbardata = arrsd;
         Indicator.close();
       });
     });
+
     getoffice().then(res => {
       this.selectdata = JSON.parse(res).officelist;
-      let ads = [];
-      for (let i = 0; i < JSON.parse(res).officelist[0].length; i++) {
-        ads.push(JSON.parse(res).officelist[i].name);
+      for (let i = 0; i < this.selectdata.length; i++) {
+        this.slots[0].values.push(this.selectdata[i].name);
       }
-
-      queryTeachereValuationitem(1, 1, this.moment).then(res => {
-        // console.log(JSON.parse(res));
-        this.singledata = JSON.parse(res).teacherevaluationitem;
-        this.showchildren = true;
-        this.showtab = true;
-        Indicator.close();
-      });
     });
     Indicator.close();
   },
@@ -987,5 +1028,63 @@ export default {
   height: 0.6rem;
   background: rgba(255, 255, 255, 1);
   border-radius: 0.2rem 0.2rem 0rem 0rem;
+}
+
+/deep/.mint-popup {
+  width: 100%;
+}
+/deep/.mint-cell-text {
+  font-size: 0.13rem;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 1);
+}
+.poptext {
+  font-size: 0.15rem;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(0, 122, 255, 1);
+}
+.raderbottom {
+  width: 80%;
+  margin: auto;
+}
+.btombox {
+  width: 1.1rem;
+  height: 0.6rem;
+  background: rgba(247, 247, 247, 1);
+  border-radius: 0.06rem;
+  margin: 0px 0.1rem;
+  text-align: center;
+  .botmnum {
+    font-size: 0.2rem;
+    font-family: DINAlternate-Bold, DINAlternate;
+    font-weight: bold;
+    color: rgba(0, 150, 193, 1);
+    line-height: 0.24rem;
+  }
+  .botmtxt {
+    font-size: 0.11rem;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: rgba(89, 89, 89, 1);
+  }
+}
+.btmtop {
+  display: flex;
+  margin-top: 0.1rem;
+}
+.pjtop {
+  height: 0.24rem;
+  font-size: 0.17rem;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(89, 89, 89, 1);
+  line-height: 0.24rem;
+  text-align: center;
+}
+.yqtop {
+  height: 0.4rem;
+  line-height: 0.4rem;
 }
 </style>

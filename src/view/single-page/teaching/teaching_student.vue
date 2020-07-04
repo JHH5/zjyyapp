@@ -474,7 +474,7 @@ export default {
   },
   methods: {
     onZyjdChange(p, v) {
-      console.log(p.getValues());
+      // console.log(p.getValues());
       if (p.getValues()[0]) {
         this.choice1(
           p.getValues()[0].index,

@@ -90,19 +90,19 @@
                 :options="swiperOption4"
               >
                 <swiper-slide>
-                  <p>师资绩效</p>
-                  <div class="swiperborder"></div>
-                </swiper-slide>
-                <swiper-slide>
-                  <p>师资评价</p>
-                  <div class="swiperborder"></div>
-                </swiper-slide>
-                <swiper-slide>
                   <p>师资介绍</p>
                   <div class="swiperborder"></div>
                 </swiper-slide>
                 <swiper-slide>
                   <p>师资培训</p>
+                  <div class="swiperborder"></div>
+                </swiper-slide>
+                <swiper-slide>
+                  <p>师资绩效</p>
+                  <div class="swiperborder"></div>
+                </swiper-slide>
+                <swiper-slide>
+                  <p>师资评价</p>
                   <div class="swiperborder"></div>
                 </swiper-slide>
               </swiper>
@@ -288,6 +288,15 @@
                           {{(teacherWorkData.djhdhpl2*100).toFixed(2)}}
                           <span>%</span>
                         </span>
+                        <span class="cycy">
+                          <cycle
+                            :cycleValue="((teacherWorkData.djhdhpl2)*100).toFixed(2)"
+                            :cyclewidth="cyclewidth"
+                            cycleColor="#0096C1"
+                            :borderWidth="8"
+                            :isShowBgBorder="true"
+                          ></cycle>
+                        </span>
                       </div>
                       <div class="teacherlist">
                         <ul>
@@ -316,6 +325,14 @@
                 :options="swiperOption4"
               >
                 <swiper-slide>
+                  <p>考核</p>
+                  <div class="swiperborder"></div>
+                </swiper-slide>
+                <swiper-slide>
+                  <p>学员概况</p>
+                  <div class="swiperborder"></div>
+                </swiper-slide>
+                <swiper-slide>
                   <p>评价</p>
                   <div class="swiperborder"></div>
                 </swiper-slide>
@@ -325,14 +342,6 @@
                 </swiper-slide>
                 <swiper-slide>
                   <p>培训</p>
-                  <div class="swiperborder"></div>
-                </swiper-slide>
-                <swiper-slide>
-                  <p>考核</p>
-                  <div class="swiperborder"></div>
-                </swiper-slide>
-                <swiper-slide>
-                  <p>学员概况</p>
                   <br />
                   <div class="swiperborder"></div>
                 </swiper-slide>
@@ -563,7 +572,9 @@
                         <div class="score_main_single">
                           <p class="title">评价平均分</p>
                           <p class="title">（满分{{studentvalue.evaluateoverview.zdmf}}）</p>
-                          <p class="answer">{{((studentvalue.evaluateoverview.pjpjf)*100).toFixed(2)}}%</p>
+                          <p
+                            class="answer"
+                          >{{((studentvalue.evaluateoverview.pjpjf)*100).toFixed(2)}}%</p>
                         </div>
                         <div class="score_main_single">
                           <p class="title">各角色对学员评价最低分</p>
@@ -753,7 +764,7 @@ export default {
       userName: "",
       complainShow: false,
       showModal: false,
-      cyclewidth: "1rem",
+      cyclewidth: "0.8rem",
       cycle2width: "0.7rem",
       cyclename: "cycle1",
       islogout: false,
@@ -833,10 +844,9 @@ export default {
         longSwipes: false,
         on: {
           transitionStart: function(event) {
-            // console.log(self.$refs.mySwiper4);
             self.$refs.mySwiper4.swiper.slideToLoop(
-              this.activeIndex - 5,
-              800,
+              this.activeIndex - 3,
+              1800,
               false
             );
           },
@@ -850,7 +860,7 @@ export default {
 
       swiperOptionteacher: {
         slidesPerView: 2,
-        spaceBetween: 180,
+        spaceBetween: 200,
         centeredSlides: true,
         loop: true,
         observer: true,
@@ -859,10 +869,9 @@ export default {
         longSwipes: false,
         on: {
           transitionStart: function(event) {
-            // console.log(self.$refs.mySwiper4);
             self.$refs.mySwiper2.swiper.slideToLoop(
-              this.activeIndex - 5,
-              800,
+              this.activeIndex - 3,
+              1800,
               false
             );
           },
@@ -1147,7 +1156,7 @@ export default {
       });
     },
     jumpStudent(ins) {
-      this.$refs.mySwiper.swiper.slideToLoop(ins, 1000, false); //切换到第一个slide，速度为1秒
+      this.$refs.mySwiper.swiper.slideToLoop(ins, 100, false); //切换到第一个slide，速度为1秒
       this.$forceUpdate();
     },
     jumpStudentTop(ins) {
@@ -1155,7 +1164,7 @@ export default {
       this.$forceUpdate();
     },
     jumpStudentTop(ins) {
-      this.$refs.mySwiper2.swiper.slideToLoop(ins - 5, 1000, false); //切换到第一个slide，速度为1秒
+      this.$refs.mySwiper2.swiper.slideToLoop(ins - 3, 1000, false); //切换到第一个slide，速度为1秒
       this.$forceUpdate();
     },
     handLogout() {
@@ -1563,16 +1572,6 @@ export default {
         "日";
     }
     this.years = moment().year();
-
-    // console.log(moment().year());
-
-    //   var mo = function (e) { e.preventDefault() }
-    //   document.body.style.overflow = 'hidden'
-    //   document.addEventListener('touchmove', mo, false)// 禁止页面滑动
-
-    // const mySwiper = this.$refs.mySwiper.swiper
-    // mySwiper4.controller.control = mySwiper
-    // mySwiper.controller.control = mySwiper4
     setTimeout(() => {
       const mySwiper4 = this.$refs.mySwiper4;
       const mySwiper2 = this.$refs.mySwiper2;
@@ -3940,6 +3939,7 @@ export default {
   }
 }
 .teachernum2 {
+  position: relative;
   height: 1rem;
   width: 2.38rem;
   background: rgba(247, 247, 247, 1);
@@ -4283,7 +4283,7 @@ export default {
   height: 0.28rem;
   background: rgba(118, 118, 128, 0.12);
   border-radius: 0.08rem;
-  ul{
+  ul {
     display: flex;
   }
   li {
@@ -4292,5 +4292,12 @@ export default {
     background: rgba(255, 255, 255, 1);
     border-radius: 0.08rem;
   }
+}
+.cycy {
+  position: absolute;
+  top: -20px;
+  right: 10px;
+  border-radius: 50%;
+  overflow: hidden;
 }
 </style>

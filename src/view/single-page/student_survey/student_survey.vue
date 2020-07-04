@@ -6,32 +6,17 @@
         <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
       </div>
       <div class="student_introduce">
-        <!-- <div class="tabbar_right">
-          <p style="display:inline-block">筛选</p>
-          <img @click="handleShowRotation()" src="../../../assets/images/todaywork/select.png" alt />
-        </div> -->
-        <!-- <div class="studentpiebar">
-          <p class="piebar_title">本科</p>
-          <piebar v-if="showpie" ref="pirbar1" :barnumber="bardata1"  style="padding-bottom:0.2rem;border-bottom: 1px solid #F0F0F7;"></piebar>
-        </div>
-        <div class="studentpiebar">
-          <p class="piebar_title">研究生</p>
-          <piebar v-if="showpie" ref="pirbar2" :barnumber="bardata2" style="padding-bottom:0.2rem;border-bottom: 1px solid #F0F0F7;"></piebar>
-        </div>
-        <div class="studentpiebar">
-          <p class="piebar_title">住培</p>
-          <piebar v-if="showpie" ref="pirbar3" :barnumber="bardata3" style="padding-bottom:0.2rem;border-bottom: 1px solid #F0F0F7;"></piebar>
-        </div>-->
         <div class="end">
           <div class="end_end">
+            <div class="toptitle">数据截止时间：{{years}}年{{moment}}月</div>
             <div class="end_th">
               <p>基地名称</p>
               <p>学员数量</p>
             </div>
             <div class="endtable">
               <div v-for="(item, index) in majorstudentsum" :key="index" class="end_td">
-                <p>{{item.majorname}} </p>
-                <p >{{item.studentsum}}</p>
+                <p>{{item.majorname}}</p>
+                <p>{{item.studentsum}}</p>
               </div>
             </div>
           </div>
@@ -68,7 +53,7 @@ import moment from "moment";
 export default {
   data() {
     return {
-      majorstudentsum:'',
+      majorstudentsum: "",
       bardata1: [
         {
           color: "#395275",
@@ -137,6 +122,7 @@ export default {
       ],
       showpie: false,
       showRotation: false,
+      years:'',
       tabIndex: 2,
       selectId: -1,
       selectName: "内科基地",
@@ -257,104 +243,19 @@ export default {
   mounted() {
     Indicator.open("加载中...");
     queryMajormanageoffice().then(res => {
-      // console.log(JSON.parse(res));
       this.selectdata = JSON.parse(res).majorlist;
       let ads = [];
       for (let i = 0; i < JSON.parse(res).majorlist[0].officelist.length; i++) {
         ads.push(JSON.parse(res).majorlist[0].officelist[i].officeid);
       }
       queryStudenttraindata(2, "", this.moment).then(res => {
-        // console.log(JSON.parse(res));
         this.singledata = JSON.parse(res).studenttraindata;
         this.showtab = true;
         Indicator.close();
       });
     });
     queryStudentdetailsdata().then(res => {
-      // console.log(JSON.parse(res));
       this.majorstudentsum = JSON.parse(res).majorstudentsum;
-      // var arrs = [];
-      // arrs.push({
-      //   color: "#395275",
-      //   title: "实习",
-      //   number: JSON.parse(res).bkstudentdetailsdata.sxssl,
-      //   percent: JSON.parse(res).bkstudentdetailsdata.sxsbl,
-      //   numbers: JSON.parse(res).bkstudentdetailsdata.sxssl
-      // });
-      // arrs.push({
-      //   color: "#5E7AB8",
-      //   title: "见习",
-      //   number: JSON.parse(res).bkstudentdetailsdata.jxssl,
-      //   percent: JSON.parse(res).bkstudentdetailsdata.jxsbl,
-      //   numbers: JSON.parse(res).bkstudentdetailsdata.jxssl
-      // });
-      // arrs.push({
-      //   color: "#7ED5BC",
-      //   title: "留学生",
-      //   number: JSON.parse(res).bkstudentdetailsdata.lxssl,
-      //   percent: JSON.parse(res).bkstudentdetailsdata.lxsbl,
-      //   numbers: JSON.parse(res).bkstudentdetailsdata.lxssl
-      // });
-      // this.bardata1 = arrs;
-      // var adds = [];
-      // adds.push({
-      //   color: "#395275",
-      //   title: "专硕",
-      //   number: JSON.parse(res).yjsstudentdetailsdata.zssl,
-      //   percent: JSON.parse(res).yjsstudentdetailsdata.zsbl,
-      //   numbers: JSON.parse(res).yjsstudentdetailsdata.zssl
-      // });
-      // adds.push({
-      //   color: "#5E7AB8",
-      //   title: "科硕",
-      //   number: JSON.parse(res).yjsstudentdetailsdata.kssl,
-      //   percent: JSON.parse(res).yjsstudentdetailsdata.ksbl,
-      //   numbers: JSON.parse(res).yjsstudentdetailsdata.kssl
-      // });
-      // adds.push({
-      //   color: "#C9D5EC",
-      //   title: "专博",
-      //   number: JSON.parse(res).yjsstudentdetailsdata.zbsl,
-      //   percent: JSON.parse(res).yjsstudentdetailsdata.zbbl,
-      //   numbers: JSON.parse(res).yjsstudentdetailsdata.zbsl
-      // });
-      // adds.push({
-      //   color: "#7ED5BC",
-      //   title: "科博",
-      //   number: JSON.parse(res).yjsstudentdetailsdata.kbsl,
-      //   percent: JSON.parse(res).yjsstudentdetailsdata.kbbl,
-      //   numbers: JSON.parse(res).yjsstudentdetailsdata.kbsl
-      // });
-      // this.bardata2 = adds;
-      // var apps = [];
-      // apps.push({
-      //   color: "#395275",
-      //   title: "本院",
-      //   number: JSON.parse(res).zpstudentdetailsdata.bysl,
-      //   percent: JSON.parse(res).zpstudentdetailsdata.bybl,
-      //   numbers: JSON.parse(res).zpstudentdetailsdata.bysl
-      // });
-      // apps.push({
-      //   color: "#5E7AB8",
-      //   title: "外院委培",
-      //   number: JSON.parse(res).zpstudentdetailsdata.wywpsl,
-      //   percent: JSON.parse(res).zpstudentdetailsdata.wywpbl,
-      //   numbers: JSON.parse(res).zpstudentdetailsdata.wywpsl
-      // });
-      // apps.push({
-      //   color: "#7ED5BC",
-      //   title: "社会化",
-      //   number: JSON.parse(res).zpstudentdetailsdata.shhsl,
-      //   percent: JSON.parse(res).zpstudentdetailsdata.shhbl,
-      //   numbers: JSON.parse(res).zpstudentdetailsdata.shhsl
-      // });
-      // this.bardata3 = apps;
-      // this.showpie = true;
-      // setTimeout(() => {
-      // this.$refs.pirbar1.drawLine()
-      // this.$refs.pirbar2.drawLine()
-      // this.$refs.pirbar3.drawLine()
-      //   }, 1000);
     });
   },
   created() {
@@ -367,6 +268,8 @@ export default {
     } else {
       this.moment = moment().month() + 1;
     }
+    
+    this.years = moment().year();
   },
   components: {
     "header-main": mainHeader,
@@ -430,11 +333,12 @@ export default {
       display: flex;
       align-items: center;
 
+      background: rgba(0, 150, 193, 1);
+
       p {
-        font-family: PingFangSC-Medium;
-        font-size: 0.13rem;
-        color: #212121;
-        letter-spacing: 0;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 1);
         // line-height: 16px;
         border: 1px solid #f0f0f7;
         height: 0.35rem;
@@ -465,7 +369,7 @@ export default {
 }
 .endtable {
   overflow: auto;
-  height: 5rem;
+  height: 7rem;
 }
 
 .tabbar_right {
