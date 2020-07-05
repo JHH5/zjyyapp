@@ -90,17 +90,20 @@
                 技能成绩
               </li>
             </ul>
-            <ul v-for="(item, index) in singlelistData2" :key="index">
+             <div v-if="allStudentlist.length != 0">
+                <ul v-for="(item, index) in allStudentlist" :key="index">
               <li > {{item.personname}}</li>
               <li>{{item.finishtheoryscore}}</li>
               <li>
                 {{item.finishskillscore}}
               </li>
             </ul>
+             </div>
+            <p v-else style="line-height: 1rem;text-align: center;font-size: 12px;color: #999;">暂无数据</p>
+            
         </div>
       </div>
     </div>
-
      <mt-popup v-model="zyjdPopup" position="bottom">
       <div class="popup-box">
         <div class="popup-close" @click="zyjdPopup = false">
@@ -143,6 +146,7 @@
           </mt-tab-container-item>
         </mt-tab-container>
       </div>
+      
     </mt-popup>
 
    
@@ -163,6 +167,7 @@ import { Header, Cell,Popup,Picker,Navbar,TabItem    } from "mint-ui";
 export default {
   data() {
     return {
+      allStudentlist:[],
       popDate: [
         {
           flex: 1,
@@ -402,6 +407,7 @@ export default {
           ).then(res => {
             this.singlelistData = JSON.parse(res).officestudentexamdatalist;
             this.singlelistData2 = JSON.parse(res).officefinishtscorelist;
+             this.getAllStudentList(this.singlelistData2)
             Indicator.close();
           });
         }
@@ -410,8 +416,8 @@ export default {
   },
   methods: {
     onZyjdChange(p, v) {
-      console.log(p.getValues());
-      if (p.getValues()[0]) {
+      console.log(!v[0]);
+      if (v[0]) {
         
         this.choice1(p.getValues()[0].officeid,p.getValues()[0].officename)
         this.slectType();
@@ -419,7 +425,7 @@ export default {
     },
     onValuesChange(p, v) {
       //s改变
-      console.log(p.getValues());
+      console.log('onValuesChange',p.getValues());
       this.choice2(p.getValues()[1].index, p.getValues()[1].number);
       this.slectType();
     },
@@ -457,6 +463,7 @@ export default {
                 // console.log(JSON.parse(res));
                 this.singlelistData = JSON.parse(res).officestudentexamdatalist;
                 this.singlelistData2 = JSON.parse(res).officefinishtscorelist;
+                 this.getAllStudentList(this.singlelistData2)
                 console.log(this.singlelistData2);
               });
             }
@@ -494,6 +501,7 @@ export default {
               // console.log(JSON.parse(res));
               this.singlelistData = JSON.parse(res).officestudentexamdatalist;
               this.singlelistData2 = JSON.parse(res).officefinishtscorelist;
+               this.getAllStudentList(this.singlelistData2)
             }
           );
         } else {
@@ -593,6 +601,7 @@ export default {
       ).then(res => {
         this.singlelistData = JSON.parse(res).officestudentexamdatalist;
         this.singlelistData2 = JSON.parse(res).officefinishtscorelist;
+         this.getAllStudentList(this.singlelistData2)
       });
     },
     hideWindow() {
@@ -602,6 +611,16 @@ export default {
       this.choice2Name = this.thirdName;
       this.choice2Number = this.choice2Numbers;
       this.selectWindow = false;
+    },
+    getAllStudentList(arr){
+      let list = []
+      for (let index = 0; index < arr.length; index++) {
+        for (let n = 0; n < arr[index].studentlist.length; n++) {
+          list.push(arr[index].studentlist[n])
+          
+        }
+      }
+      this.allStudentlist = list
     },
     closeSecond() {
       (this.secondId = 999), (this.choice1Id = 999), (this.showSecond = false);
@@ -623,6 +642,7 @@ export default {
                 // console.log(JSON.parse(res));
                 this.singlelistData = JSON.parse(res).officestudentexamdatalist;
                 this.singlelistData2 = JSON.parse(res).officefinishtscorelist;
+                this.getAllStudentList(this.singlelistData2)
               });
             }
           }
@@ -647,6 +667,7 @@ export default {
                 // console.log(JSON.parse(res));
                 this.singlelistData = JSON.parse(res).officestudentexamdatalist;
                 this.singlelistData2 = JSON.parse(res).officefinishtscorelist;
+                 this.getAllStudentList(this.singlelistData2)
               });
             }
           }
@@ -671,6 +692,7 @@ export default {
                 // console.log(JSON.parse(res));
                 this.singlelistData = JSON.parse(res).officestudentexamdatalist;
                 this.singlelistData2 = JSON.parse(res).officefinishtscorelist;
+                 this.getAllStudentList(this.singlelistData2)
               });
             }
           }
@@ -681,6 +703,7 @@ export default {
             // console.log(JSON.parse(res));
             this.singlelistData = JSON.parse(res).officestudentexamdatalist;
             this.singlelistData2 = JSON.parse(res).officefinishtscorelist;
+             this.getAllStudentList(this.singlelistData2)
           }
         );
       }
@@ -735,15 +758,15 @@ export default {
         this.secondId = JSON.parse(res).majorlist[0].officelist[0].officeid;
         this.choice1Id = JSON.parse(res).majorlist[0].officelist[0].officeid;
         this.firstId = JSON.parse(res).majorlist[0].majorsubjectid;
-        queryStudentexamdataOffice(
-          JSON.parse(res).majorlist[0].officelist[0].officeid,
-          1,
-          this.moment
-        ).then(res => {
-          // console.log(JSON.parse(res));
-          this.singlelistData = JSON.parse(res).officestudentexamdatalist;
-          this.singlelistData2 = JSON.parse(res).officefinishtscorelist;
-        });
+        // queryStudentexamdataOffice(
+        //   JSON.parse(res).majorlist[0].officelist[0].officeid,
+        //   1,
+        //   this.moment
+        // ).then(res => {
+        //   // console.log(JSON.parse(res));
+        //   this.singlelistData = JSON.parse(res).officestudentexamdatalist;
+        //   this.singlelistData2 = JSON.parse(res).officefinishtscorelist;
+        // });
       }
     });
   },
