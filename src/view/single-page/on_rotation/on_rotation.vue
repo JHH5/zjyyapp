@@ -471,6 +471,7 @@ export default {
   color: rgba(89, 89, 89, 1);
   line-height: 0.18rem;
   padding-left: 20px;
+  margin-top: 20px;
 }
 .jdcell {
   width: 90%;

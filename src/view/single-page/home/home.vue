@@ -751,7 +751,7 @@ export default {
       isActive: true,
       hasError: false,
       student: "7",
-      showa: "",
+      showa: 1,
       skill: "10",
       hospitalName: "",
       userName: "",
@@ -1028,6 +1028,7 @@ export default {
       },
       studentround: "",
       studenttype: "",
+      
       studentsubject: "",
       studentpie: false,
       studenttrain: {
@@ -1178,7 +1179,6 @@ export default {
     },
     today_a() {
       this.showa = 1;
-      console.log("12");
     },
     today_b() {
       this.showa = 2;
