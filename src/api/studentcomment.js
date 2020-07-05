@@ -15,7 +15,7 @@ export const queryStudentevaluationitem = (time) => {
         data: {
             starttime: year + "-" + time + "-01 00:00:00",
             endtime: year + "-" + time + "-" + moment(year + "-" + time, "YYYY-MM").daysInMonth() + " 23:59:59",
-            officeid:1
+            officeid: 1
         },
         method: 'post'
     })
@@ -53,7 +53,7 @@ export const queryMajorstudentrounddata = (ids) => {
 }
 
 
-export const queryStudenttraindata = (ids, id, time) => {
+export const queryStudenttraindata = (time, ids, id) => {
     return axios.request({
         url: '/doctor_train/rest/H5Management/querystudenttraindata.do',
         data: {

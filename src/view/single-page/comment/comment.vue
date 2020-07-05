@@ -1,220 +1,118 @@
 <template>
   <div class="content">
     <Header-bar :message="'学员评价'"></Header-bar>
-    <!-- tab-container -->
-    <mt-navbar v-model="selected">
-      <mt-tab-item :id="index" v-for="(item,index) in singledata" :key="index">{{item.typename}}</mt-tab-item>
-    </mt-navbar>
-    <!-- tab-container -->
-    <mt-tab-container v-model="selected">
-      <mt-tab-container-item :id="index" v-for="(item,index) in singledata" :key="index">
-        <div class="tabbar_right">
-          <span>选择科室：</span>
-          <p @click="handleShowRotation()">{{selectName}}</p>
-        </div>
-        <div class="comment-box">
-          <div class="comments_top">
-            <appraise v-if="showchildren" v-bind:singledata="singledata" style="margin-top:0.2rem"></appraise>
-          </div>
-        </div>
-      </mt-tab-container-item>
-    </mt-tab-container>
-    <div class="comment-box">
-      <div class="comment_top">
-        <div class="comment_top_left" style="margin-left:0.2rem">
-          <p>各专业基地学员评价</p>
-        </div>
-      </div>
-      <div class="comments_end">
-        <swiper
-          ref="mySwiper4"
-          style="width:3.5rem;height:0.5rem;"
-          class="student_top_box swiper-no-swiping"
-          :options="swiperOption4"
-        >
-          <swiper-slide v-for="(item, index) in swipeTopData" :key="index">
-            <p class="title">{{item.majorname}}</p>
-            <p class="number">好评度{{item.hpl}}</p>
-          </swiper-slide>
-        </swiper>
-      </div>
-      <swiper ref="mySwiper" class="student_main_box" :options="swiperOption">
-        <swiper-slide v-for="(item, index) in swipeTopData" :key="index">
-          <div class="comment">
+    <div class="bannerbox">
+      <mt-cell title="选择专业基地" :value="selectName">
+        <span @click="handleShowRotation()">{{selectName}}</span>
+      </mt-cell>
+      <hr style="backgroud:#f2f2f2;border:1px solid #f2f2f2;" />
+      <div class="jdraderbox">
+        <div class="jdrader">
+          <div
+            class="comment"
+            v-for="(item, index) in swipeTopData"
+            :key="index"
+            v-if="item.majorsubjectid==datas"
+          >
             <radar
-              v-if="flag"
               ref="radars"
-              :maintitle="item.majorname + '基地对学员评价雷达图'"
-              :barnumber="rainbardata"
+              :maintitle="item.majorname + '基地对学生评价雷达图'"
+              :barnumber="winrainbardata"
             ></radar>
-            <div v-else style="width:100%;height:2rem;">
-              <p style="text-align: center; line-height: 2rem; color: #dddddd;">暂无数据</p>
-            </div>
             <div class="teacher_radar_detial">
-              <div class="rader_detial_left">
-                <div class="rader_detial_left_top">
-                  <p class="title">评价平均分</p>
-                  <p class="desc">(满分100)</p>
-                  <p class="number">{{(commentdata.pjpjf)*100}}%</p>
+              <div class="raderbottom">
+                <div class="btmtop">
+                  <div class="btombox">
+                    <p class="botmnum">{{(commentdata.pjpjf)*100}}%</p>
+                    <p class="botmtxt">评价得分率</p>
+                  </div>
+                  <div class="btombox">
+                    <p class="botmnum">{{commentdata.zdf}}</p>
+                    <p class="botmtxt">评价最低分</p>
+                  </div>
                 </div>
-                <div class="rader_detial_left_end">
-                  <p class="title">评价最低分</p>
-                  <p class="number">{{commentdata.zdf}}</p>
+                <div class="btmtop">
+                  <div class="btombox">
+                    <p class="botmnum">{{commentdata.tjl}}</p>
+                    <p class="botmtxt">评价表提交率</p>
+                  </div>
+                  <div class="btombox">
+                    <p class="botmnum">{{commentdata.pjzs}}</p>
+                    <p class="botmtxt">评价总次数</p>
+                  </div>
                 </div>
               </div>
-              <div class="rader_detial_middle"></div>
-              <div class="rader_detial_right">
-                <div class="rader_detial_left_top">
-                  <p class="title">评价总次数</p>
-                  <p class="number">{{commentdata.pjzs}}</p>
-                </div>
-                <div class="rader_detial_left_end">
-                  <p class="title">评价表提交率</p>
-                  <p class="number">{{commentdata.tjl}}</p>
-                </div>
-              </div>
-            </div>
-            <!--                                <div class="comment_table">-->
-            <!--                                    <p class="title">-->
-            <!--                                        {{item.majorname}}基地老师评价表-->
-            <!--                                        <span>（最近一次）</span>-->
-            <!--                                    </p>-->
-            <!--                                    <div :style="openmore == true ?'height:auto':'height:2rem'" class="table">-->
-            <!--                                        <div class="table_top">-->
-            <!--                                            <p>排名</p>-->
-            <!--                                            <p>分数</p>-->
-            <!--                                            <p>姓名</p>-->
-            <!--                                            <p>科室</p>-->
-            <!--                                            <p>评价人数</p>-->
-            <!--                                        </div>-->
-            <!--                                        <div-->
-            <!--                                                v-for="(item, index) in teacherdata"-->
-            <!--                                                :key="index+'e'"-->
-            <!--                                                @click="handleOpenWind(item.personid,item.officeid,item.personname)"-->
-            <!--                                                class="table_single"-->
-            <!--                                        >-->
-            <!--                                            <p>{{index + 1}}</p>-->
-            <!--                                            <p style="color: #277FFF;">{{item.pjf}}</p>-->
-            <!--                                            <p>{{item.personname}}</p>-->
-            <!--                                            <p>{{item.officename}}</p>-->
-            <!--                                            <p>{{item.pjrs}}</p>-->
-            <!--                                        </div>-->
-            <!--                                    </div>-->
-            <!--                                    <p v-show="!openmore" @click="openmore = true" class="showmore">展开更多…</p>-->
-            <!--                                </div>-->
-          </div>
-        </swiper-slide>
-      </swiper>
-    </div>
-    <div v-show="openWind" class="wind">
-      <div class="open_window">
-        <div class="win_top">
-          <p class="win_title">{{teachername}}老师评价详情</p>
-          <img @click="hideWind()" src="../../../assets/images/close.png" alt />
-        </div>
-        <radar v-if="winflag" ref="winradars" :barnumber="winrainbardata"></radar>
-        <div v-else style="width:100%;height:2rem;">
-          <p style="text-align: center; line-height: 2rem; color: #dddddd;">暂无数据</p>
-        </div>
-        <!-- <radar v-if="flag" ref="radars" :maintitle="item.majorname + '基地对老师评价雷达图'" :barnumber="rainbardata"></radar> -->
-        <div class="teacher_radar_detial">
-          <div class="rader_detial_left">
-            <div class="rader_detial_left_top">
-              <p class="title">评价平均分1</p>
-              <p class="desc">(满分100)</p>
-              <p class="number">{{wincommentdata.pjpjf}}</p>
-            </div>
-            <div class="rader_detial_left_end">
-              <p class="title">评价最低分</p>
-              <p class="number">{{wincommentdata.zdf}}</p>
-            </div>
-          </div>
-          <div class="rader_detial_middle"></div>
-          <div class="rader_detial_right">
-            <div class="rader_detial_left_top">
-              <p class="title">评价总次数</p>
-              <p class="number">{{wincommentdata.pjzs}}</p>
-            </div>
-            <div class="rader_detial_left_end">
-              <p class="title">评价表提交率</p>
-              <p class="number">{{wincommentdata.tjl}}</p>
             </div>
           </div>
         </div>
-
-        <div class="win_end">
-          <p class="win_title">评论项</p>
-          <div class="win_end_block">
-            <div v-for="(item, index) in winteacherdata" :key="index" class="win_end_block_single">
-              <div class="top">
-                <div class="block"></div>
-                <p>{{item.days}}-{{item.officename}}</p>
-              </div>
-              <div class="middle">
-                <p>{{item.wordsvalue}}</p>
-              </div>
-            </div>
-            <!-- <div class="win_end_block_single">
-                                  <div class="top">
-                                    <div class="block"></div>
-                                    <p>09月20日-内科</p>
-                                  </div>
-                                  <div class="middle">
-                                    <p>王老师带教过程中认真负责，有耐心王老师带教过程中认真负责，有耐心过程中认真负责，有耐心过程中认真负责，有耐心</p>
-                                  </div>
-                                </div>
-                                <div class="win_end_block_single">
-                                  <div class="top">
-                                    <div class="block"></div>
-                                    <p>09月20日-内科</p>
-                                  </div>
-                                  <div class="middle">
-                                    <p>王老师带教过程中认真负责，有耐心王老师带教过程中认真负责，有耐心过程中认真负责，有耐心过程中认真负责，有耐心</p>
-                                  </div>
-                                </div>
-                                <div class="win_end_block_single">
-                                  <div class="top">
-                                    <div class="block"></div>
-                                    <p>09月20日-内科</p>
-                                  </div>
-                                  <div class="middle">
-                                    <p>王老师带教过程中认真负责，有耐心</p>
-                                  </div>
-            </div>-->
+      </div>
+      <div class="comment-box">
+        <div class="conbox_title">
+          <p class="pjtop">基地老师评分细则</p>
+          <div @click="popupVisible=true">
+            <mt-cell title="请选择科室">
+              <span>{{hospitalname}}</span>
+            </mt-cell>
           </div>
         </div>
-        <!-- </div> -->
+        <div class="yqtop" @click="popupVisiblemid=true">
+          <mt-cell>
+            <mt-cell v-for="(item,index) in singledata" :key="index">
+              <span>{{item.typename}}</span>
+            </mt-cell>
+          </mt-cell>
+        </div>
+        <div class="comments_top">
+          <appraise v-if="showchildren" v-bind:singledata="singledata" style="margin-top:0.2rem"></appraise>
+        </div>
       </div>
     </div>
-    <!-- </mt-tab-container-item>
-    </mt-tab-container>-->
+    <mt-popup v-model="popupVisible" position="bottom">
+      <div class="ksbox">
+        <mt-cell title="请选择科室">
+          <p class="poptext" @click="getSlotValue()">确定</p>
+        </mt-cell>
+        <mt-picker :slots="slots" @change="onValuesChange"></mt-picker>
+      </div>
+    </mt-popup>
+    <div class="comment-box"></div>
     <div @click="handleHideRotation()" v-show="showRotation" class="rotation_wind">
       <div class="rotation_wind_main">
-        <p
-          @click="handleSelectName(index,item,item.officelist)"
-          v-for="(item, index) in selectdata"
-          :style="selectId == index?'color: #277fff':'color: #212121'"
-          :key="index"
-        >{{item.name}}</p>
+        <div class="jd">
+          <div class="title">
+            请选择基地
+            <p @click="showRotation">X</p>
+          </div>
+          <div
+            class="jdbox"
+            @click="handleSelectName(index,item,item.majorlist)"
+            v-for="(item, index) in selectmajorlist"
+            :style="selectId == index?'color: #0096C1':'color: #212121'"
+            :key="index"
+          >{{item.majorname}}</div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import "swiper/dist/css/swiper.css";
 import HeaderBar from "@/components/mainHeader";
+import { Header, Cell, Indicator, Navbar, TabItem, Popup } from "mint-ui";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import radar from "../../../components/mecharts/radar.vue";
 import appraise from "../../../components/appraise/appraise.vue";
-import { queryMajorstudentdimensionevaluate } from "../../../api/studentcomment";
-import { Indicator, Navbar, TabItem } from "mint-ui";
+import {
+  queryMajorstudentdimensionevaluate,
+  queryStudentevaluationitem
+} from "../../../api/studentcomment";
 import {
   queryMajorFavorablerate,
   queryMajorTeacherevaluatedata,
   queryMajorTeacherevaluatedataitem,
   getoffice,
-  queryTeachereValuationitem
+  queryTeachereValuationitem,
+  getmajor
 } from "../../../api/teachercomment";
 import moment from "moment";
 
@@ -224,13 +122,17 @@ export default {
     radar,
     swiper,
     swiperSlide,
-    appraise
+    appraise,
+    Header,
+    Cell
   },
   data() {
     const self = this;
     return {
       selected: 0,
       showRotation: false,
+      popupVisible: false,
+      popupVisiblemid: false,
       openmore: false,
       openWind: false,
       swipeTopData: "",
@@ -245,10 +147,14 @@ export default {
       wincommentdata: "",
       winteacherdata: "",
       teachername: "王老师",
-      selectName: "内科基地",
+      selectName: "麻醉科",
+      selectmajorlist: "",
       datas: 0,
+      index: "",
+      firstData: "教学部",
       singledata: [],
       showchildren: false,
+      hospitalname: "",
       winrainbardata: [
         {
           name: "学员满意",
@@ -302,76 +208,6 @@ export default {
         }
       ],
       closeid: 99,
-      swiperOption4: {
-        slidesPerView: 3,
-        spaceBetween: 3,
-        loop: true,
-        centeredSlides: true,
-        noSwiping: true,
-        speed: 500,
-        on: {
-          transitionStart: function(event) {
-            self.openmore = false;
-            queryMajorTeacherevaluatedata(
-              self.swipeTopData[this.activeIndex].majorsubjectid,
-              self.moment
-            ).then(res => {
-              self.radardata1 = JSON.parse(res).majordimensionevaluatelist;
-              var arrs = [];
-              for (let i = 0; i < self.radardata1.length; i++) {
-                arrs.push({
-                  name:
-                    self.radardata1[i].typename +
-                    "\n" +
-                    self.radardata1[i].averagescore,
-                  value: parseFloat(self.radardata1[i].averagescore)
-                });
-              }
-              self.commentdata = JSON.parse(res).majorevaluateoverview;
-              self.teacherdata = JSON.parse(res).teacherevaluatelatelydata;
-              if (
-                arrs[0].value == 0 &&
-                arrs[1].value == 0 &&
-                arrs[2].value == 0 &&
-                arrs[3].value == 0 &&
-                arrs[4].value == 0 &&
-                arrs[5].value == 0
-              ) {
-                self.flag = false;
-              } else {
-                self.flag = true;
-                self.rainbardata = arrs;
-                setTimeout(() => {
-                  self.$refs.radars[this.activeIndex].drawLine();
-                }, 1000);
-              }
-              Indicator.close();
-            });
-          }
-        }
-      },
-      swiperOption: {
-        centeredSlides: true,
-        loop: false,
-        speed: 500,
-        longSwipes: false,
-        on: {
-          transitionEnd: function(event) {
-            if (this.activeIndex == self.closeid) {
-              Indicator.close();
-            }
-          },
-          transitionStart: function(event) {
-            self.$refs.mySwiper4.swiper.slideToLoop(
-              this.activeIndex,
-              500,
-              false
-            );
-            self.closeid = this.activeIndex;
-            Indicator.open("加载中...");
-          }
-        }
-      },
       radardata1: [
         {
           name: "学员满意",
@@ -428,6 +264,14 @@ export default {
         {
           name: "放射科基地"
         }
+      ],
+      slots: [
+        {
+          flex: 1,
+          values: [""],
+          className: "slot1",
+          textAlign: "center"
+        }
       ]
     };
   },
@@ -443,28 +287,86 @@ export default {
     handleSelectName(index, name, datas) {
       Indicator.open("加载中...");
       this.selectId = index;
-      this.selectName = name.name;
-      this.datas = name.officeid;
+      this.selectName = name.majorname;
+      this.datas = name.majorsubjectid;
       let add = [];
       add.push(this.datas);
-      queryTeachereValuationitem(2, add, this.moment).then(res => {
-        // console.log(JSON.parse(res));
-        this.singledata = JSON.parse(res).teacherevaluationitem;
-        this.showtab = true;
+      this.officelist = name.officelist;
+      for (var u = 0; u < this.officelist.length; u++) {
+        this.slots[0].values.push(this.officelist[u].name);
+      }
+      getmajor(add, this.moment).then(res => {
+        //基地
+        this.swipeTopData = JSON.parse(res).majorlist;
         Indicator.close();
       });
+      queryMajorTeacherevaluatedata(this.datas, this.moment).then(
+        //雷达图
+        res => {
+          // console.log(this.firstid, this.datas);
+          this.winrainbardata = JSON.parse(res).majordimensionevaluatelist;
+          this.commentdata = JSON.parse(res).majorevaluateoverview;
+          var arrsd = [];
+          for (
+            let i = 0;
+            i < JSON.parse(res).majordimensionevaluatelist.length;
+            i++
+          ) {
+            arrsd.push({
+              name:
+                JSON.parse(res).majordimensionevaluatelist[i].typename +
+                "\n" +
+                JSON.parse(res).majordimensionevaluatelist[i].averagescore,
+              value: parseFloat(
+                JSON.parse(res).majordimensionevaluatelist[i].averagescore
+              )
+            });
+          }
+          this.winrainbardata = arrsd;
+          //  console.log(this.winrainbardata)
+          Indicator.close();
+        }
+      );
     },
-    handleClickSelect() {
-      this.showModal = true;
+    onValuesChange(picker, values) {
+      this.hospitalname = values[0];
+      // this.firstData = this.hospitalname
+      for (var q = 0; q < this.swipeTopData.length; q++) {
+        let qbks = this.swipeTopData[q].officelist;
+        for (var x = 0; x < qbks.length; x++) {
+          if (qbks[x] != null) {
+            if (qbks[x].name == this.hospitalname) {
+              this.hospitalofficeid = qbks[x].officeid;
+            }
+          }
+        }
+      }
     },
-    handleOpenWind(ids, id, name) {
-      Indicator.open("加载中...");
-      (this.openWind = true), (this.teachername = name), this.noScroll();
-      queryMajorstudentdimensionevaluate(ids, id, this.moment).then(res => {
-        // console.log(this.moment);
-        this.windata = JSON.parse(res);
-        this.wincommentdata = JSON.parse(res).majorevaluateoverview;
-        this.winteacherdata = JSON.parse(res).teacherevaluatewords;
+    getSlotValue() {
+      queryMajorstudentdimensionevaluate(
+        this.hospitalofficeid,
+        this.moment
+      ).then(res => {
+        this.singledata = JSON.parse(res).teacherevaluationitem;
+        this.showchildren = true;
+        Indicator.close();
+      });
+      this.popupVisible = false;
+    }
+  },
+  mounted() {
+    Indicator.open("加载中...");
+    queryMajorFavorablerate(this.moment).then(res => {
+      this.swipeTopData = JSON.parse(res).major;
+    });
+    getmajor(this.moment).then(res => {
+      this.selectmajorlist = JSON.parse(res).majorlist;
+      // console.log(this.selectmajorlist);
+      this.selectName = JSON.parse(res).majorlist[0].majorname;
+      this.datas = JSON.parse(res).majorlist[0].majorsubjectid;
+      queryMajorTeacherevaluatedata(this.datas, this.moment).then(res => {
+        this.winrainbardata = JSON.parse(res).majordimensionevaluatelist;
+        this.commentdata = JSON.parse(res).majorevaluateoverview;
         var arrsd = [];
         for (
           let i = 0;
@@ -481,57 +383,22 @@ export default {
             )
           });
         }
-        if (
-          arrsd[0].value == 0 &&
-          arrsd[1].value == 0 &&
-          arrsd[2].value == 0 &&
-          arrsd[3].value == 0 &&
-          arrsd[4].value == 0 &&
-          arrsd[5].value == 0
-        ) {
-          this.winflag = false;
-        } else {
-          this.winrainbardata = arrsd;
-          this.winflag = true;
-          setTimeout(() => {
-            this.$refs.winradars.drawLine();
-          }, 1000);
-        }
+        this.winrainbardata = arrsd;
         Indicator.close();
       });
-    },
-    hideWind() {
-      (this.openWind = false), this.canScroll();
-    }
-  },
-  mounted() {
-    Indicator.open("加载中...");
-    queryMajorFavorablerate(this.moment).then(res => {
-      this.swipeTopData = JSON.parse(res).major;
-      // console.log(JSON.parse(res));
-      this.firstid = JSON.parse(res).major[0].majorsubjectid;
     });
-    queryMajorTeacherevaluatedata(this.firstid).then(res => {
+    queryTeachereValuationitem(5, this.moment).then(res => {
       // console.log(JSON.parse(res));
-      this.radardata1 = JSON.parse(res).majordimensionevaluatelist;
-      this.commentdata = JSON.parse(res).majorevaluateoverview;
-      // this.teacherdata = JSON.parse(res).majorevaluateoverview
-      this.flag = true;
+      this.singledata = JSON.parse(res).teacherevaluationitem;
+      this.showchildren = true;
+      this.showtab = true;
+      Indicator.close();
     });
     getoffice().then(res => {
-      // console.log(JSON.parse(res));
       this.selectdata = JSON.parse(res).officelist;
-      let ads = [];
-      for (let i = 0; i < JSON.parse(res).officelist[0].length; i++) {
-        ads.push(JSON.parse(res).officelist[i].name);
+      for (let i = 0; i < this.selectdata.length; i++) {
+        this.slots[0].values.push(this.selectdata[i].name);
       }
-      queryTeachereValuationitem(1, 1, this.moment).then(res => {
-        // console.log(JSON.parse(res));
-        this.singledata = JSON.parse(res).teacherevaluationitem;
-        this.showchildren = true;
-        this.showtab = true;
-        Indicator.close();
-      });
     });
     Indicator.close();
   },
@@ -550,18 +417,26 @@ export default {
 </script>
 
 <style scoped lang="less">
+.content {
+  height: 100%;
+}
 .tabbar_right {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-  position: absolute;
-  z-index: 2;
-  right: 0.2rem;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  width: 90%;
+  margin: auto;
+  .title {
+    margin-left: auto;
+    float: right;
+  }
   img {
     width: 0.16rem;
     height: 0.16rem;
     margin-left: 0.05rem;
   }
+}
+.bannerbox {
+  height: 100%;
 }
 .rotation_wind {
   width: 100%;
@@ -574,28 +449,62 @@ export default {
   margin: auto;
   z-index: 9999;
   background: rgba(0, 0, 0, 0.5);
+
   .rotation_wind_main {
     background: #ffffff;
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    padding-top: 0.29rem;
+    // padding-top: 0.19rem;
     padding-bottom: 0.11rem;
-    height: 3rem;
+    height: 6rem;
     overflow: scroll;
-    p {
-      font-family: PingFangSC-Regular;
-      font-size: 0.16rem;
-      color: #212121;
-      text-align: center;
-      line-height: 0.17rem;
-      margin-bottom: 0.18rem;
-    }
+
     .active {
-      color: #277fff;
+      color: #0096c1;
     }
   }
+}
+.jd {
+  width: 96%;
+  margin: auto;
+  .title {
+    font-size: 0.13rem;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 1);
+    border-bottom: 1px solid #f2f2f2;
+    line-height: 0.4rem;
+    p {
+      float: right;
+    }
+  }
+}
+.jdbox {
+  width: 0.8rem;
+  height: 0.44rem;
+  background: rgba(242, 242, 243, 1);
+  border-radius: 0.06rem;
+  display: inline-block;
+  margin: 5px;
+  text-align: center;
+  line-height: 0.44rem;
+  font-size: 0.13rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 1);
+  overflow: hidden;
+}
+.jdraderbox {
+  background: #f2f2f2;
+  height: 3.8rem;
+  padding: 0.15rem;
+}
+.jdrader {
+  height: 3.76rem;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 0.06rem;
 }
 .comments_top {
   // position: absolute;
@@ -653,43 +562,25 @@ export default {
 
 .mint-navbar {
   width: 3.55rem;
+  text-align: center;
   margin: 0 auto;
   background: #fff;
   border-top-left-radius: 0.05rem;
   border-top-right-radius: 0.05rem;
   position: relative;
 
-  // .mint-tab-item:nth-child(1) {
-  //   width: 1.1rem;
-  // }
+  /*.mint-tab-item:nth-child(1) {*/
+  /*    width: 1.1rem;*/
+  /*}*/
 
-  // .mint-tab-item:nth-child(2) {
-  //   width: 1.6rem;
-  // }
+  /*.mint-tab-item:nth-child(2) {*/
+  /*    width: 1.6rem;*/
+  /*}*/
 
-  // .mint-tab-item:nth-child(3) {
-  //   width: 1rem;
-  //   overflow: hidden;
-  // }
-}
-
-.comment {
-  width: 3.55rem;
-  margin: 0 auto;
-  background: #ffffff;
-  box-shadow: 0 0 0.12rem 0 rgba(0, 0, 0, 0.08);
-  border-radius: 5px;
-  border-radius: 5px;
-  padding-bottom: 0.2rem;
-  // span {
-  //   color: #474c63;
-  //   // padding-top: 0.15rem;
-  //   // padding-bottom: 0.2rem;
-  //   // padding-right: 0.18rem;
-  //   display: block;
-  //   text-align: right;
-  //   margin-left: auto;
-  // }
+  /*.mint-tab-item:nth-child(3) {*/
+  /*    width: 1rem;*/
+  /*    overflow: hidden;*/
+  /*}*/
 }
 
 /deep/ .mint-tab-item {
@@ -725,8 +616,8 @@ export default {
 }
 
 /deep/ .mint-navbar .mint-tab-item {
-  // width: 1.3rem;
-  padding: 0;
+  /*width: 1.3rem;*/
+  padding: 0.06rem;
   height: 0.48rem;
   background: transparent;
   margin-bottom: 0.01rem;
@@ -737,20 +628,10 @@ export default {
   overflow: inherit;
 }
 
-// .comment-box {
-//   p{
-//         position: absolute;
-//             top: 0.16rem;
-//         display: block;
-//         /* margin: 0 auto; */
-//         text-align: center;
-//         left: 0;
-//         right: 0;
-//         bottom: 0;
-//         margin: auto;
-//         font-size: 0.1rem;
-//   }
-// }
+.comment-box {
+  // position: absolute;
+  border-radius: 0.2rem 0.2rem 0rem 0rem;
+}
 .comment_top {
   display: flex;
   align-items: center;
@@ -1157,5 +1038,68 @@ export default {
       }
     }
   }
+}
+.conbox_title {
+  height: 0.6rem;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 0.2rem 0.2rem 0rem 0rem;
+}
+
+/deep/.mint-popup {
+  width: 100%;
+}
+/deep/.mint-cell-text {
+  font-size: 0.13rem;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 1);
+}
+.poptext {
+  font-size: 0.15rem;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(0, 122, 255, 1);
+}
+.raderbottom {
+  width: 80%;
+  margin: auto;
+}
+.btombox {
+  width: 1.1rem;
+  height: 0.6rem;
+  background: rgba(247, 247, 247, 1);
+  border-radius: 0.06rem;
+  margin: 0px 0.1rem;
+  text-align: center;
+  .botmnum {
+    font-size: 0.2rem;
+    font-family: DINAlternate-Bold, DINAlternate;
+    font-weight: bold;
+    color: rgba(0, 150, 193, 1);
+    line-height: 0.24rem;
+  }
+  .botmtxt {
+    font-size: 0.11rem;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: rgba(89, 89, 89, 1);
+  }
+}
+.btmtop {
+  display: flex;
+  margin-top: 0.1rem;
+}
+.pjtop {
+  height: 0.24rem;
+  font-size: 0.17rem;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(89, 89, 89, 1);
+  line-height: 0.24rem;
+  text-align: center;
+}
+.yqtop {
+  height: 0.4rem;
+  line-height: 0.4rem;
 }
 </style>

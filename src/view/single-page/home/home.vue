@@ -122,17 +122,6 @@
                       <p @click="handleClickMore" class="more">更多</p>
                       <img src="../../../assets/images/right_arrow.png" alt />
                     </div>
-                    <!-- <mt-tabbar v-model="selected2">
-                      <mt-tab-item @click.stop="changeValue('月度',1)" id="月度">
-                        <p @click.stop="changeValue('月度',1)">月度</p>
-                      </mt-tab-item>
-                      <mt-tab-item @click.stop="changeValue('季度',2)" id="季度">
-                        <p @click.stop="changeValue('季度',2)">季度</p>
-                      </mt-tab-item>
-                      <mt-tab-item id="年度">
-                        <p @click.stop="changeValue('年度',3)">年度</p>
-                      </mt-tab-item>
-                    </mt-tabbar>-->
                     <div class="montent">
                       <ul>
                         <li>
@@ -407,7 +396,7 @@
                           <p class="title">{{moment}}月培训累计人次</p>
                         </div>
                       </div>
-                      <div class="bannerright">
+                      <div class="bannerright2">
                         <ul>
                           <li>
                             一年级
@@ -483,16 +472,24 @@
                       </div>
                       <div class="radechart">
                         <div class="radechart_desc">
-                          <div
-                            class="radechart_desc_end"
-                            v-for="(item,index) in studenttype"
-                            :key="index"
-                          >
-                            <div class="radechart_desc_detial" v-if="item.typename !='共有学员'">
-                              <div :style="randomRgb(item)" class="block"></div>
-                              <p class="title">{{item.typename}}</p>
-                              <p class="newnumber">{{item.studentsum}}</p>
-                              <p class="desc">{{item.slbl}}</p>
+                          <div class="radechart_desc_end">
+                            <div class="radechart_desc_detial">
+                              <div style="background:#5E7AB8" class="block"></div>
+                              <p class="title">{{studenttype[1].typename}}</p>
+                              <p class="newnumber">{{studenttype[1].studentsum}}</p>
+                              <p class="desc">{{studenttype[1].slbl}}</p>
+                            </div>
+                            <div class="radechart_desc_detial">
+                              <div style="background:#395275" class="block"></div>
+                              <p class="title">{{studenttype[2].typename}}</p>
+                              <p class="newnumber">{{studenttype[2].studentsum}}</p>
+                              <p class="desc">{{studenttype[2].slbl}}</p>
+                            </div>
+                            <div class="radechart_desc_detial">
+                              <div style="background:#7ED5BC" class="block"></div>
+                              <p class="title">{{studenttype[3].typename}}</p>
+                              <p class="newnumber">{{studenttype[3].studentsum}}</p>
+                              <p class="desc">{{studenttype[3].slbl}}</p>
                             </div>
                           </div>
                         </div>
@@ -521,7 +518,7 @@
                                 <div :style="{ 'height': item.zszs*0.0015 + 'rem' }" class="block"></div>
                               </div>
                               <div class="right">
-                                <p style="color:#FF9B00">{{item.jqzyzss}}</p>
+                                <p style="color:#FF9B00;">{{item.jqzyzss}}</p>
                                 <div
                                   :style="{ 'height': item.jqzyzss*0.0015 + 'rem' }"
                                   class="block"
@@ -1575,33 +1572,9 @@ export default {
     setTimeout(() => {
       const mySwiper4 = this.$refs.mySwiper4;
       const mySwiper2 = this.$refs.mySwiper2;
-      // console.log(this.$refs.mySwiper4.swiper);
       const mySwiper = this.$refs.mySwiper;
-      // mySwiper4.slideToLoop(2, 1000, false);
-      // mySwiper.slideToLoop(2, 1000, false);
     }, 1000);
-
-    // this.teacherVal('11','11')
-    // this.teacherVal("11","11")
-    // if (moment().date() < 20) {
     this.teacherVal(1, this.moment, this.moment);
-    // }else{
-    //   this.teacherVal(moment().month() + 1,moment().month() + 1)
-    // }
-    // Promise.all([
-
-    // ]).then(msg => {
-    //   // setTimeout(() => {
-    //     // console.log(this.$refs.radar1);
-    //   // }, 2000);
-
-    //   // this.flag1 = true
-    //   // this.$refs.radar1.drawLine()
-
-    // }).catch(err => {
-    //   console.log(err);
-    // });
-    //////////今日直通
     workToday("", "").then(res => {
       if (JSON.parse(res).code == 1) {
         this.workTodaydata = JSON.parse(res).worktodaylist;
@@ -1611,7 +1584,7 @@ export default {
     }),
       teacherWorkload(this.moment).then(res => {
         if (JSON.parse(res).code == 1) {
-          console.log(JSON.parse(res));
+          // console.log(JSON.parse(res));
           this.teacherWorkData = JSON.parse(res).teacherworkload;
           this.teachertraintypeworkload = JSON.parse(
             res
@@ -3420,12 +3393,12 @@ export default {
     margin-right: 0.27rem;
     .left {
       width: 0.14rem;
-      background: #77caf6;
+      background: #00C290;
       position: relative;
     }
     .right {
       width: 0.14rem;
-      background: #326699;
+      background: #FF9B00;
       position: relative;
     }
     .block {
@@ -4071,6 +4044,7 @@ export default {
       font-weight: 400;
       color: rgba(89, 89, 89, 1);
       padding-left: 10px;
+      line-height: 0.4rem;
       margin-top: 0.02rem;
       span {
         font-size: 0.2rem;
@@ -4090,6 +4064,29 @@ export default {
         font-weight: bold;
         color: rgba(0, 150, 193, 1);
       }
+    }
+  }
+}
+.bannerright2 {
+  width: 50%;
+  text-align: left;
+  ul li {
+    height: 0.55rem;
+    margin-left: 10px;
+    background: rgba(247, 247, 247, 1);
+    border-radius: 0.06rem;
+    line-height: 0.55rem;
+    font-size: 0.11rem;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: rgba(89, 89, 89, 1);
+    padding-left: 10px;
+    margin-top: 0.02rem;
+    span {
+      font-size: 0.2rem;
+      font-family: DINAlternate-Bold, DINAlternate;
+      font-weight: bold;
+      color: rgba(89, 89, 89, 1);
     }
   }
 }
@@ -4283,13 +4280,15 @@ export default {
   height: 0.28rem;
   background: rgba(118, 118, 128, 0.12);
   border-radius: 0.08rem;
+  margin: 10px auto;
   ul {
     display: flex;
   }
   li {
     width: 0.7rem;
     height: 0.24rem;
-    background: rgba(255, 255, 255, 1);
+    // background: rgba(255, 255, 255, 1);
+    line-height: 0.24rem;
     border-radius: 0.08rem;
   }
 }
