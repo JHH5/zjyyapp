@@ -124,23 +124,14 @@
                     </div>
                     <div class="montent">
                       <ul>
-                        <li
-                          class="static"
-                          v-bind:class="{ active: isActive, 'text-danger': hasError }"
-                        >
-                          <p @click.stop="changeValue('月度',1)">月度</p>
+                        <li :class="{active:showa==1}">
+                          <p @click.stop="changeValue('月度',1)" @click="today_a">月度</p>
                         </li>
-                        <li
-                          class="static"
-                          v-bind:class="{ active: isActive, 'text-danger': hasError }"
-                        >
-                          <p @click.stop="changeValue('季度',2)">季度</p>
+                        <li :class="{active:showa==2}">
+                          <p @click.stop="changeValue('季度',2)" @click="today_b">季度</p>
                         </li>
-                        <li
-                          class="static"
-                          v-bind:class="{ active: isActive, 'text-danger': hasError }"
-                        >
-                          <p @click.stop="changeValue('年度',3)">年度</p>
+                        <li :class="{active:showa==3}">
+                          <p @click.stop="changeValue('年度',3)" @click="today_c">年度</p>
                         </li>
                       </ul>
                     </div>
@@ -371,7 +362,10 @@
                       <div class="bannerleft">
                         <p>人均（次）</p>
                         <div class="bannertext">
-                          <p class="number"><span>≈</span>{{studenttrain.trainrjcs.rjpxcs}}</p>
+                          <p class="number">
+                            <span>≈</span>
+                            {{studenttrain.trainrjcs.rjpxcs}}
+                          </p>
                           <p class="title">{{moment}}月人均培训次数</p>
                         </div>
                       </div>
@@ -401,7 +395,7 @@
                       <div class="bannerleft">
                         <p>累计人次（次）</p>
                         <div class="bannertext">
-                          <p class="number"> {{studenttrain.trainljrc.ljrc}}</p>
+                          <p class="number">{{studenttrain.trainljrc.ljrc}}</p>
                           <p class="title">{{moment}}月培训累计人次</p>
                         </div>
                       </div>
@@ -758,6 +752,7 @@ export default {
       isActive: true,
       hasError: false,
       student: "7",
+      showa: "",
       skill: "10",
       hospitalName: "",
       userName: "",
@@ -1176,42 +1171,21 @@ export default {
       this.student = "8";
     },
     changeValue(type, state) {
-      console.log(state);
-      if ((state = 1)) {
-        this.isActive = false;
-        this.hasError = false;
-      }
       Indicator.open("加载中...");
       this.selectcomp = false;
 
       this.selectname = type;
       this.teacherVal(state, "01", "12");
-      // if (type == '年度') {
-      //   this.teacherVal('01','12')
-      // }else if (type == '季度') {
-      //   switch (moment().quarter()) {
-      //     case 1:
-      //         this.teacherVal('01','03')
-      //       break;
-      //     case 2:
-      //         this.teacherVal('04','06')
-      //       break;
-      //     case 3:
-      //         this.teacherVal('07','09')
-      //       break;
-      //     case 4:
-      //         this.teacherVal('10','12')
-      //       break;
-      //     default:
-      //       break;
-      //   }
-      // }else{
-      //   // if (moment().date() < 20) {
-      //     this.teacherVal(this.moment,this.moment)
-      //   // }else{
-      //   //   this.teacherVal(moment().month() + 1,moment().month() + 1)
-      //   // }
-      // }
+    },
+    today_a() {
+      this.showa = 1;
+      console.log("12");
+    },
+    today_b() {
+      this.showa = 2;
+    },
+    today_c() {
+      this.showa = 3;
     },
     changeValues(type) {
       this.selectcomp1 = false;
@@ -1289,36 +1263,6 @@ export default {
           alert("接口返回错误，请重新刷新页面");
           // window.location.reload()
         });
-
-      // return new Promise((resolve, reject) => {
-      //   teachereValuate(start,end)
-      //     .then(res => {
-      //       if(JSON.parse(res).code == 1){
-      //         this.teacherValuate = JSON.parse(res).evaluateoverview,
-      //         this.teacherBardata = JSON.parse(res).dimensionevaluatelist
-      //         var arrsp = []
-      //         for (let i = 0; i < this.teacherBardata.length; i++) {
-      //           arrsp.push({
-      //             name:this.teacherBardata[i].typename + "\n" + this.teacherBardata[i].averagescore,
-      //             value: parseFloat(this.teacherBardata[i].averagescore)
-      //           })
-      //         }
-      //         this.radardata1 = arrsp
-      //         this.flag1 = true
-      //         this.$refs.radar1.drawLine()
-      //         Indicator.close();
-      //         resolve();
-      //       }else{
-      //         // console.log(6);
-      //         reject();
-      //       }
-      //     })
-      //     .catch(err => {
-      //       console.log(err);
-
-      //       reject();
-      //     });
-      // });
     },
     studentVal(start, end) {
       queryHomepageExamdata(start, end).then(res => {
@@ -1348,35 +1292,7 @@ export default {
         this.selectcomp = true;
       }
     },
-    // startTop() {
-    //   // if (document.documentElement.scrollTop == 590) {
-    //   //   document.body.scrollTop = document.documentElement.scrollTop = 1157;
-    //   // }else{
-    //   //   document.body.scrollTop = document.documentElement.scrollTop = 590;
-    //   // }
-    //   this.starNumber = document.documentElement.scrollTop
 
-    // },
-    // endTop() {
-    //   this.endNumber = document.documentElement.scrollTop
-    //   console.log(this.starNumber,this.endNumber);
-    //   if (this.starNumber > this.endNumber) {
-    //     //向上滑动
-    //     if (this.starNumber < 590) {
-    //       document.body.scrollTop = document.documentElement.scrollTop = 1157;
-    //     }else{
-    //       document.body.scrollTop = document.documentElement.scrollTop = 590;
-    //     }
-    //   }else{
-    //     //向下滑动
-    //     if (this.starNumber < 590) {
-    //       document.body.scrollTop = document.documentElement.scrollTop = 590;
-    //     }else{
-    //       document.body.scrollTop = document.documentElement.scrollTop = 1157;
-    //     }
-
-    //   }
-    // },
     drawLine() {
       // 基于准备好的dom，初始化echarts实例
       let myChart = myCharts.init(document.getElementById("myChart2"));
@@ -1384,9 +1300,7 @@ export default {
       // let myChart4 = myCharts.init(document.getElementById("myChart4"));
       window.onresize = myChart.resize;
       var vms = this;
-      // console.log(vms.studenttype);
-      // window.onresize = myChart3.resize;
-      // window.onresize = myChart4.resize;
+
       // 绘制图表
       myChart.setOption({
         // legend: {
@@ -1556,6 +1470,7 @@ export default {
         moment(moment().month() + 1, "MM").daysInMonth() +
         "日";
     }
+
     this.years = moment().year();
     setTimeout(() => {
       const mySwiper4 = this.$refs.mySwiper4;
@@ -1638,67 +1553,6 @@ export default {
         // console.log(JSON.parse(res));
         this.studentround = JSON.parse(res).personrounddata;
         if (JSON.parse(res).code == 1) {
-          // console.log(JSON.parse(res));
-          // var arrs = [];
-          // arrs.push({
-          //   name: JSON.parse(res).officeroundnowsum[0].officename,
-          //   number: JSON.parse(res).officeroundnowsum[0].lzbl,
-          //   percent: JSON.parse(res).officeroundnowsum[0].lzbl,
-          //   color: "rgba(249,149,63,1)"
-          // });
-          // arrs.push({
-          //   name: JSON.parse(res).officeroundnowsum[1].officename,
-          //   number: JSON.parse(res).officeroundnowsum[1].lzbl,
-          //   percent: JSON.parse(res).officeroundnowsum[1].lzbl,
-          //   color: "rgba(249,149,63,0.70)"
-          // });
-          // arrs.push({
-          //   name: JSON.parse(res).officeroundnowsum[2].officename,
-          //   number: JSON.parse(res).officeroundnowsum[2].lzbl,
-          //   percent: JSON.parse(res).officeroundnowsum[2].lzbl,
-          //   color: "rgba(249,149,63,0.40)"
-          // });
-          // this.barleft = arrs;
-          // var arrsd = [];
-          // arrsd.push({
-          //   name: JSON.parse(res).officeroundnowsum[
-          //     JSON.parse(res).officeroundnowsum.length - 3
-          //   ].officename,
-          //   number: JSON.parse(res).officeroundnowsum[
-          //     JSON.parse(res).officeroundnowsum.length - 3
-          //   ].lzbl,
-          //   percent: JSON.parse(res).officeroundnowsum[
-          //     JSON.parse(res).officeroundnowsum.length - 3
-          //   ].lzbl,
-          //   color: "rgba(249,149,63,1)"
-          // });
-          // arrsd.push({
-          //   name: JSON.parse(res).officeroundnowsum[
-          //     JSON.parse(res).officeroundnowsum.length - 2
-          //   ].officename,
-          //   number: JSON.parse(res).officeroundnowsum[
-          //     JSON.parse(res).officeroundnowsum.length - 2
-          //   ].lzbl,
-          //   percent: JSON.parse(res).officeroundnowsum[
-          //     JSON.parse(res).officeroundnowsum.length - 2
-          //   ].lzbl,
-          //   color: "rgba(249,149,63,1)"
-          // });
-          // arrsd.push({
-          //   name: JSON.parse(res).officeroundnowsum[
-          //     JSON.parse(res).officeroundnowsum.length - 1
-          //   ].officename,
-          //   number: JSON.parse(res).officeroundnowsum[
-          //     JSON.parse(res).officeroundnowsum.length - 1
-          //   ].lzbl,
-          //   percent: JSON.parse(res).officeroundnowsum[
-          //     JSON.parse(res).officeroundnowsum.length - 1
-          //   ].lzbl,
-          //   color: "rgba(249,149,63,1)"
-          // });
-          // this.barright = arrsd;
-          // // console.log(arrsd);
-
           this.showbar = true;
         } else {
           console.log("暂无数据");
@@ -1779,6 +1633,7 @@ export default {
         this.skilldata = bdd;
       }
     });
+
     queryActivitydata().then(res => {
       (this.historyactive = JSON.parse(res).historyactivitylist),
         (this.threeactive = JSON.parse(res).threedaysactivitylist);
@@ -1787,6 +1642,7 @@ export default {
         // console.log("1");
       }
     });
+
     // queryProposalsheetdata().then(res => {
     //   this.userdels = JSON.parse(res).dcls;
     // });
@@ -1825,11 +1681,6 @@ export default {
     cycle,
     barlabel
   }
-  // computed: {
-  //   swiper() {
-  //     return this.$refs.mySwiper.swiper;
-  //   }
-  // }
 };
 </script>  
   
@@ -4264,14 +4115,19 @@ export default {
   }
 }
 .montent {
-  width: 2.1rem;
-  height: 0.28rem;
+  width: 2.2rem;
+  height: 0.44rem;
   background: rgba(118, 118, 128, 0.12);
   border-radius: 0.08rem;
   margin: 10px auto;
   position: relative;
   .active {
     background: #fff;
+    margin: 5px;
+    padding: 5px;
+    line-height: 0.24rem;
+    // font-weight: bold;
+    color: #0096c1;
   }
   ul {
     display: flex;
@@ -4281,6 +4137,8 @@ export default {
     height: 0.24rem;
     // background: rgba(255, 255, 255, 1);
     line-height: 0.24rem;
+    margin: 5px;
+    padding: 5px;
     border-radius: 0.08rem;
   }
 }
