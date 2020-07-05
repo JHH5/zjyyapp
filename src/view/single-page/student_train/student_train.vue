@@ -1,68 +1,27 @@
 <template>
   <div>
     <header-main :message="'培训'"></header-main>
+    <div @click="popupVisible=true" class="select">筛选</div>
     <div class="studenttrain">
       <div class="student_train">
         <div class="student_train_top">
-          <!-- <div class="tabbar"> -->
-          <!-- <p :class="this.tabIndex == 2 ? 'active':''" >住培</p> -->
-          <!-- <p :class="this.tabIndex == 2 ? 'active':''" @click="changeTab(2)">住培</p> -->
-          <!-- <p :class="this.tabIndex == 3 ? 'active':''" >专培</p>
-            <p :class="this.tabIndex == 4 ? 'active':''" >本科</p>
-          <p :class="this.tabIndex == 5 ? 'active':''" >研究生</p>-->
-          <!-- </div> -->
-          <!-- <div class="tabbar_right">
-            <p>筛选</p>
-            <img
-              @click="handleShowRotation()"
-              src="../../../assets/images/todaywork/select.png"
-              alt
-            />
-          </div>-->
-        </div>
-        <!-- <div style="width:100%;height:4rem">
-          <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
-        </div>-->
-        <div class="student_train_main" v-for="(item,index) in singledata" :key="index">
-          <div class="student_train_main_single">
-            <p class="top">{{item.name}}</p>
-            <!-- <div class="middle">
-              <div class="left">
-                <p style="color: #F9953F;" class="number">{{singledata[0].ljrs}}</p>
-                <p class="desc">培训累计人数</p>
+          <!-- <mt-search v-model="value"></mt-search> -->
+          <div class="end" v-for="(item, index) in tabledata" :key="index">
+            <div class="pxtop">
+              <p class="pxtitle">{{item.name}}——培训数据</p>
+              <p class="descs">数据截止时间：：{{years}}年/{{moment}}月</p>
+            </div>
+            <div class="end_end">
+              <div class="end_th">
+                <p>培训类型</p>
+                <p>发布次数</p>
+                <p>参与人数</p>
               </div>
-              <div class="center">
-                <p style="color: #326699;" class="number">{{singledata[0].rjpxcs}}</p>
-                <p class="desc">人均培训次数</p>
-                <p class="desc">（总人数<span>{{singledata[0].zrs}}</span>人）</p>
-              </div>
-              <div class="right">
-                <div class="right_top">
-                  <p class="right_number">{{singledata[0].bypxcs}}</p>
-                   <p class="right_percent">%</p>
-                </div>
-                <p  class="desc">本月共计培训场次</p>
-              </div>
-            </div>-->
-            <!-- <piebar :barnumber="bardata"></piebar> -->
-            <!-- <trainbar :bardata="singledata[0].studenttraintypedata"></trainbar> -->
-            <div class="end">
-              <div class="end_end">
-                <div class="end_th">
-                  <p>培训类型</p>
-                  <p>发布次数</p>
-                  <p>参与人数</p>
-                </div>
-                <div class="endtable">
-                  <div
-                    v-for="(studentsweb, index) in item.traintypesumlist"
-                    :key="index"
-                    class="end_td"
-                  >
-                    <p>{{studentsweb.traintypename}}</p>
-                    <p>{{studentsweb.trainsum}}</p>
-                    <p>{{studentsweb.studentsum}}</p>
-                  </div>
+              <div class="endtable">
+                <div class="end_td" v-for="(student,index) in item.traintypesumlist" :key="index">
+                  <p>{{student.traintypename}}</p>
+                  <p>{{student. trainsum}}</p>
+                  <p>{{student. studentsum}}</p>
                 </div>
               </div>
             </div>
@@ -70,32 +29,45 @@
         </div>
       </div>
     </div>
-    <div @click="handleHideRotation()" v-show="showRotation" class="rotation_wind">
-      <div class="rotation_wind_main">
-        <p
-          :style="selectId == -1?'color: #277fff':'color: #212121'"
-          @click="handleSelectName(-1,'全部','')"
-        >全部</p>
-        <p
-          @click="handleSelectName(index,item.majorname,item.officelist)"
-          v-for="(item, index) in selectdata"
-          :style="selectId == index?'color: #277fff':'color: #212121'"
-          :key="index"
-        >{{item.majorname}}</p>
-      </div>
-    </div>
+    <mt-popup v-model="popupVisible" position="bottom">
+      <mt-navbar class="page-part" v-model="selected">
+        <mt-tab-item id="1">专业基地</mt-tab-item>
+        <mt-tab-item id="2">选择科室</mt-tab-item>
+      </mt-navbar>
+      <!-- tab-container -->
+      <mt-tab-container v-model="selected">
+        <mt-tab-container-item id="1">
+          <div class="wadu">
+            <ul>
+              <li
+                v-for="(item,index) in selectdata"
+                :key="index"
+                @click="getValue(index,item.majorsubjectid)"
+              >{{item.majorname}}</li>
+            </ul>
+          </div>
+        </mt-tab-container-item>
+        <mt-tab-container-item id="2">
+          <div class="wadu">
+            <ul>
+              <li v-for="(item,index) in  kswar" :key="index"
+              >{{item.name}}</li>
+            </ul>
+          </div>
+        </mt-tab-container-item>
+      </mt-tab-container>
+    </mt-popup>
   </div>
 </template>
 
 <script>
 import mainHeader from "../../../components/mainHeader.vue";
-// import piebar from "../../../components/mecharts/piebar.vue";
 import trainbar from "../../../components/mecharts/trainbar.vue";
 import {
   queryStudenttraindata,
   queryMajormanageoffice
 } from "../../../api/studentcomment";
-import { Indicator } from "mint-ui";
+import { Indicator, Popup, Navbar, TabItem, Search } from "mint-ui";
 import moment from "moment";
 export default {
   data() {
@@ -103,7 +75,12 @@ export default {
       showRotation: false,
       tabIndex: 2,
       selectId: -1,
+      kswar: "",
+      tabledata: [],
+      selected: "1",
+      popupVisible: false,
       selectName: "内科基地",
+      value: "",
       bardata: [
         {
           color: "#395275",
@@ -182,18 +159,42 @@ export default {
         }
       ],
       showtab: false,
-      moment: 0
+      moment: 0,
+      ksid: []
     };
   },
   methods: {
-    // changeTab(num){
-    //   this.tabIndex = num
-    //   queryStudenttraindata(num,'',this.moment).then(res => {
-    //     // console.log(JSON.parse(res));
-    //     this.singledata = JSON.parse(res).studenttraindata
-    //     this.showtab = true
-    //   })
-    // },
+    getValue(index, majorsubjectid) {
+      // console.log(index, majorsubjectid);
+      queryMajormanageoffice().then(res => {
+        // console.log(JSON.parse(res));
+        this.selectdata = JSON.parse(res).majorlist;
+        for (var t = 0; t < this.selectdata.length; t++) {
+          if (this.selectdata[t].majorsubjectid == majorsubjectid) {
+            this.kswar = this.selectdata[t].officelist;
+          }
+        }
+        for (var e = 0; e < this.kswar.length; e++) {
+          if (this.kswar[e].officeid == null) {
+            console.log("暂无数据");
+          } else {
+            this.ksid.push(this.kswar[e].officeid);
+          }
+        }
+        let ads = [];
+        // console.log(this.kswar);
+        queryStudenttraindata(this.moment, this.ksid).then(res => {
+          this.singledata = JSON.parse(res).officetrainsumlist;
+          // console.log(this.singledata);
+          for (var k = 0; k < this.singledata.length; k++) {
+            if (this.ksid.indexOf(this.singledata[k].officeid) != -1) {
+              this.tabledata.push(this.singledata[k]);
+            }
+          }
+          Indicator.close();
+        });
+      });
+    },
 
     handleShowRotation() {
       this.noScroll();
@@ -225,9 +226,9 @@ export default {
       // console.log(JSON.parse(res));
       this.selectdata = JSON.parse(res).majorlist;
       let ads = [];
-      for (let i = 0; i < JSON.parse(res).majorlist[0].officelist.length; i++) {
-        ads.push(JSON.parse(res).majorlist[0].officelist[i].officeid);
-      }
+      // for (let i = 0; i < JSON.parse(res).majorlist[0].officelist.length; i++) {
+      //   ads.push(JSON.parse(res).majorlist[0].officelist[i].officeid);
+      // }
       queryStudenttraindata(2, "", this.moment).then(res => {
         // console.log(JSON.parse(res));
         this.singledata = JSON.parse(res).officetrainsumlist;
@@ -246,6 +247,8 @@ export default {
     } else {
       this.moment = moment().month() + 1;
     }
+
+    this.years = moment().year();
   },
   components: {
     "header-main": mainHeader,
@@ -277,7 +280,6 @@ export default {
   }
 
   .end_end {
-    width: 3.25rem;
     margin: 0 auto;
 
     .end_th {
@@ -336,7 +338,7 @@ export default {
     margin: 0 auto;
     padding-top: 0.01rem;
     .student_train_top {
-      display: flex;
+      // display: flex;
       align-items: center;
       margin-top: 0.1rem;
       margin-left: 0.1rem;
@@ -492,5 +494,57 @@ export default {
       color: #277fff;
     }
   }
+}
+/deep/ .mint-popup {
+  width: 100%;
+  height: 5rem;
+  background: #fff;
+}
+.wadu ul {
+  width: 96%;
+  margin: auto;
+}
+.wadu ul li {
+  width: 0.8rem;
+  height: 0.44rem;
+  line-height: 0.44rem;
+  text-align: center;
+  background: rgba(242, 242, 243, 1);
+  border-radius: 0.06rem;
+  margin: 5px;
+  display: inline-block;
+  overflow: hidden;
+  font-size: 0.13rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(89, 89, 89, 1);
+}
+.descs {
+  height: 0.16rem;
+  font-size: 0.11rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 1);
+  line-height: 0.16rem;
+}
+.select {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  z-index: 9999;
+}
+.pxtop {
+  height: 0.44rem;
+  background: rgba(0, 150, 193, 1);
+  border-radius: 0.06rem 0.06rem 0rem 0rem;
+  padding: 10px;
+}
+.pxtitle {
+  height: 0.21rem;
+  font-size: 0.15rem;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 1);
+  line-height: 0.21rem;
 }
 </style>

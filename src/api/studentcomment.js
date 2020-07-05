@@ -9,13 +9,14 @@ if (moment().month() == 0) {
     year = moment().year()
 }
 
-export const queryStudentevaluationitem = (time) => {
+export const queryStudentevaluationitem = (hospitalofficeid, time) => {
     return axios.request({
         url: '/doctor_train/rest/H5Management/querystudentevaluationitem.do',
         data: {
+            officeid: 101,
             starttime: year + "-" + time + "-01 00:00:00",
             endtime: year + "-" + time + "-" + moment(year + "-" + time, "YYYY-MM").daysInMonth() + " 23:59:59",
-            officeid:1
+
         },
         method: 'post'
     })
@@ -53,11 +54,11 @@ export const queryMajorstudentrounddata = (ids) => {
 }
 
 
-export const queryStudenttraindata = (ids, id, time) => {
+export const queryStudenttraindata = (time) => {
     return axios.request({
         url: '/doctor_train/rest/H5Management/querystudenttraindata.do',
         data: {
-            // officeids: id,
+            // officeid: 5,
             // studenttype: ids,
             starttime: year + "-" + time + "-01 00:00:00",
             endtime: year + "-" + time + "-" + moment(year + "-" + time, "YYYY-MM").daysInMonth() + " 23:59:59",

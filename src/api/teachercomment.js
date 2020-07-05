@@ -72,11 +72,11 @@ export const queryMajorTeacherevaluatedataitem = (ids, id, time) => {
 }
 
 
-export const getoffice = (officefastid, time) => {             //筛选科室
+export const getoffice = (time) => {             //筛选科室
     return axios.request({
         url: '/doctor_train/rest/H5Management/queryoffice.do',
         data: {
-            officeid: officefastid,
+            // officeid: officefastid,
             starttime: year + "-" + time + "-01 00:00:00",
             endtime: year + "-" + time + "-" + moment(year + "-" + time, "YYYY-MM").daysInMonth() + " 23:59:59",
         },

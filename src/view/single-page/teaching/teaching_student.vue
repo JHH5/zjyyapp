@@ -31,8 +31,7 @@
           >{{String(new Date().getFullYear())+'年'}}{{thirdName}}</p>
         </div>
         <div class="main-table" v-if="tableData.length != 0">
-          
-          <ul >
+          <ul>
             <li>教师</li>
             <li>副主任医师</li>
             <li>
@@ -56,8 +55,7 @@
             </li>
           </ul>
         </div>
-          <p v-else style="line-height: 1rem;text-align: center;font-size: 12px;color: #999;">暂无数据</p>
-
+        <p v-else style="line-height: 1rem;text-align: center;font-size: 12px;color: #999;">暂无数据</p>
       </div>
     </div>
     <mt-popup v-model="zyjdPopup" position="bottom">
@@ -201,7 +199,7 @@
           <p>确定</p>
         </div>
       </div>
-    </div> -->
+    </div>-->
   </div>
 </template>
 
@@ -486,7 +484,7 @@ export default {
     },
     onValuesChange(p, v) {
       //s改变
-      console.log(p.getValues());
+      // console.log(p.getValues());
       this.choice2(p.getValues()[1].index, p.getValues()[1].number);
       this.slectType();
     },
@@ -494,7 +492,7 @@ export default {
       this.zyjdPopup = true;
       this.selected = String(val);
     },
-  
+
     onSave() {
       this.zyjdPopup = false;
       this.slectType();
@@ -510,7 +508,7 @@ export default {
       // console.log(this.choice1Id,this.choice2Id);
       if (this.choice1Id == 99 && this.choice2Id == 99) {
         queryMajormanageOffice(this.firstName).then(res => {
-          // console.log(JSON.parse(res));
+          console.log(JSON.parse(res));
           var adds = "";
           for (
             let i = 0;
@@ -710,9 +708,10 @@ export default {
   created() {
     queryMajormanageOffice("").then(res => {
       let majorlist = JSON.parse(res).majorlist;
-      console.log(JSON.parse(res).majorlist);
+      // console.log(JSON.parse(res).majorlist);
       this.alltype = majorlist;
       this.firstName = JSON.parse(res).majorlist[0].majorname;
+      console.log(this.firstName);
       this.secondName = JSON.parse(res).majorlist[0].officelist[0]
         ? JSON.parse(res).majorlist[0].officelist[0].name
         : "未知";
@@ -732,6 +731,16 @@ export default {
       // console.log(this.alltype);
       // console.log(JSON.parse(res).majorlist[0]);
     });
+    if (moment().date() < 20) {
+      if (moment().month() == 0) {
+        this.moment = 12;
+      } else {
+        this.moment = moment().month();
+      }
+    } else {
+      this.moment = moment().month() + 1;
+    }
+    this.years = moment().year();
   },
   components: {
     // "header-main": mainHeader

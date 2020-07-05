@@ -122,7 +122,7 @@ export default {
       ],
       showpie: false,
       showRotation: false,
-      years:'',
+      years: "",
       tabIndex: 2,
       selectId: -1,
       selectName: "内科基地",
@@ -268,7 +268,7 @@ export default {
     } else {
       this.moment = moment().month() + 1;
     }
-    
+
     this.years = moment().year();
   },
   components: {
@@ -304,7 +304,14 @@ export default {
     }
   }
 }
-
+.toptitle {
+  height: 0.16rem;
+  font-size: 0.11rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(89, 89, 89, 1);
+  line-height: 0.16rem;
+}
 .end {
   background: #ffffff;
   padding-top: 0.09rem;

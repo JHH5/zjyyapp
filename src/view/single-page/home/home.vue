@@ -122,26 +122,24 @@
                       <p @click="handleClickMore" class="more">更多</p>
                       <img src="../../../assets/images/right_arrow.png" alt />
                     </div>
-                    <!-- <mt-tabbar v-model="selected2">
-                      <mt-tab-item @click.stop="changeValue('月度',1)" id="月度">
-                        <p @click.stop="changeValue('月度',1)">月度</p>
-                      </mt-tab-item>
-                      <mt-tab-item @click.stop="changeValue('季度',2)" id="季度">
-                        <p @click.stop="changeValue('季度',2)">季度</p>
-                      </mt-tab-item>
-                      <mt-tab-item id="年度">
-                        <p @click.stop="changeValue('年度',3)">年度</p>
-                      </mt-tab-item>
-                    </mt-tabbar>-->
                     <div class="montent">
                       <ul>
-                        <li>
+                        <li
+                          class="static"
+                          v-bind:class="{ active: isActive, 'text-danger': hasError }"
+                        >
                           <p @click.stop="changeValue('月度',1)">月度</p>
                         </li>
-                        <li>
+                        <li
+                          class="static"
+                          v-bind:class="{ active: isActive, 'text-danger': hasError }"
+                        >
                           <p @click.stop="changeValue('季度',2)">季度</p>
                         </li>
-                        <li>
+                        <li
+                          class="static"
+                          v-bind:class="{ active: isActive, 'text-danger': hasError }"
+                        >
                           <p @click.stop="changeValue('年度',3)">年度</p>
                         </li>
                       </ul>
@@ -217,10 +215,10 @@
                 </swiper-slide>
                 <!-- 师资培训 -->
                 <swiper-slide>
-                  <div @click="hadleTeacherTrain" class="student_exam boxshadow">
+                  <div class="student_exam boxshadow">
                     <div class="student_train_top box2_top">
                       <p style="margin-right:0.1rem" class="title">师资培训</p>
-                      <p class="more">更多</p>
+                      <!-- <p  @click="hadleTeacherTrain" class="more">更多</p> -->
                       <img src="../../../assets/images/right_arrow.png" alt />
                     </div>
                     <p class="descs">数据截止时间：：{{years}}年/06月</p>
@@ -300,10 +298,10 @@
                       </div>
                       <div class="teacherlist">
                         <ul>
-                          <li v-for="(item,index) in teachertraintypeworkload" :key="index">
+                          <!-- <li v-for="(item,index) in teachertraintypeworkload" :key="index">
                             <p class="number">{{item.typesum }}</p>
                             <p class="title">{{item.traintypename }}</p>
-                          </li>
+                          </li>-->
                         </ul>
                       </div>
                     </div>
@@ -373,7 +371,7 @@
                       <div class="bannerleft">
                         <p>人均（次）</p>
                         <div class="bannertext">
-                          <p class="number">{{studenttrain.trainrjcs.rjpxcs}}</p>
+                          <p class="number"><span>≈</span>{{studenttrain.trainrjcs.rjpxcs}}</p>
                           <p class="title">{{moment}}月人均培训次数</p>
                         </div>
                       </div>
@@ -385,15 +383,15 @@
                           </li>
                           <li>
                             一年级
-                            <span>{{studenttrain.trainrjcs.ynjrjcs}}</span>
+                            <span>{{studenttrain.trainrjcs.ynjrs}}</span>
                           </li>
                           <li>
                             二年级
-                            <span>{{studenttrain.trainrjcs.enjrjcs}}</span>
+                            <span>{{studenttrain.trainrjcs.enjrs}}</span>
                           </li>
                           <li>
                             三年级
-                            <span>{{studenttrain.trainrjcs.snjrjcs}}</span>
+                            <span>{{studenttrain.trainrjcs.snjrs}}</span>
                           </li>
                         </ul>
                       </div>
@@ -403,11 +401,11 @@
                       <div class="bannerleft">
                         <p>累计人次（次）</p>
                         <div class="bannertext">
-                          <p class="number">{{studenttrain.trainljrc.ljrc}}</p>
+                          <p class="number"> {{studenttrain.trainljrc.ljrc}}</p>
                           <p class="title">{{moment}}月培训累计人次</p>
                         </div>
                       </div>
-                      <div class="bannerright">
+                      <div class="bannerright2">
                         <ul>
                           <li>
                             一年级
@@ -466,7 +464,6 @@
                     <div class="box2_top">
                       <div class="top">
                         <p class="title">当前学员概况</p>
-                        <p class="desc">截止时间:当前</p>
                       </div>
                       <p class="more">更多</p>
                       <img src="../../../assets/images/right_arrow.png" alt />
@@ -521,7 +518,7 @@
                                 <div :style="{ 'height': item.zszs*0.0015 + 'rem' }" class="block"></div>
                               </div>
                               <div class="right">
-                                <p style="color:#FF9B00">{{item.jqzyzss}}</p>
+                                <p style="color:#FF9B00;">{{item.jqzyzss}}</p>
                                 <div
                                   :style="{ 'height': item.jqzyzss*0.0015 + 'rem' }"
                                   class="block"
@@ -649,8 +646,8 @@
         <mt-tab-container-item id="3">
           <div class="jnbanner">
             <div class="box3_top">
-              <p style="margin-right:0.1rem" class="title">学员评价概况</p>
-              <p class="more">更多</p>
+              <p style="margin-right:0.1rem" class="title">技能中心</p>
+              <!-- <p class="more">更多</p> -->
               <img src="../../../assets/images/right_arrow.png" alt />
             </div>
             <p class="descs">数据截止时间：{{years}}年/{{moment}}月</p>
@@ -758,6 +755,8 @@ export default {
       active: "tab-container1",
       selected: "1",
       selected2: "月度",
+      isActive: true,
+      hasError: false,
       student: "7",
       skill: "10",
       hospitalName: "",
@@ -1177,8 +1176,14 @@ export default {
       this.student = "8";
     },
     changeValue(type, state) {
+      console.log(state);
+      if ((state = 1)) {
+        this.isActive = false;
+        this.hasError = false;
+      }
       Indicator.open("加载中...");
       this.selectcomp = false;
+
       this.selectname = type;
       this.teacherVal(state, "01", "12");
       // if (type == '年度') {
@@ -1257,26 +1262,6 @@ export default {
                 value: parseFloat(this.teacherBardata[i].averagescore)
               });
             }
-            // console.log(arrsp);
-            // if (arrsp[0].value <= 10) {
-            //   arrsp[0].value = arrsp[0].value * 10;
-            // }
-            // if (arrsp[1].value <= 10) {
-            //   arrsp[1].value = arrsp[1].value * 10;
-            // }
-            // if (arrsp[2].value <= 10) {
-            //   arrsp[2].value = arrsp[2].value * 10;
-            // }
-            // if (arrsp[3].value <= 10) {
-            //   arrsp[3].value = arrsp[3].value * 10;
-            // }
-            // if (arrsp[4].value <= 10) {
-            //   arrsp[4].value = arrsp[4].value * 10;
-            // }
-            // if (arrsp[5].value <= 10) {
-            //   arrsp[5].value = arrsp[5].value * 10;
-            // }
-
             if (
               arrsp[0].value == 0 &&
               arrsp[1].value == 0 &&
@@ -1575,33 +1560,9 @@ export default {
     setTimeout(() => {
       const mySwiper4 = this.$refs.mySwiper4;
       const mySwiper2 = this.$refs.mySwiper2;
-      // console.log(this.$refs.mySwiper4.swiper);
       const mySwiper = this.$refs.mySwiper;
-      // mySwiper4.slideToLoop(2, 1000, false);
-      // mySwiper.slideToLoop(2, 1000, false);
     }, 1000);
-
-    // this.teacherVal('11','11')
-    // this.teacherVal("11","11")
-    // if (moment().date() < 20) {
     this.teacherVal(1, this.moment, this.moment);
-    // }else{
-    //   this.teacherVal(moment().month() + 1,moment().month() + 1)
-    // }
-    // Promise.all([
-
-    // ]).then(msg => {
-    //   // setTimeout(() => {
-    //     // console.log(this.$refs.radar1);
-    //   // }, 2000);
-
-    //   // this.flag1 = true
-    //   // this.$refs.radar1.drawLine()
-
-    // }).catch(err => {
-    //   console.log(err);
-    // });
-    //////////今日直通
     workToday("", "").then(res => {
       if (JSON.parse(res).code == 1) {
         this.workTodaydata = JSON.parse(res).worktodaylist;
@@ -1611,7 +1572,7 @@ export default {
     }),
       teacherWorkload(this.moment).then(res => {
         if (JSON.parse(res).code == 1) {
-          console.log(JSON.parse(res));
+          // console.log(JSON.parse(res));
           this.teacherWorkData = JSON.parse(res).teacherworkload;
           this.teachertraintypeworkload = JSON.parse(
             res
@@ -1760,7 +1721,7 @@ export default {
       this.studentVal(moment().month() + 1, moment().month() + 1);
     }
     queryHomepageStudentdata(this.moment).then(res => {
-      // console.log(JSON.parse(res));
+      console.log(JSON.parse(res));
       this.studenttype = JSON.parse(res).studatalist;
       // console.log(this.studenttype);
       this.studentsubject = JSON.parse(res).studensubjectdata;
@@ -1826,9 +1787,9 @@ export default {
         // console.log("1");
       }
     });
-    queryProposalsheetdata().then(res => {
-      this.userdels = JSON.parse(res).dcls;
-    });
+    // queryProposalsheetdata().then(res => {
+    //   this.userdels = JSON.parse(res).dcls;
+    // });
     queryProposalsheetdata2().then(res => {
       // console.log(JSON.parse(res));
       this.proposaldata = JSON.parse(res).proposalyeardata;
@@ -3420,12 +3381,12 @@ export default {
     margin-right: 0.27rem;
     .left {
       width: 0.14rem;
-      background: #77caf6;
+      background: #00c290;
       position: relative;
     }
     .right {
       width: 0.14rem;
-      background: #326699;
+      background: #ff9b00;
       position: relative;
     }
     .block {
@@ -4071,6 +4032,7 @@ export default {
       font-weight: 400;
       color: rgba(89, 89, 89, 1);
       padding-left: 10px;
+      line-height: 0.4rem;
       margin-top: 0.02rem;
       span {
         font-size: 0.2rem;
@@ -4093,6 +4055,29 @@ export default {
     }
   }
 }
+.bannerright2 {
+  width: 50%;
+  text-align: left;
+  ul li {
+    height: 0.55rem;
+    margin-left: 10px;
+    background: rgba(247, 247, 247, 1);
+    border-radius: 0.06rem;
+    line-height: 0.55rem;
+    font-size: 0.11rem;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: rgba(89, 89, 89, 1);
+    padding-left: 10px;
+    margin-top: 0.02rem;
+    span {
+      font-size: 0.2rem;
+      font-family: DINAlternate-Bold, DINAlternate;
+      font-weight: bold;
+      color: rgba(89, 89, 89, 1);
+    }
+  }
+}
 .khbanner {
   text-align: left;
   width: 80%;
@@ -4108,13 +4093,13 @@ export default {
 .khbox {
   margin-top: 0.17rem;
 }
-.khbox ul {
-  display: flex;
-}
+
 .khbox ul li {
-  width: 0.8rem;
+  width: 0.65rem;
+  display: inline-block;
   height: 0.5rem;
-  padding: 10px;
+  padding: 5px;
+  margin-top: 5px;
   background: rgba(247, 247, 247, 1);
   border-radius: 0.06rem;
   margin-right: 0.05rem;
@@ -4283,13 +4268,19 @@ export default {
   height: 0.28rem;
   background: rgba(118, 118, 128, 0.12);
   border-radius: 0.08rem;
+  margin: 10px auto;
+  position: relative;
+  .active {
+    background: #fff;
+  }
   ul {
     display: flex;
   }
   li {
     width: 0.7rem;
     height: 0.24rem;
-    background: rgba(255, 255, 255, 1);
+    // background: rgba(255, 255, 255, 1);
+    line-height: 0.24rem;
     border-radius: 0.08rem;
   }
 }
@@ -4299,5 +4290,14 @@ export default {
   right: 10px;
   border-radius: 50%;
   overflow: hidden;
+}
+.showbg {
+  width: 0.7rem;
+  height: 0.24rem;
+  line-height: 0.24rem;
+  border-radius: 0.08rem;
+  background: #fff;
+  position: absolute;
+  top: 0;
 }
 </style>

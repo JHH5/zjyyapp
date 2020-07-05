@@ -1,132 +1,43 @@
 <template>
-  <div>
+  <div style="height:100%">
     <header-main :message="'轮转'"></header-main>
 
-    <!-- tab-container -->
-       <!-- <mt-cell title="标题文字" is-link>
-      <span style="color: green">这里是元素</span>
-      
-      <span style="color: green">这里是元素</span>
-      <span style="color: green">这里是元素</span>
-    </mt-cell> -->
-
-    <div class="rotation">
+    <div class="jdbox">
+      <!-- <div @click="handleShowRotation()">
+        <p class="boxtitle">轮转学员名单</p>
+      </div>-->
       <mt-navbar v-model="selected">
         <mt-tab-item id="1">退培学员清单</mt-tab-item>
         <mt-tab-item id="2">轮转学员清单</mt-tab-item>
         <mt-tab-item id="3">本月未入科清单</mt-tab-item>
         <mt-tab-item id="4">轮转异常人员</mt-tab-item>
       </mt-navbar>
-      <mt-tab-container v-model="selected">
-        <mt-tab-container-item id="1">
-          <div class="end">
-            <div class="end_end">
-              <div class="end_th">
-                <p>基地名称</p>
-                <p>学员姓名</p>
-              </div>
-              <div class="endtable">
-                <div class="end_td" v-for="(item, index) in selectdata" :key="index">
-                  <p>{{item.majorname}}</p>
-                  <p style="border-left:1px solid #f0f0f7">
-                    <span v-for="(studentname,index) in item.studentlist" :key="index">
-                      {{studentname.personname}}
-                      <span>
-                        <br />
-                      </span>
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </mt-tab-container-item>
-        <mt-tab-container-item id="2">
-          <div class="end">
-            <div class="end_end">
-              <div class="end_th">
-                <p>基地名称</p>
-                <p>学员姓名</p>
-              </div>
-              <div class="endtable">
-                <div v-for="(item, index) in selectdata" :key="index" class="end_td">
-                  <p>{{item.majorname}}</p>
-                  <p style="border-left:1px solid #f0f0f7">
-                    <span v-for="(studentname,index) in item.studentlist" :key="index">
-                      {{studentname.personname}}
-                      <span>
-                        <br />
-                      </span>
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </mt-tab-container-item>
-        <mt-tab-container-item id="3">
-          <div class="end">
-            <div class="end_end">
-              <div class="end_th">
-                <p>基地名称</p>
-                <p>学员姓名</p>
-              </div>
-              <div class="endtable">
-                <div v-for="(item, index) in selectdata2" :key="index" class="end_td">
-                  <p>{{item.name}}</p>
-                  <p style="border-left:1px solid #f0f0f7">
-                    <span v-for="(studentname,index) in item.studentlist" :key="index">
-                      {{studentname.personname}}
-                      <span>
-                        <br />
-                      </span>
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </mt-tab-container-item>
-        <mt-tab-container-item id="4">
-          <div class="end">
-            <div class="end_end">
-              <div class="end_th">
-                <p>科室名称</p>
-                <p>学员姓名</p>
-              </div>
-              <div class="endtable">
-                <div v-for="(item, index) in selectdata" :key="index" class="end_td">
-                  <p>{{item.majorname}}</p>
-                  <p style="border-left:1px solid #f0f0f7">
-                    <span v-for="(studentname,index) in item.studentlist" :key="index">
-                      {{studentname.personname}}
-                      <span>
-                        <br />
-                      </span>
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </mt-tab-container-item>
-      </mt-tab-container>
-    </div>
-    <div @click="handleHideRotation()" v-show="showRotation" class="rotation_wind">
-      <div class="rotation_wind_main">
-        <p
-          @click="handleSelectName(index,item.majorname,item.officelist)"
-          v-for="(item, index) in selectdata"
-          :style="selectId == index?'color: #277fff':'color: #212121'"
-          :key="index"
-        >{{item.majorname}}</p>
+
+      <p class="jdmc">基地名称</p>
+      <div class="jdcell" v-for="(item, index) in selectdata" :key="index">
+        <p class="jdcelldiv">{{item.majorname}}</p>
+        <div class="jdstudent">
+          <p v-for="(studentname,index) in item.studentlist" :key="index">{{studentname.personname}}</p>
+        </div>
+      </div>
+
+      <div @click="handleHideRotation()" v-show="showRotation" class="rotation_wind">
+        <div class="rotation_wind_main">
+          <mt-navbar v-model="selected">
+            <mt-tab-item id="1">退培学员清单</mt-tab-item>
+            <mt-tab-item id="2">轮转学员清单</mt-tab-item>
+            <mt-tab-item id="3">本月未入科清单</mt-tab-item>
+            <mt-tab-item id="4">轮转异常人员</mt-tab-item>
+          </mt-navbar>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
 import mainHeader from "../../../components/mainHeader.vue";
-import { Navbar, TabItem } from "mint-ui";
+import { Collapse } from "element-ui";
+import { Navbar, TabItem, TabContainer, TabContainerItem, Cell } from "mint-ui";
 import {
   queryMajormanageoffice,
   queryMajorstudentrounddata
@@ -135,6 +46,7 @@ export default {
   data() {
     return {
       showRotation: false,
+      showjdlist: false,
       selectId: 0,
       selected: "1",
       selectName: "内科基地",
@@ -212,35 +124,7 @@ export default {
           now: 15
         }
       ],
-      // selectdata: [
-      //   {
-      //     name: "内科基地"
-      //   },
-      //   {
-      //     name: "外科基地"
-      //   },
-      //   {
-      //     name: "儿科基地"
-      //   },
-      //   {
-      //     name: "全科基地"
-      //   },
-      //   {
-      //     name: "中医基地"
-      //   },
-      //   {
-      //     name: "麻醉科基地"
-      //   },
-      //   {
-      //     name: "眼科基地"
-      //   },
-      //   {
-      //     name: "皮肤科基地"
-      //   },
-      //   {
-      //     name: "放射科基地"
-      //   }
-      // ],
+
       offid: 0,
       majorlists: {}
     };
@@ -256,14 +140,24 @@ export default {
     }
   },
   methods: {
-    // handleShowRotation() {
+    handleShowRotation() {
+      this.noScroll();
+      this.showRotation = true;
+    },
+    // jdshow(index) {
     //   this.noScroll();
-    //   this.showRotation = true;
+    //   this.showjdlist = true;
+    //   console.log(index);
     // },
-    // handleHideRotation() {
-    //   this.showRotation = false;
-    //   this.canScroll();
+    // jdhide(index) {
+    //   this.noScroll();
+    //   this.showjdlist = false;
+    //   console.log(index)
     // },
+    handleHideRotation() {
+      this.showRotation = false;
+      this.canScroll();
+    }
     // handleSelectName(index, name, data) {
     //   (this.selectId = index), (this.selectName = name);
     //   let addp = [];
@@ -568,5 +462,61 @@ export default {
       }
     }
   }
+}
+.jdmc {
+  height: 0.18rem;
+  font-size: 0.13rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(89, 89, 89, 1);
+  line-height: 0.18rem;
+  padding-left: 20px;
+}
+.jdcell {
+  width: 90%;
+  margin: auto;
+}
+.jdbox {
+  background: rgba(242, 242, 243, 1);
+  height: 100%;
+}
+.jdcelldiv {
+  height: 0.5rem;
+  background: rgba(255, 255, 255, 1);
+  line-height: 0.5rem;
+  border-radius: 0.01rem;
+  border-bottom: 1px solid #f2f2f2;
+  font-size: 0.13rem;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 1);
+  padding-left: 10px;
+}
+.jdstudent {
+  background: #fff;
+
+  p {
+    width: 0.7rem;
+    height: 0.32rem;
+    line-height: 0.32rem;
+    font-size: 0.13rem;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: rgba(89, 89, 89, 1);
+    text-align: center;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 0.03rem;
+    border: 0.01rem solid rgba(238, 238, 239, 1);
+    margin: 5px;
+    display: inline-block;
+  }
+}
+.boxtitle {
+  font-size: 0.15rem;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(0, 150, 193, 1);
+  line-height: 0.21rem;
+  text-align: center;
 }
 </style>

@@ -49,9 +49,11 @@
       <div class="comment-box">
         <div class="conbox_title">
           <p class="pjtop">基地老师评分细则</p>
-          <mt-cell title="请选择科室">
-            <span @click="popupVisible=true">{{firstData}}</span>
-          </mt-cell>
+          <div @click="popupVisible=true">
+            <mt-cell title="请选择科室">
+              <span>{{hospitalname}}</span>
+            </mt-cell>
+          </div>
         </div>
         <div class="yqtop" @click="popupVisiblemid=true">
           <mt-cell>
@@ -65,13 +67,10 @@
         </div>
       </div>
     </div>
-    <!-- <mt-popup v-model="popupVisiblemid" position="bottom">
-      <div class="ksbox"></div>
-    </mt-popup>-->
     <mt-popup v-model="popupVisible" position="bottom">
       <div class="ksbox">
         <mt-cell title="请选择科室">
-          <p class="poptext" @click="getSlotValue(index)">确定</p>
+          <p class="poptext" @click="getSlotValue()">确定</p>
         </mt-cell>
         <mt-picker :slots="slots" @change="onValuesChange"></mt-picker>
       </div>
@@ -135,6 +134,7 @@ export default {
       swipeTopData: "",
       selectId: -1,
       firstid: 0,
+      hospitalname:'',
       commentdata: "",
       teacherdata: "",
       flag: true,
@@ -287,14 +287,14 @@ export default {
       this.datas = name.majorsubjectid;
       let add = [];
       add.push(this.datas);
-      queryTeachereValuationitem(99, this.moment).then(res => {
-        this.singledata = JSON.parse(res).teacherevaluationitem;
-        Indicator.close();
-      });
+      this.officelist = name.officelist;
+      for (var u = 0; u < this.officelist.length; u++) {
+        this.slots[0].values.push(this.officelist[u].name);
+      }
       getmajor(add, this.moment).then(res => {
         //基地
         this.swipeTopData = JSON.parse(res).majorlist;
-        this.showtab = true;
+
         Indicator.close();
       });
       queryMajorTeacherevaluatedata(this.datas, this.moment).then(
@@ -327,22 +327,26 @@ export default {
     },
     onValuesChange(picker, values) {
       this.hospitalname = values[0];
-      // console.log(this.hospitalname);
+      // this.firstData = this.hospitalname
+      for (var q = 0; q < this.swipeTopData.length; q++) {
+        let qbks = this.swipeTopData[q].officelist;
+        for (var x = 0; x < qbks.length; x++) {
+          if (qbks[x] != null) {
+            if (qbks[x].name == this.hospitalname) {
+              this.hospitalofficeid = qbks[x].officeid;
+            }
+          }
+        }
+      }
     },
     getSlotValue() {
-      this.selectdata.forEach(item => {
-        if (item.name == this.hospitalname) {
-          (this.firstData = item.name), (this.officeid = item.officeid);
-          // console.log(item);
-          queryTeachereValuationitem(this.officeid, this.moment).then(res => {
-            // console.log(JSON.parse(res));
-            this.singledata = JSON.parse(res).teacherevaluationitem;
-            this.showchildren = true;
-            this.showtab = true;
-            Indicator.close();
-          });
+      queryTeachereValuationitem(this.hospitalofficeid, this.moment).then(
+        res => {
+          this.singledata = JSON.parse(res).teacherevaluationitem;
+          this.showchildren = true;
+          Indicator.close();
         }
-      });
+      );
       this.popupVisible = false;
     }
   },
@@ -353,6 +357,7 @@ export default {
     });
     getmajor(this.moment).then(res => {
       this.selectmajorlist = JSON.parse(res).majorlist;
+      // console.log(this.selectmajorlist);
       this.selectName = JSON.parse(res).majorlist[0].majorname;
       this.datas = JSON.parse(res).majorlist[0].majorsubjectid;
       queryMajorTeacherevaluatedata(this.datas, this.moment).then(res => {
@@ -378,12 +383,22 @@ export default {
         Indicator.close();
       });
     });
-
-    getoffice().then(res => {
+    queryTeachereValuationitem( 99,this.moment).then(res => {
+      // console.log(JSON.parse(res));
+      this.singledata = JSON.parse(res).teacherevaluationitem;
+      this.showchildren = true;
+      this.showtab = true;
+      Indicator.close();
+    });
+    queryTeachereValuationitem().then(res => {
       this.selectdata = JSON.parse(res).officelist;
-      for (let i = 0; i < this.selectdata.length; i++) {
-        this.slots[0].values.push(this.selectdata[i].name);
-      }
+      // console.log(this.selectdata);
+
+      // for (let i = 0; i < this.selectdata.length; i++) {
+      //   if (this.selectdata[i] != null) {
+      //     this.slots[0].values.push(this.selectdata[i].name);
+      //   }
+      // }
     });
     Indicator.close();
   },
@@ -1062,6 +1077,7 @@ export default {
     font-weight: bold;
     color: rgba(0, 150, 193, 1);
     line-height: 0.24rem;
+    padding-top: 0.1rem;
   }
   .botmtxt {
     font-size: 0.11rem;
