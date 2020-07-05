@@ -383,7 +383,7 @@ export default {
         Indicator.close();
       });
     });
-    queryTeachereValuationitem(5, this.moment).then(res => {
+    queryTeachereValuationitem( 99,this.moment).then(res => {
       // console.log(JSON.parse(res));
       this.singledata = JSON.parse(res).teacherevaluationitem;
       this.showchildren = true;

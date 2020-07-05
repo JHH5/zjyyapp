@@ -371,7 +371,7 @@
                       <div class="bannerleft">
                         <p>人均（次）</p>
                         <div class="bannertext">
-                          <p class="number">{{studenttrain.trainrjcs.rjpxcs}}</p>
+                          <p class="number"><span>≈</span>{{studenttrain.trainrjcs.rjpxcs}}</p>
                           <p class="title">{{moment}}月人均培训次数</p>
                         </div>
                       </div>
@@ -383,15 +383,15 @@
                           </li>
                           <li>
                             一年级
-                            <span>{{studenttrain.trainrjcs.ynjrjcs}}</span>
+                            <span>{{studenttrain.trainrjcs.ynjrs}}</span>
                           </li>
                           <li>
                             二年级
-                            <span>{{studenttrain.trainrjcs.enjrjcs}}</span>
+                            <span>{{studenttrain.trainrjcs.enjrs}}</span>
                           </li>
                           <li>
                             三年级
-                            <span>{{studenttrain.trainrjcs.snjrjcs}}</span>
+                            <span>{{studenttrain.trainrjcs.snjrs}}</span>
                           </li>
                         </ul>
                       </div>
@@ -401,7 +401,7 @@
                       <div class="bannerleft">
                         <p>累计人次（次）</p>
                         <div class="bannertext">
-                          <p class="number">{{studenttrain.trainljrc.ljrc}}</p>
+                          <p class="number"> {{studenttrain.trainljrc.ljrc}}</p>
                           <p class="title">{{moment}}月培训累计人次</p>
                         </div>
                       </div>

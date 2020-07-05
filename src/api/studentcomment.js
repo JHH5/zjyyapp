@@ -13,7 +13,7 @@ export const queryStudentevaluationitem = (hospitalofficeid, time) => {
     return axios.request({
         url: '/doctor_train/rest/H5Management/querystudentevaluationitem.do',
         data: {
-            officeid: hospitalofficeid,
+            officeid: 101,
             starttime: year + "-" + time + "-01 00:00:00",
             endtime: year + "-" + time + "-" + moment(year + "-" + time, "YYYY-MM").daysInMonth() + " 23:59:59",
 

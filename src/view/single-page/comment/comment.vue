@@ -309,14 +309,14 @@ export default {
   },
   mounted() {
     // Indicator.open("加载中...");
-    getoffice(99, this.moment).then(res => {
+    getoffice( this.moment).then(res => {
       this.officelist = JSON.parse(res).officelist;
+      this.fristname =  JSON.parse(res).officelist[0].officeid
       for (let i = 0; i < this.officelist.length; i++) {
         this.slots[0].values.push(this.officelist[i].name);
       }
     });
-    queryStudentevaluationitem(this.moment, 101).then(res => {
- 
+    queryStudentevaluationitem( 101,this.moment).then(res => {
       this.singledata = JSON.parse(res).studentevaluationitem[0];
       this.showchildren = true;
     });
