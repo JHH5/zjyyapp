@@ -36,7 +36,6 @@
     "@vue/cli-service": "^3.0.0-rc.10",
     "@vue/eslint-config-standard": "^3.0.0-rc.10",
     "@vue/test-utils": "^1.0.0-beta.23",
-    "babel-plugin-component": "^1.1.1",
     "babel-plugin-dynamic-import-webpack": "^1.1.0",
     "chai": "^4.1.2",
     "compression-webpack-plugin": "^2.0.0",

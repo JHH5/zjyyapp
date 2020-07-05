@@ -134,7 +134,7 @@ export default {
       swipeTopData: "",
       selectId: -1,
       firstid: 0,
-      hospitalname:'',
+      hospitalname: "",
       commentdata: "",
       teacherdata: "",
       flag: true,
@@ -282,25 +282,26 @@ export default {
     },
     handleSelectName(index, name, datas) {
       Indicator.open("加载中...");
+      console.log(this.slots);
+
       this.selectId = index;
       this.selectName = name.majorname;
       this.datas = name.majorsubjectid;
       let add = [];
       add.push(this.datas);
       this.officelist = name.officelist;
+      this.slots[0].values = [];
       for (var u = 0; u < this.officelist.length; u++) {
         this.slots[0].values.push(this.officelist[u].name);
       }
       getmajor(add, this.moment).then(res => {
         //基地
         this.swipeTopData = JSON.parse(res).majorlist;
-
         Indicator.close();
       });
       queryMajorTeacherevaluatedata(this.datas, this.moment).then(
         //雷达图
         res => {
-          // console.log(this.firstid, this.datas);
           this.winrainbardata = JSON.parse(res).majordimensionevaluatelist;
           this.commentdata = JSON.parse(res).majorevaluateoverview;
           var arrsd = [];
@@ -320,7 +321,6 @@ export default {
             });
           }
           this.winrainbardata = arrsd;
-          //  console.log(this.winrainbardata)
           Indicator.close();
         }
       );
@@ -356,8 +356,10 @@ export default {
       this.swipeTopData = JSON.parse(res).major;
     });
     getmajor(this.moment).then(res => {
+      // console.log(JSON.parse(res));
       this.selectmajorlist = JSON.parse(res).majorlist;
-      // console.log(this.selectmajorlist);
+      this.hospitalname = this.selectmajorlist[0].officelist[0].name;
+      this.oneid = this.selectmajorlist[0].officelist[0].officeid;
       this.selectName = JSON.parse(res).majorlist[0].majorname;
       this.datas = JSON.parse(res).majorlist[0].majorsubjectid;
       queryMajorTeacherevaluatedata(this.datas, this.moment).then(res => {
@@ -382,24 +384,18 @@ export default {
         this.winrainbardata = arrsd;
         Indicator.close();
       });
+      queryTeachereValuationitem(this.oneid, this.moment).then(res => {
+        // console.log(JSON.parse(res));
+        this.singledata = JSON.parse(res).teacherevaluationitem;
+        this.showchildren = true;
+        this.showtab = true;
+        Indicator.close();
+      });
     });
-    queryTeachereValuationitem( 99,this.moment).then(res => {
-      // console.log(JSON.parse(res));
-      this.singledata = JSON.parse(res).teacherevaluationitem;
-      this.showchildren = true;
-      this.showtab = true;
-      Indicator.close();
-    });
-    queryTeachereValuationitem().then(res => {
-      this.selectdata = JSON.parse(res).officelist;
-      // console.log(this.selectdata);
 
-      // for (let i = 0; i < this.selectdata.length; i++) {
-      //   if (this.selectdata[i] != null) {
-      //     this.slots[0].values.push(this.selectdata[i].name);
-      //   }
-      // }
-    });
+    // queryTeachereValuationitem().then(res => {
+    //   this.selectdata = JSON.parse(res).officelist;
+    // });
     Indicator.close();
   },
   created() {

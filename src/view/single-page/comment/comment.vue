@@ -2,50 +2,7 @@
   <div class="content">
     <Header-bar :message="'学员评价'"></Header-bar>
     <div class="bannerbox">
-      <!-- <mt-cell title="选择专业基地" :value="selectName">
-        <span @click="handleShowRotation()">{{selectName}}</span>
-      </mt-cell>-->
       <hr style="backgroud:#f2f2f2;border:1px solid #f2f2f2;" />
-      <!-- <div class="jdraderbox">
-        <div class="jdrader">
-          <div
-            class="comment"
-            v-for="(item, index) in swipeTopData"
-            :key="index"
-            v-if="item.majorsubjectid==datas"
-          >
-            <radar
-              ref="radars"
-              :maintitle="item.majorname + '基地对学生评价雷达图'"
-              :barnumber="winrainbardata"
-            ></radar>
-            <div class="teacher_radar_detial">
-              <div class="raderbottom">
-                <div class="btmtop">
-                  <div class="btombox">
-                    <p class="botmnum">{{(commentdata.pjpjf)*100}}%</p>
-                    <p class="botmtxt">评价得分率</p>
-                  </div>
-                  <div class="btombox">
-                    <p class="botmnum">{{commentdata.zdf}}</p>
-                    <p class="botmtxt">评价最低分</p>
-                  </div>
-                </div>
-                <div class="btmtop">
-                  <div class="btombox">
-                    <p class="botmnum">{{commentdata.tjl}}</p>
-                    <p class="botmtxt">评价表提交率</p>
-                  </div>
-                  <div class="btombox">
-                    <p class="botmnum">{{commentdata.pjzs}}</p>
-                    <p class="botmtxt">评价总次数</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>-->
       <div class="comment-box">
         <div class="conbox_title">
           <p class="pjtop">基地老师评分细则</p>
@@ -308,19 +265,22 @@ export default {
     }
   },
   mounted() {
-    // Indicator.open("加载中...");
-    getoffice( this.moment).then(res => {
+    Indicator.open("加载中...");
+    getoffice(this.moment).then(res => {
       this.officelist = JSON.parse(res).officelist;
-      this.fristname =  JSON.parse(res).officelist[0].officeid
+      this.fristname = JSON.parse(res).officelist[0].officeid;
       for (let i = 0; i < this.officelist.length; i++) {
         this.slots[0].values.push(this.officelist[i].name);
       }
-    });
-    queryStudentevaluationitem( 101,this.moment).then(res => {
-      this.singledata = JSON.parse(res).studentevaluationitem[0];
-      this.showchildren = true;
-    });
+      this.hospitalname = this.officelist[0].name;
+      queryStudentevaluationitem(this.fristname, this.moment).then(res => {
+        this.singledata.push(JSON.parse(res).studentevaluationitem[0]);
+        this.showchildren = true;
+      });
+      
     Indicator.close();
+    });
+
   },
   created() {
     if (moment().date() < 20) {
