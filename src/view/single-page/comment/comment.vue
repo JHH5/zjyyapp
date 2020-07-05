@@ -2,11 +2,11 @@
   <div class="content">
     <Header-bar :message="'学员评价'"></Header-bar>
     <div class="bannerbox">
-      <mt-cell title="选择专业基地" :value="selectName">
+      <!-- <mt-cell title="选择专业基地" :value="selectName">
         <span @click="handleShowRotation()">{{selectName}}</span>
-      </mt-cell>
+      </mt-cell>-->
       <hr style="backgroud:#f2f2f2;border:1px solid #f2f2f2;" />
-      <div class="jdraderbox">
+      <!-- <div class="jdraderbox">
         <div class="jdrader">
           <div
             class="comment"
@@ -45,7 +45,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div>-->
       <div class="comment-box">
         <div class="conbox_title">
           <p class="pjtop">基地老师评分细则</p>
@@ -102,18 +102,8 @@ import { Header, Cell, Indicator, Navbar, TabItem, Popup } from "mint-ui";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import radar from "../../../components/mecharts/radar.vue";
 import appraise from "../../../components/appraise/appraise.vue";
-import {
-  queryMajorstudentdimensionevaluate,
-  queryStudentevaluationitem
-} from "../../../api/studentcomment";
-import {
-  queryMajorFavorablerate,
-  queryMajorTeacherevaluatedata,
-  queryMajorTeacherevaluatedataitem,
-  getoffice,
-  queryTeachereValuationitem,
-  getmajor
-} from "../../../api/teachercomment";
+import { queryStudentevaluationitem } from "../../../api/studentcomment";
+import { getoffice } from "../../../api/teachercomment";
 import moment from "moment";
 
 export default {
@@ -291,114 +281,44 @@ export default {
       this.datas = name.majorsubjectid;
       let add = [];
       add.push(this.datas);
-      this.officelist = name.officelist;
-      for (var u = 0; u < this.officelist.length; u++) {
-        this.slots[0].values.push(this.officelist[u].name);
-      }
-      getmajor(add, this.moment).then(res => {
-        //基地
-        this.swipeTopData = JSON.parse(res).majorlist;
-        Indicator.close();
-      });
-      queryMajorTeacherevaluatedata(this.datas, this.moment).then(
-        //雷达图
-        res => {
-          // console.log(this.firstid, this.datas);
-          this.winrainbardata = JSON.parse(res).majordimensionevaluatelist;
-          this.commentdata = JSON.parse(res).majorevaluateoverview;
-          var arrsd = [];
-          for (
-            let i = 0;
-            i < JSON.parse(res).majordimensionevaluatelist.length;
-            i++
-          ) {
-            arrsd.push({
-              name:
-                JSON.parse(res).majordimensionevaluatelist[i].typename +
-                "\n" +
-                JSON.parse(res).majordimensionevaluatelist[i].averagescore,
-              value: parseFloat(
-                JSON.parse(res).majordimensionevaluatelist[i].averagescore
-              )
-            });
-          }
-          this.winrainbardata = arrsd;
-          //  console.log(this.winrainbardata)
-          Indicator.close();
-        }
-      );
     },
+
     onValuesChange(picker, values) {
       this.hospitalname = values[0];
-      // this.firstData = this.hospitalname
-      for (var q = 0; q < this.swipeTopData.length; q++) {
-        let qbks = this.swipeTopData[q].officelist;
-        for (var x = 0; x < qbks.length; x++) {
-          if (qbks[x] != null) {
-            if (qbks[x].name == this.hospitalname) {
-              this.hospitalofficeid = qbks[x].officeid;
-            }
-          }
-        }
-      }
     },
     getSlotValue() {
-      queryMajorstudentdimensionevaluate(
-        this.hospitalofficeid,
-        this.moment
-      ).then(res => {
-        this.singledata = JSON.parse(res).teacherevaluationitem;
-        this.showchildren = true;
-        Indicator.close();
+      getoffice(this.moment).then(res => {
+        this.officelist = JSON.parse(res).officelist;
+        for (let i = 0; i < this.officelist.length; i++) {
+          if (this.officelist[i].name == this.hospitalname) {
+            this.hospitalofficeid = this.officelist[i].officeid;
+          }
+        }
+        queryStudentevaluationitem(this.hospitalofficeid, this.moment).then(
+          res => {
+            // console.log(this.hospitalofficeid);
+            this.singledata = JSON.parse(res).studentevaluationitem;
+            this.showchildren = true;
+            Indicator.close();
+          }
+        );
       });
+
       this.popupVisible = false;
     }
   },
   mounted() {
-    Indicator.open("加载中...");
-    queryMajorFavorablerate(this.moment).then(res => {
-      this.swipeTopData = JSON.parse(res).major;
-    });
-    getmajor(this.moment).then(res => {
-      this.selectmajorlist = JSON.parse(res).majorlist;
-      // console.log(this.selectmajorlist);
-      this.selectName = JSON.parse(res).majorlist[0].majorname;
-      this.datas = JSON.parse(res).majorlist[0].majorsubjectid;
-      queryMajorTeacherevaluatedata(this.datas, this.moment).then(res => {
-        this.winrainbardata = JSON.parse(res).majordimensionevaluatelist;
-        this.commentdata = JSON.parse(res).majorevaluateoverview;
-        var arrsd = [];
-        for (
-          let i = 0;
-          i < JSON.parse(res).majordimensionevaluatelist.length;
-          i++
-        ) {
-          arrsd.push({
-            name:
-              JSON.parse(res).majordimensionevaluatelist[i].typename +
-              "\n" +
-              JSON.parse(res).majordimensionevaluatelist[i].averagescore,
-            value: parseFloat(
-              JSON.parse(res).majordimensionevaluatelist[i].averagescore
-            )
-          });
-        }
-        this.winrainbardata = arrsd;
-        Indicator.close();
-      });
-    });
-    queryTeachereValuationitem(5, this.moment).then(res => {
-      // console.log(JSON.parse(res));
-      this.singledata = JSON.parse(res).teacherevaluationitem;
-      this.showchildren = true;
-      this.showtab = true;
-      Indicator.close();
-    });
-    getoffice().then(res => {
-      this.selectdata = JSON.parse(res).officelist;
-      for (let i = 0; i < this.selectdata.length; i++) {
-        this.slots[0].values.push(this.selectdata[i].name);
+    // Indicator.open("加载中...");
+    getoffice(99, this.moment).then(res => {
+      this.officelist = JSON.parse(res).officelist;
+      for (let i = 0; i < this.officelist.length; i++) {
+        this.slots[0].values.push(this.officelist[i].name);
       }
+    });
+    queryStudentevaluationitem(this.moment, 101).then(res => {
+ 
+      this.singledata = JSON.parse(res).studentevaluationitem[0];
+      this.showchildren = true;
     });
     Indicator.close();
   },

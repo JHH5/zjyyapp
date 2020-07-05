@@ -1,13 +1,16 @@
 <template>
   <div>
     <header-main :message="'培训'"></header-main>
+    <div @click="popupVisible=true" class="select">筛选</div>
     <div class="studenttrain">
       <div class="student_train">
         <div class="student_train_top">
-          <div @click="popupVisible=true">筛选</div>
           <!-- <mt-search v-model="value"></mt-search> -->
           <div class="end" v-for="(item, index) in tabledata" :key="index">
-            <p>{{item.name}}</p>
+            <div class="pxtop">
+              <p class="pxtitle">{{item.name}}——培训数据</p>
+              <p class="descs">数据截止时间：：{{years}}年/{{moment}}月</p>
+            </div>
             <div class="end_end">
               <div class="end_th">
                 <p>培训类型</p>
@@ -47,7 +50,8 @@
         <mt-tab-container-item id="2">
           <div class="wadu">
             <ul>
-              <li v-for="(item,index) in  kswar" :key="index">{{item.name}}</li>
+              <li v-for="(item,index) in  kswar" :key="index"
+              >{{item.name}}</li>
             </ul>
           </div>
         </mt-tab-container-item>
@@ -243,6 +247,8 @@ export default {
     } else {
       this.moment = moment().month() + 1;
     }
+
+    this.years = moment().year();
   },
   components: {
     "header-main": mainHeader,
@@ -274,7 +280,6 @@ export default {
   }
 
   .end_end {
-    width: 3.25rem;
     margin: 0 auto;
 
     .end_th {
@@ -513,5 +518,33 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: rgba(89, 89, 89, 1);
+}
+.descs {
+  height: 0.16rem;
+  font-size: 0.11rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 1);
+  line-height: 0.16rem;
+}
+.select {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  z-index: 9999;
+}
+.pxtop {
+  height: 0.44rem;
+  background: rgba(0, 150, 193, 1);
+  border-radius: 0.06rem 0.06rem 0rem 0rem;
+  padding: 10px;
+}
+.pxtitle {
+  height: 0.21rem;
+  font-size: 0.15rem;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 1);
+  line-height: 0.21rem;
 }
 </style>

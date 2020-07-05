@@ -134,6 +134,7 @@ export default {
       swipeTopData: "",
       selectId: -1,
       firstid: 0,
+      hospitalname:'',
       commentdata: "",
       teacherdata: "",
       flag: true,
@@ -389,11 +390,15 @@ export default {
       this.showtab = true;
       Indicator.close();
     });
-    getoffice().then(res => {
+    queryTeachereValuationitem().then(res => {
       this.selectdata = JSON.parse(res).officelist;
-      for (let i = 0; i < this.selectdata.length; i++) {
-        this.slots[0].values.push(this.selectdata[i].name);
-      }
+      // console.log(this.selectdata);
+
+      // for (let i = 0; i < this.selectdata.length; i++) {
+      //   if (this.selectdata[i] != null) {
+      //     this.slots[0].values.push(this.selectdata[i].name);
+      //   }
+      // }
     });
     Indicator.close();
   },
@@ -1072,6 +1077,7 @@ export default {
     font-weight: bold;
     color: rgba(0, 150, 193, 1);
     line-height: 0.24rem;
+    padding-top: 0.1rem;
   }
   .botmtxt {
     font-size: 0.11rem;
