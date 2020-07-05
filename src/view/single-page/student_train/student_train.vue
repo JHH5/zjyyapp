@@ -50,8 +50,7 @@
         <mt-tab-container-item id="2">
           <div class="wadu">
             <ul>
-              <li v-for="(item,index) in  kswar" :key="index"
-              >{{item.name}}</li>
+              <li v-for="(item,index) in  kswar" :key="index">{{item.name}}</li>
             </ul>
           </div>
         </mt-tab-container-item>
@@ -181,15 +180,16 @@ export default {
             this.ksid.push(this.kswar[e].officeid);
           }
         }
-        let ads = [];
-        // console.log(this.kswar);
+
         queryStudenttraindata(this.moment, this.ksid).then(res => {
           this.singledata = JSON.parse(res).officetrainsumlist;
+          this.tabledata = [];
           // console.log(this.singledata);
           for (var k = 0; k < this.singledata.length; k++) {
             if (this.ksid.indexOf(this.singledata[k].officeid) != -1) {
               this.tabledata.push(this.singledata[k]);
             }
+            // console.log(this.singledata[k])
           }
           Indicator.close();
         });
@@ -230,9 +230,10 @@ export default {
       //   ads.push(JSON.parse(res).majorlist[0].officelist[i].officeid);
       // }
       queryStudenttraindata(2, "", this.moment).then(res => {
-        // console.log(JSON.parse(res));
         this.singledata = JSON.parse(res).officetrainsumlist;
         // this.showtab = true
+        this.tabledata .push(JSON.parse(res).officetrainsumlist[0]);
+    
         Indicator.close();
       });
     });
