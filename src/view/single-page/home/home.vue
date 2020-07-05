@@ -210,7 +210,7 @@
                     <div class="student_train_top box2_top">
                       <p style="margin-right:0.1rem" class="title">师资培训</p>
                       <!-- <p  @click="hadleTeacherTrain" class="more">更多</p> -->
-                      <img src="../../../assets/images/right_arrow.png" alt />
+                      <!-- <img src="../../../assets/images/right_arrow.png" alt /> -->
                     </div>
                     <p class="descs">数据截止时间：：{{years}}年/06月</p>
                     <div style="width: 3rem;display:none;">
@@ -363,8 +363,7 @@
                         <p>人均（次）</p>
                         <div class="bannertext">
                           <p class="number">
-                            <span>≈</span>
-                            {{studenttrain.trainrjcs.rjpxcs}}
+                            <span>≈</span>{{studenttrain.trainrjcs.rjpxcs}}
                           </p>
                           <p class="title">{{moment}}月人均培训次数</p>
                         </div>
@@ -642,7 +641,7 @@
             <div class="box3_top">
               <p style="margin-right:0.1rem" class="title">技能中心</p>
               <!-- <p class="more">更多</p> -->
-              <img src="../../../assets/images/right_arrow.png" alt />
+              <!-- <img src="../../../assets/images/right_arrow.png" alt /> -->
             </div>
             <p class="descs">数据截止时间：{{years}}年/{{moment}}月</p>
             <div style="width: 3rem;display:none;">

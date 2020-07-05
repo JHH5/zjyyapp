@@ -281,8 +281,8 @@ export default {
       margin-bottom: 0.1rem;
       margin-left: 0.2rem;
       .block {
-        background: #ffa42e;
-        border: 1px solid #ffffff;
+        background: #fff;
+        border: 1px solid #0096C1;
         width: 0.08rem;
         height: 0.08rem;
         border-radius: 50%;
@@ -291,8 +291,8 @@ export default {
         left: 0.18rem;
       }
       .block2 {
-        background: #239eff;
-        border: 1px solid #ffffff;
+        background: #fff;
+        border: 1px solid #0096C1;
         width: 0.08rem;
         height: 0.08rem;
         border-radius: 50%;
