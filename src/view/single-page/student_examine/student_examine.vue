@@ -29,6 +29,7 @@
         </div>
         <div class="sum-right"  >
           <cycle
+                
                   v-if="showcycle"
                   :cycleValue="(item.dfl2).toFixed(2)"
                   :cyclewidth="cyclewidth"
@@ -51,6 +52,7 @@
         </div>
         <div class="sum-right" >
           <cycle
+                  
                   v-if="showcycle"
                   :cycleValue="(item.dfl2).toFixed(2)"
                   :cyclewidth="cyclewidth"
@@ -1045,7 +1047,7 @@ padding-left: 0.10rem;
   margin: 0 auto;
   line-height: 0.44rem;
   border-radius: 10px;
-  width: 2.96rem;
+  width: 2.98rem;
     font-size:0.15rem;
     font-weight:bold;
     color:rgba(0,150,193,1);

@@ -1,6 +1,6 @@
 <template>
   <div class="cycle_main" :style="{width:cyclewidth,height:cyclewidth}">
-    <div :id="elId" :style="{width:'1.1rem',height:'1.1rem',margin:'0 auto'}"></div>
+    <div :id="elId" :style="{width:cwidth?cwidth:'1.1rem',height:cheight?cheight:'1.1rem',margin:'0 auto'}"></div>
   </div>
 </template>
 
@@ -17,6 +17,14 @@ export default {
     this.elId = uuidv1(); //获取随机id
   },
   props: {
+    cwidth: {
+      type: String,
+      required: false
+    },
+    cheight: {
+      type: String,
+      required: false
+    },
     cyclewidth: {
       type: String,
       required: true
@@ -126,6 +134,7 @@ export default {
           ]
         }
       });
+      chartObj.resize();
     },
   },
   mounted() {

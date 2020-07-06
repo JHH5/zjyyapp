@@ -176,7 +176,7 @@
 
 <script>
 // import mainHeader from "../../../components/mainHeader.vue";
-import { Header } from "mint-ui";
+import { Header,Indicator } from "mint-ui";
 import { workToday } from "../../../api/main";
 export default {
   data() {
@@ -342,12 +342,18 @@ export default {
       this.realsecondname = this.secoendname;
       this.realthirdid = this.thirdid;
       this.thirdname = this.selectname;
+       Indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
       if (this.thirdid == 1) {
         workToday("", this.firstid, this.secoendname).then(res => {
+          Indicator.close();
           this.tabledata = JSON.parse(res).worktodaylist;
         });
       } else {
         workToday("desc", this.firstid, this.secoendname).then(res => {
+          Indicator.close();
           this.tabledata = JSON.parse(res).worktodaylist;
         });
       }
