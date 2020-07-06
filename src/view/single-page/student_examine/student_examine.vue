@@ -386,7 +386,7 @@ export default {
       // }
       queryStudentexamdata(val).then(res => {
         // console.log(JSON.parse(res));
-        // this.topSwipeData = JSON.parse(res).studentexamdata;
+        this.topSwipeData = JSON.parse(res).studentexamdata;
         // this.singlenumber = parseInt(
         //   JSON.parse(res).studentexamdata.lltgl2 * 100
         // );
@@ -396,7 +396,7 @@ export default {
         if (JSON.parse(res).majorlist[0].officelist.length == 0) {
           console.log("暂无数据");
         } else {
-          this.typeDate2 = JSON.parse(res).majorlist[0].officelist;
+          // this.typeDate2 = JSON.parse(res).majorlist[0].officelist;
           // this.secondName = JSON.parse(
           //   res
           // ).majorlist[0].officelist[0].officename;
