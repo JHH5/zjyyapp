@@ -42,9 +42,6 @@
     <div style class="main">
       <!-- 页面顶部 -->
       <div>
-        <!-- <div class="dropdown">
-          <p>下拉刷新...</p>
-        </div>-->
         <!-- 页面顶部内容 -->
         <div class="main_today">
           <div class="main_today_top2">
@@ -108,7 +105,7 @@
               </swiper>
               <swiper
                 v-if="showteacherString && showteacherWork"
-                ref="mySwiper4"
+                ref="mySwiper"
                 class="student_main_box"
                 :options="swiperOptionteacher"
               >
@@ -136,15 +133,7 @@
                       </ul>
                     </div>
                     <div class="teacher_radar">
-                      <radar
-                        v-if="flag1"
-                        ref="radar1"
-                        :maintitle="'对老师评价雷达图'"
-                        :barnumber="radardata1"
-                      ></radar>
-                      <div v-else style="width:100%;height:2rem;width:3rem">
-                        <p style="text-align: center; line-height: 2rem; color: #dddddd;">暂无数据</p>
-                      </div>
+                      <radar ref="radar1" :maintitle="'对老师评价雷达图'" :barnumber="radardata1"></radar>
                       <div class="teacher_radar_detial">
                         <div>
                           <div class="blockbg">
@@ -184,7 +173,7 @@
                       <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
                     </div>
                     <!-- 师资介绍内容 -->
-                    <div style="margin-top:0.25rem" v-if="showteacherString">
+                    <div style="margin-top:0.25rem">
                       <div class="teacherrs">
                         <p class="title">老师总数量（人）</p>
                         <p class="number">{{ teacherDatalist[4].rs}}</p>
@@ -287,10 +276,10 @@
                       </div>
                       <div class="teacherlist">
                         <ul>
-                          <!-- <li v-for="(item,index) in teachertraintypeworkload" :key="index">
+                          <li v-for="(item,index) in teachertraintypeworkload" :key="index">
                             <p class="number">{{item.typesum }}</p>
                             <p class="title">{{item.traintypename }}</p>
-                          </li>-->
+                          </li>
                         </ul>
                       </div>
                     </div>
@@ -478,7 +467,7 @@
                             :key="index"
                           >
                             <div class="radechart_desc_detial" v-if="item.typename !='共有学员'">
-                              <div  class="block"></div>
+                              <div class="block"></div>
                               <p class="title">{{item.typename}}</p>
                               <p class="newnumber">{{item.studentsum}}</p>
                               <p class="desc">{{item.slbl}}</p>
@@ -486,10 +475,7 @@
                           </div>
                         </div>
                       </div>
-                      <div
-                        id="myChart2"
-                        :style="{width: '1.2rem', height: '1.2rem', marginLeft:'auto',marginRight: '0.1rem'}"
-                      ></div>
+                      <div id="myChart2" :style="{height: '1.2rem'}"></div>
                       <div class="pointchart">
                         <p class="title">招收人数统计图</p>
                         <div class="selfchart">
@@ -639,8 +625,6 @@
           <div class="jnbanner">
             <div class="box3_top">
               <p style="margin-right:0.1rem" class="title">技能中心</p>
-              <!-- <p class="more">更多</p> -->
-              <!-- <img src="../../../assets/images/right_arrow.png" alt /> -->
             </div>
             <p class="descs">数据统计时间：{{years}}年/{{moment}}月</p>
             <div style="width: 3rem;display:none;">
@@ -852,7 +836,7 @@ export default {
 
       swiperOptionteacher: {
         slidesPerView: 2,
-        spaceBetween: 200,
+        spaceBetween: 180,
         centeredSlides: true,
         loop: true,
         observer: true,
@@ -867,7 +851,11 @@ export default {
               false
             );
           },
-          transitionEnd: function(event) {}
+          transitionEnd: function(event) {},
+          click: function() {
+            const realIndex = this.realIndex;
+            // self.handleClickSlide(realIndex);
+          }
         }
       },
 
@@ -882,10 +870,7 @@ export default {
         centeredSlides: true,
         slideToClickedSlide: true,
         noSwiping: true,
-        speed: 300,
-        on: {
-          transitionEnd: function(event) {}
-        }
+        speed: 300
       },
 
       skilldata: [
@@ -942,13 +927,7 @@ export default {
       }
     };
   },
-  watch: {
-    flag1() {
-      setTimeout(() => {
-        this.$refs.radar1.drawLine();
-      }, 3000);
-    }
-  },
+
   methods: {
     handleClickSlide(id) {
       // console.log(id);
@@ -959,12 +938,7 @@ export default {
         this.handleRotation();
       }
     },
-    handleClickSlideTeacher(id) {
-      if (id == 0) {
-        this.hadleTeacherTrain();
-      }
-  
-    },
+
     handleClickSelect() {
       this.showModal = true;
     },
@@ -1010,7 +984,6 @@ export default {
     },
     hadleStudentTrain() {
       this.$router.push("/student_train");
-
     },
     handleSkill() {
       this.$router.push("/skill_center");
@@ -1034,15 +1007,18 @@ export default {
       });
     },
     jumpStudent(ins) {
-      this.$refs.mySwiper.swiper.slideToLoop(ins, 100, false); //切换到第一个slide，速度为1秒
+      this.$refs.mySwiper.swiper.slideToLoop(ins - 4, 1000, false); //切换到第一个slide，速度为1秒
       this.$forceUpdate();
     },
     jumpStudentTop(ins) {
+      console.log(ins);
       this.$refs.mySwiper4.swiper.slideToLoop(ins - 5, 1000, false); //切换到第一个slide，速度为1秒
       this.$forceUpdate();
     },
-    jumpStudentTop(ins) {
-      this.$refs.mySwiper2.swiper.slideToLoop(ins, 100, false); //切换到第一个slide，速度为1秒
+    jumpTeacherTop(ins) {
+      console.log(ins);
+
+      this.$refs.mySwiper2.swiper.slideToLoop(ins - 4, 1000, false); //切换到第一个slide，速度为1秒
       this.$forceUpdate();
     },
     handLogout() {
@@ -1070,36 +1046,36 @@ export default {
     today_c() {
       this.showa = 3;
     },
-    changeValues(type) {
-      this.selectcomp1 = false;
-      this.selectname1 = type;
-      if (type == "年度") {
-        this.studentVal("01", "12");
-      } else if (type == "季度") {
-        switch (moment().quarter()) {
-          case 1:
-            this.studentVal("01", "03");
-            break;
-          case 2:
-            this.studentVal("04", "06");
-            break;
-          case 3:
-            this.studentVal("07", "09");
-            break;
-          case 4:
-            this.studentVal("10", "12");
-            break;
-          default:
-            break;
-        }
-      } else {
-        if (moment().date() < 20) {
-          this.studentVal(this.moment, this.moment);
-        } else {
-          this.studentVal(moment().month() + 1, moment().month() + 1);
-        }
-      }
-    },
+    // changeValues(type) {
+    //   this.selectcomp1 = false;
+    //   this.selectname1 = type;
+    //   if (type == "年度") {
+    //     this.studentVal("01", "12");
+    //   } else if (type == "季度") {
+    //     switch (moment().quarter()) {
+    //       case 1:
+    //         this.studentVal("01", "03");
+    //         break;
+    //       case 2:
+    //         this.studentVal("04", "06");
+    //         break;
+    //       case 3:
+    //         this.studentVal("07", "09");
+    //         break;
+    //       case 4:
+    //         this.studentVal("10", "12");
+    //         break;
+    //       default:
+    //         break;
+    //     }
+    //   } else {
+    //     if (moment().date() < 20) {
+    //       this.studentVal(this.moment, this.moment);
+    //     } else {
+    //       this.studentVal(moment().month() + 1, moment().month() + 1);
+    //     }
+    //   }
+    // },
     teacherVal(type, start, end) {
       teachereValuate(type, start, end)
         .then(res => {
@@ -1116,23 +1092,7 @@ export default {
                 value: parseFloat(this.teacherBardata[i].averagescore)
               });
             }
-            if (
-              arrsp[0].value == 0 &&
-              arrsp[1].value == 0 &&
-              arrsp[2].value == 0 &&
-              arrsp[3].value == 0 &&
-              arrsp[4].value == 0 &&
-              arrsp[5].value == 0
-            ) {
-              this.flag1 = false;
-            } else {
-              this.flag1 = true;
-              this.radardata1 = arrsp;
-              setTimeout(() => {
-                this.$refs.radar1;
-              }, 1000);
-            }
-
+            this.radardata1 = arrsp;
             Indicator.close();
           } else {
             console.log("暂无数据");
@@ -1177,6 +1137,17 @@ export default {
       // 基于准备好的dom，初始化echarts实例
       let myChart = myCharts.init(document.getElementById("myChart2"));
       window.onresize = myChart.resize;
+      const colorList = [
+        "#8660D1",
+        "#547EEC",
+        "#547EEC",
+        "#47A2FF ",
+        "#53C8D1",
+        "#59CB74",
+        "#FBD444",
+        "#7F6AAD",
+        "#585247"
+      ];
       var vms = this;
 
       // 绘制图表
@@ -1184,10 +1155,10 @@ export default {
         series: [
           {
             type: "pie",
-            color: ["#C9D5EC", "#5E7AB8", "#395275", "#7ED5BC"],
+            color:colorList,
             legendHoverLink: false,
             hoverAnimation: false,
-            radius: ["40%", "100%"],
+            radius: [40, 50],
             center: ["50%", "50%"],
             avoidLabelOverlap: false,
             label: {
@@ -1317,7 +1288,6 @@ export default {
           this.flag2 = true;
           setTimeout(() => {
             this.$refs.radar2.drawLine();
-            // this.$refs.radar2.drawLine()
           }, 1000);
         } else {
           console.log("暂无数据");

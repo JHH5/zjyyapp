@@ -13,8 +13,8 @@
             <p class="title">最佳评价项</p>
             <div class="descbox">
               <div class="desc">
-                评价平均分：
-                <span>{{(item.pjpjf)*100}}</span>
+                评价得分率：
+                <span>{{((item.pjpjf)*100).toFixed(2)}}%</span>
               </div>
             </div>
           </div>
@@ -30,7 +30,7 @@
               <p class="titletxt">{{itemtext.itemtitle}}</p>
               <hr />
               <div class="end_desc">
-                <p>满分{{itemtext.itemff}}分，得分{{((itemtext.pjdel)*100)}}%，{{itemtext.zz}}</p>
+                <p>满分{{itemtext.itemff}}分，得分率{{((itemtext.pjdel)*100).toFixed(2)}}%，{{itemtext.zz}}</p>
               </div>
             </div>
           </div>
@@ -55,7 +55,7 @@
               <p class="single_title">{{index + ids + 1}}. {{itemtext.typename}}</p>
               <p class="titletxt">{{itemtext.itemtitle}}</p>
               <div class="end_desc2">
-                <p>满分{{itemtext.itemff}}分，平均{{itemtext.pjf}}分，{{itemtext.zz}}</p>
+                <p>满分{{itemtext.itemff}}分，得分率{{((itemtext.pjdel)*100).toFixed(2)}}%，{{itemtext.zz}}</p>
               </div>
             </div>
           </div>
@@ -159,12 +159,12 @@ export default {
     teacherFunc() {
       this.selectdata = this.singledata;
       console.log(this.selectdata);
-      queryTeachereValuationitem(0,this.moment).then(res => {
+      queryTeachereValuationitem(0, this.moment).then(res => {
         // console.log(JSON.p  arse(this.users));
         // this.selectdata = JSON.parse(res).teacherevaluationitem
         // this.selectdatatext = JSON.parse(res).itemtypeconfiglist
-        this.topnumber = JSON.parse(res).pjpjf
-      })
+        this.topnumber = JSON.parse(res).pjpjf;
+      });
       // console.log(this.selectdata)
     },
     studentFunc() {
@@ -282,7 +282,7 @@ export default {
       margin-left: 0.2rem;
       .block {
         background: #fff;
-        border: 1px solid #0096C1;
+        border: 1px solid #0096c1;
         width: 0.08rem;
         height: 0.08rem;
         border-radius: 50%;
@@ -292,7 +292,7 @@ export default {
       }
       .block2 {
         background: #fff;
-        border: 1px solid #0096C1;
+        border: 1px solid #0096c1;
         width: 0.08rem;
         height: 0.08rem;
         border-radius: 50%;
@@ -389,7 +389,7 @@ export default {
   .end_title {
     font-family: PingFangSC-Regular;
     font-size: 0.13rem;
-    color: #FF4A4A;
+    color: #ff4a4a;
     letter-spacing: 0;
     margin-left: 0.4rem;
   }

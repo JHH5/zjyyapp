@@ -27,18 +27,19 @@
                     <p class="botmtxt">评价得分率</p>
                   </div>
                   <div class="btombox">
-                    <p class="botmnum">{{commentdata.zdf}}</p>
-                    <p class="botmtxt">评价最低分</p>
+                    <p class="botmnum">{{commentdata.zs}}</p>
+                    <p class="botmtxt">评价发送次数</p>
                   </div>
                 </div>
                 <div class="btmtop">
                   <div class="btombox">
+                    <p class="botmnum">{{commentdata.zdf}}</p>
+                    <p class="botmtxt">评价最低分</p>
+                  </div>
+
+                  <div class="btombox">
                     <p class="botmnum">{{commentdata.tjl}}</p>
                     <p class="botmtxt">评价表提交率</p>
-                  </div>
-                  <div class="btombox">
-                    <p class="botmnum">{{commentdata.pjzs}}</p>
-                    <p class="botmtxt">评价总次数</p>
                   </div>
                 </div>
               </div>
