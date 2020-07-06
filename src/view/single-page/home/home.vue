@@ -358,9 +358,9 @@
                       </div>
                       <div class="bannerright">
                         <ul>
-                          <li style="display: flex;align-items: center;line-height: 0.2rem;">
-                            <p>接受培训总人数</p>
-                            <span style="display: block; padding: 0 0.06rem;">{{studenttrain.trainrjcs.zrs}}</span>
+                          <li>
+                            接受培训总人数
+                            <span>{{studenttrain.trainrjcs.zrs}}</span>
                           </li>
                           <li>
                             一年级
@@ -459,23 +459,30 @@
                           <p class="number">{{item.studentsum}}</p>
                         </div>
                       </div>
-                      <div class="radechart">
-                        <div class="radechart_desc">
-                          <div
-                            class="radechart_desc_end"
-                            v-for="(item,index) in studenttype"
-                            :key="index"
-                          >
-                            <div class="radechart_desc_detial" v-if="item.typename !='共有学员'">
-                              <div class="block"></div>
-                              <p class="title">{{item.typename}}</p>
-                              <p class="newnumber">{{item.studentsum}}</p>
-                              <p class="desc">{{item.slbl}}</p>
-                            </div>
-                          </div>
-                        </div>
+
+                      <div id="myChart2" :style="{width: '3.2rem', height: '1.2rem',}"></div>
+                      <div class="chartsbox">
+                        <ul>
+                          <li>
+                            <div style="background:#53C8D1" class="block"></div>
+                            <p class="title">{{studenttype[1].typename}}</p>
+                            <p class="number">{{studenttype[1].studentsum}}</p>
+                            <!-- <p class="desc">{{item.slbl}}</p> -->
+                          </li>
+                          <li>
+                            <div style="background:#59CB74" class="block"></div>
+                            <p class="title">{{studenttype[2].typename}}</p>
+                            <p class="number">{{studenttype[2].studentsum}}</p>
+                            <!-- <p class="desc">{{item.slbl}}</p> -->
+                          </li>
+                          <li>
+                            <div style="background:#FBD444" class="block"></div>
+                            <p class="title">{{studenttype[3].typename}}</p>
+                            <p class="number">{{studenttype[3].studentsum}}</p>
+                            <!-- <p class="desc">{{item.slbl}}</p> -->
+                          </li>
+                        </ul>
                       </div>
-                      <div id="myChart2" :style="{height: '1.2rem'}"></div>
                       <div class="pointchart">
                         <p class="title">招收人数统计图</p>
                         <div class="selfchart">
@@ -1137,17 +1144,7 @@ export default {
       // 基于准备好的dom，初始化echarts实例
       let myChart = myCharts.init(document.getElementById("myChart2"));
       window.onresize = myChart.resize;
-      const colorList = [
-        "#8660D1",
-        "#547EEC",
-        "#547EEC",
-        "#47A2FF ",
-        "#53C8D1",
-        "#59CB74",
-        "#FBD444",
-        "#7F6AAD",
-        "#585247"
-      ];
+
       var vms = this;
 
       // 绘制图表
@@ -1155,7 +1152,14 @@ export default {
         series: [
           {
             type: "pie",
-            color:colorList,
+            color: [
+              "#47A2FF ",
+              "#53C8D1",
+              "#59CB74",
+              "#FBD444",
+              "#7F6AAD",
+              "#585247"
+            ],
             legendHoverLink: false,
             hoverAnimation: false,
             radius: [40, 50],
@@ -3629,8 +3633,6 @@ export default {
       padding-left: 10px;
       line-height: 0.4rem;
       margin-top: 0.02rem;
-      display: flex;
-    align-items: center;
       span {
         font-size: 0.2rem;
         font-family: DINAlternate-Bold, DINAlternate;
@@ -3904,5 +3906,33 @@ export default {
   background: #fff;
   position: absolute;
   top: 0;
+}
+.chartsbox ul li {
+  width: 0.8rem;
+  height: 0.6rem;
+  background: rgba(247, 247, 247, 1);
+  border-radius: 0.06rem;
+  display: inline-block;
+  margin: 0px 5px;
+  .title {
+    height: 0.16rem;
+    font-size: 0.11rem;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: rgba(89, 89, 89, 1);
+    line-height: 0.16rem;
+  }
+  .number {
+    font-size: 0.2rem;
+    font-family: DINAlternate-Bold, DINAlternate;
+    font-weight: bold;
+    color: rgba(89, 89, 89, 1);
+    line-height: 0.24rem;
+  }
+  .block {
+    width: 10px;
+    height: 10px;
+    float: left;
+  }
 }
 </style>

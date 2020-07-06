@@ -1,5 +1,6 @@
 import axios from '@/libs/api.request'
 import moment from 'moment';
+import { valid } from 'mockjs';
 
 var year = 0
 
@@ -43,11 +44,11 @@ export const queryMajormanageoffice = () => {
     })
 }
 
-export const queryMajorstudentrounddata = (ids) => {
+export const queryMajorstudentrounddata = (val) => {
     return axios.request({
         url: '/doctor_train/rest/H5Management/querymajorstudentrounddata.do',
         data: {
-            type: ids
+            type: val
         },
         method: 'post'
     })

@@ -7,10 +7,10 @@
         <p class="boxtitle">轮转学员名单</p>
       </div>-->
       <mt-navbar v-model="selected">
-        <mt-tab-item id="1">退培学员清单</mt-tab-item>
-        <mt-tab-item id="2">轮转学员清单</mt-tab-item>
-        <mt-tab-item id="3">本月未入科清单</mt-tab-item>
-        <mt-tab-item id="4">轮转异常人员</mt-tab-item>
+        <mt-tab-item id="1">退培学员</mt-tab-item>
+        <mt-tab-item id="2">未排轮转学员</mt-tab-item>
+        <mt-tab-item id="3">本月未入科学员</mt-tab-item>
+        <mt-tab-item id="4">轮转异常</mt-tab-item>
       </mt-navbar>
 
       <p class="jdmc">基地名称</p>
@@ -20,8 +20,16 @@
           <p v-for="(studentname,index) in item.studentlist" :key="index">{{studentname.personname}}</p>
         </div>
       </div>
+      
+      <div class="jdcell" v-for="(item, index) in selectdata2" :key="index">
+        <p class="jdcelldiv">{{item.name}}</p>
+        <div class="jdstudent">
+          <p v-for="(studentname,index) in item.studentlist" :key="index">{{studentname.personname}}</p>
+        </div>
+      </div>
 
-      <div @click="handleHideRotation()" v-show="showRotation" class="rotation_wind">
+
+      <!-- <div @click="handleHideRotation()" v-show="showRotation" class="rotation_wind">
         <div class="rotation_wind_main">
           <mt-navbar v-model="selected">
             <mt-tab-item id="1">退培学员清单</mt-tab-item>
@@ -30,7 +38,7 @@
             <mt-tab-item id="4">轮转异常人员</mt-tab-item>
           </mt-navbar>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -133,9 +141,9 @@ export default {
     selected(val) {
       // console.log(val);
       queryMajorstudentrounddata(val).then(res => {
-        console.log(JSON.parse(res));
+        // console.log(JSON.parse(res));
         this.selectdata = JSON.parse(res).majorlist;
-        this.selectdata2 = JSON.parse(res).officelist;
+          this.selectdata2 = JSON.parse(res).officelist;
       });
     }
   },
