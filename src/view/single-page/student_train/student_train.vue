@@ -845,7 +845,7 @@ padding-left: 0.10rem;
 
 /deep/.mint-tab-item-label {
   color: #9397ad;
-  font-size: 0.15rem;
+  font-size: 0.13rem;
   height: 0.45rem;
   line-height: 0.45rem;
   span {
@@ -1187,5 +1187,9 @@ padding-left: 0.10rem;
   font-weight: 500;
   color: rgba(255, 255, 255, 1);
   line-height: 0.21rem;
+}
+/deep/ .is-selected .mint-tab-item-label{
+  font-size: 0.13rem;
+    color: #0096c1;
 }
 </style>

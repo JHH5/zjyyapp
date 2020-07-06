@@ -1374,7 +1374,6 @@ padding-left: 0.10rem;
 
 /deep/.mint-tab-item-label {
   color: #9397ad;
-  font-size: 0.15rem;
   height: 0.45rem;
   line-height: 0.45rem;
   span {
@@ -1387,7 +1386,7 @@ padding-left: 0.10rem;
   }
 }
 /deep/ .is-selected .mint-tab-item-label {
-  font-size: 0.18rem;
+  font-size: 0.13rem;
   color: #212121;
   span {
     color: #9397ad;
@@ -1417,5 +1416,8 @@ padding-left: 0.10rem;
   position: relative;
 }
 
-
+/deep/ .is-selected .mint-tab-item-label{
+  font-size: 0.13rem;
+    color: #0096c1;
+}
 </style>
