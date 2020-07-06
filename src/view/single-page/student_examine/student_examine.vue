@@ -32,6 +32,7 @@
                   v-if="showcycle"
                   :cycleValue="(item.dfl2).toFixed(2)"
                   :cyclewidth="cyclewidth"
+                  
                   cycleColor="#0096C1"
                   :borderWidth="8"
                   :isShowBgBorder="true"
@@ -68,7 +69,7 @@
       <mt-cell title="选择专业基地"  is-link @click.native="openPopup(1)" :value="firstName"></mt-cell>
 
       <div class="screen-tap-box">
-        <p class="screen-tap" @click="openPopup(2)">{{secondName}}</p>
+        <p class="screen-tap" @click="openPopup(2)">科室-{{secondName}}</p>
         <p class="screen-tap" @click="openPopup(3)">{{String(new Date().getFullYear())+'年'+thirdName}}  </p>
 
       </div>
@@ -77,14 +78,14 @@
         <div class="main-table">
           <div class="nav-bar">
           <p class="main-title">
-            {{firstName}}
-              <span v-show="showSecond">{{secondName}}</span>
-              <span v-show="showThird">{{thirdName}}</span>
+            专业基地-{{firstName}}
+              <span v-show="showSecond">科室-{{secondName}}</span>
+              <span v-show="showThird"> {{thirdName}}</span>
           </p>
           <p class="main-title-sub">{{String(new Date().getFullYear())+'年'+thirdName}}</p>
         </div>
           <ul class="head-table">
-              <li>教师</li>
+              <li>学员姓名</li>
               <li>理论成绩</li>
               <li>
                 技能成绩
@@ -135,6 +136,7 @@
             <div class="s-picker">
               <mt-picker :slots="[{values:typeDate2}]" valueKey="officename" @change="onZyjdChange"></mt-picker>
             </div>
+            <div class="save" @click="onSave(2)">确定</div>
           </mt-tab-container-item>
           <mt-tab-container-item id="3">
             <mt-cell title="专业基地" :value="firstName"></mt-cell>
@@ -156,14 +158,13 @@
 <script>
 import mainHeader from "../../../components/mainHeader.vue";
 import cycle from "../../../components/mecharts/cycle.vue";
-import { Indicator } from "mint-ui";
 import {
   queryStudentexamdata,
   queryStudentexamdataOffice,
   queryNotpassstudentdata
 } from "../../../api/studentexame";
 import moment from "moment";
-import { Header, Cell,Popup,Picker,Navbar,TabItem    } from "mint-ui";
+import { Indicator,Header, Cell,Popup,Picker,Navbar,TabItem    } from "mint-ui";
 export default {
   data() {
     return {
@@ -177,6 +178,7 @@ export default {
         },
         {
           flex: 1,
+          
           values: [
             {
               number: "12月",
@@ -250,9 +252,9 @@ export default {
       choice1Name: "",
       choice1Id: 0,
       choice2Name: "6月",
-      choice2Id: 0,
-      choice2Number: "12",
-      choice2Numbers: "12",
+      choice2Id: 5,
+      choice2Number: "6",
+      choice2Numbers: "6",
       showSecond: true,
       showThird: true,
       singlenumber: 0,
@@ -355,19 +357,23 @@ export default {
       singlelistData: [],
       singlelistData2: [],
       winlistdata: [],
-      moment: 0
+      moment: 5
     };
   },
   watch: {
       
     selected(val) {
+      Indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
       // Indicator.open("加载中...");
-      this.moment = moment().month() + 1;
+      // this.moment = moment().month() + 1;
       this.showSecond = true;
       this.showThird = true;
       this.openList = false;
-      this.choice2Number = moment().month() + 1;
-      this.thirdName = moment().month() + 1 + "月";
+      // this.choice2Number = moment().month() + 1;
+      // this.thirdName = moment().month() + 1 + "月";
       this.choice2Id = 0;
       this.thirdId = 0;
       if (val == 1) {
@@ -380,37 +386,39 @@ export default {
       // }
       queryStudentexamdata(val).then(res => {
         // console.log(JSON.parse(res));
-        this.topSwipeData = JSON.parse(res).studentexamdata;
-        this.singlenumber = parseInt(
-          JSON.parse(res).studentexamdata.lltgl2 * 100
-        );
-        this.showcycle = true;
-        this.typeDate1 = JSON.parse(res).majorlist;
-        this.firstName = JSON.parse(res).majorlist[0].majorname;
+        // this.topSwipeData = JSON.parse(res).studentexamdata;
+        // this.singlenumber = parseInt(
+        //   JSON.parse(res).studentexamdata.lltgl2 * 100
+        // );
+        // this.showcycle = true;
+        // this.typeDate1 = JSON.parse(res).majorlist;
+        // this.firstName = JSON.parse(res).majorlist[0].majorname;
         if (JSON.parse(res).majorlist[0].officelist.length == 0) {
           console.log("暂无数据");
         } else {
           this.typeDate2 = JSON.parse(res).majorlist[0].officelist;
-          this.secondName = JSON.parse(
-            res
-          ).majorlist[0].officelist[0].officename;
-          this.choice1Name = JSON.parse(
-            res
-          ).majorlist[0].officelist[0].officename;
-          this.secondId = JSON.parse(res).majorlist[0].officelist[0].officeid;
-          this.choice1Id = JSON.parse(res).majorlist[0].officelist[0].officeid;
-          this.firstId = JSON.parse(res).majorlist[0].majorsubjectid;
-          queryStudentexamdataOffice(
-            JSON.parse(res).majorlist[0].officelist[0].officeid,
-            val,
-            this.choice2Number
-          ).then(res => {
-            this.singlelistData = JSON.parse(res).officestudentexamdatalist;
-            this.singlelistData2 = JSON.parse(res).officefinishtscorelist;
-             this.getAllStudentList(this.singlelistData2)
-            Indicator.close();
-          });
+          // this.secondName = JSON.parse(
+          //   res
+          // ).majorlist[0].officelist[0].officename;
+          // this.choice1Name = JSON.parse(
+          //   res
+          // ).majorlist[0].officelist[0].officename;
+          // this.secondId = JSON.parse(res).majorlist[0].officelist[0].officeid;
+          // this.choice1Id = JSON.parse(res).majorlist[0].officelist[0].officeid;
+          // this.firstId = JSON.parse(res).majorlist[0].majorsubjectid;
+          // console.log('this.choice2Number',this.choice2Number)
+          // queryStudentexamdataOffice(
+          //   JSON.parse(res).majorlist[0].officelist[0].officeid,
+          //   val,
+          //   this.choice2Number
+          // ).then(res => {
+          //   this.singlelistData = JSON.parse(res).officestudentexamdatalist;
+          //   this.singlelistData2 = JSON.parse(res).officefinishtscorelist;
+          //    this.getAllStudentList(this.singlelistData2)
+          //   Indicator.close();
+          // });
         }
+        Indicator.close();
       });
     }
   },
@@ -418,7 +426,7 @@ export default {
     onZyjdChange(p, v) {
       console.log(!v[0]);
       if (v[0]) {
-        
+        console.log(12312)
         this.choice1(p.getValues()[0].officeid,p.getValues()[0].officename)
         this.slectType();
       }
@@ -434,8 +442,15 @@ export default {
       this.selected1 = String(val);
     },
   
-    onSave() {
-      this.zyjdPopup = false;
+    onSave(val) {
+       if(val){
+         if(val == 2){
+         this.selected1 = '3'
+      }
+      }else{
+        this.zyjdPopup = false;
+        
+      }
       this.slectType();
     },
     slectType() {
@@ -513,6 +528,8 @@ export default {
             // console.log(JSON.parse(res));
             this.singlelistData = JSON.parse(res).officestudentexamdatalist;
             this.singlelistData2 = JSON.parse(res).officefinishtscorelist;
+            this.getAllStudentList(this.singlelistData2)
+                console.log(this.singlelistData2);
           });
         }
       }
@@ -573,6 +590,10 @@ export default {
       }
     },
     handleFirst(id, name, data) {
+      Indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
       this.moment = moment().month() + 1;
       this.showSecond = true;
       this.showThird = true;
@@ -599,9 +620,17 @@ export default {
         this.selected,
         this.choice2Number
       ).then(res => {
+        Indicator.close();
         this.singlelistData = JSON.parse(res).officestudentexamdatalist;
         this.singlelistData2 = JSON.parse(res).officefinishtscorelist;
          this.getAllStudentList(this.singlelistData2)
+         //判断当前筛选位置
+          if(this.selected1 == 1){
+            this.selected1 = '2'
+          }else if(this.selected1 == 2){
+            this.selected1 = '3'
+
+          }
       });
     },
     hideWindow() {
@@ -613,14 +642,21 @@ export default {
       this.selectWindow = false;
     },
     getAllStudentList(arr){
-      let list = []
-      for (let index = 0; index < arr.length; index++) {
+       let list = []
+      if(arr.length == 0){
+        this.allStudentlist = list
+      }else{
+         for (let index = 0; index < arr.length; index++) {
         for (let n = 0; n < arr[index].studentlist.length; n++) {
           list.push(arr[index].studentlist[n])
           
         }
       }
       this.allStudentlist = list
+      }
+     
+      
+      
     },
     closeSecond() {
       (this.secondId = 999), (this.choice1Id = 999), (this.showSecond = false);
@@ -726,17 +762,25 @@ export default {
   },
   mounted() {
     
+    for (let index = 0; index < this.popDate[1].values.length; index++) {
+      if( this.moment ==  this.popDate[1].values[index].number.substr(0,this.popDate[1].values[index].number.length -1)){
+        this.$set( this.popDate[1],'defaultIndex',index)
+    }
+    console.log( this.moment ==  this.popDate[1].values[index].number.substr(0,this.popDate[1].values[index].number.length -1))
+    }
+    
   },
   created() {
     if (moment().date() < 20) {
       if (moment().month() == 0) {
-        this.moment = 12;
+        this.moment = 7;
       } else {
         this.moment = moment().month();
       }
     } else {
       this.moment = moment().month() + 1;
     }
+    
     // this.moment = moment().month() + 1
     queryStudentexamdata(1).then(res => {
       // console.log(JSON.parse(res));
@@ -758,6 +802,7 @@ export default {
         this.secondId = JSON.parse(res).majorlist[0].officelist[0].officeid;
         this.choice1Id = JSON.parse(res).majorlist[0].officelist[0].officeid;
         this.firstId = JSON.parse(res).majorlist[0].majorsubjectid;
+         
         // queryStudentexamdataOffice(
         //   JSON.parse(res).majorlist[0].officelist[0].officeid,
         //   1,

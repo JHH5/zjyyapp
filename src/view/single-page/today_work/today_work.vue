@@ -35,20 +35,21 @@
       </ul>
       <div class="pop-down" @click="onColseFilter" v-show="isFilterPop">
         <ul class="pop-down-items" v-if="filterPopNumber == 1">
-          <li :class="firstid == item.ids ? 'pop-down-action':''" v-for="(item, index) in selecttab" :key="index" @click="selectFirst(item.ids,item.name)">{{item.name}}</li>
+          <li :class="firstid == item.ids ? 'pop-down-action':''" v-for="(item, index) in selecttab" :key="index" @click="selectFirst(item.ids)">{{item.name}}</li>
         </ul>
         <ul class="pop-down-items" v-if="filterPopNumber == 2">
-          <li :class="secoendname == '全部' ? 'pop-down-action':''" @click="selectSecond('全部')">全部</li>
-          <li :class="secoendname == '已完成' ? 'pop-down-action':''" @click="selectSecond('已完成')">已完成</li>
-          <li :class="secoendname == '进行中' ? 'pop-down-action':''" @click="selectSecond('进行中')">进行中</li>
-          <li :class="secoendname == '未开始' ? 'pop-down-action':''" @click="selectSecond('未开始')">未开始</li>
+          <li :class="secoendname == '' ? 'pop-down-action':''" @click="selectSecond('')">全部</li>
+          <li :class="secoendname == '1' ? 'pop-down-action':''" @click="selectSecond('1')">未开始</li>
+          <li :class="secoendname == '50' ? 'pop-down-action':''" @click="selectSecond('50')">进行中</li>
+          <li :class="secoendname == '100' ? 'pop-down-action':''" @click="selectSecond('100')">已完成</li>
       
         </ul>
     
       </div>
     </div>
     <div class="main-boxs" >
-      <div class="main-item" v-for="(item, index) in tabledata" :key="index">
+      <div v-if="tabledata.length != 0">
+         <div class="main-item" v-for="(item, index) in tabledata" :key="index">
         <div class="main-item-top">
           <div class="main-item-top-left">
             <p class="main-item-title">{{item.title}}</p>
@@ -91,7 +92,11 @@
           <span>{{item.addressname}}</span>
         </div>
       </div>
+      </div>
+            <p v-else style="line-height: 1rem;text-align: center;font-size: 12px;color: #999;">暂无数据</p>
+     
     </div>
+
 
     <!-- 老版本 -->
 
@@ -270,7 +275,7 @@ export default {
       realsecondname: "全部",
       realthirdid: 1,
       firstid: 0,
-      secoendname: "全部",
+      secoendname: "",
       thirdid: 1,
       thirdname: "全部",
       selectname: "全部"
@@ -338,11 +343,11 @@ export default {
       this.realthirdid = this.thirdid;
       this.thirdname = this.selectname;
       if (this.thirdid == 1) {
-        workToday("", this.firstid).then(res => {
+        workToday("", this.firstid, this.secoendname).then(res => {
           this.tabledata = JSON.parse(res).worktodaylist;
         });
       } else {
-        workToday("desc", this.firstid).then(res => {
+        workToday("desc", this.firstid, this.secoendname).then(res => {
           this.tabledata = JSON.parse(res).worktodaylist;
         });
       }
@@ -355,11 +360,12 @@ export default {
       this.canScroll();
     },
     selectFirst(id, name) {
-      (this.firstid = id), (this.selectname = name);
+      this.firstid = id
       this.slectType()
     },
     selectSecond(name) {
       this.secoendname = name;
+      
      this.slectType()
     },
     selectThird(id) {

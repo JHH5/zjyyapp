@@ -19,13 +19,13 @@ export const teachereValuate = (type,start,end) => {
     })
 }
 
-export const workToday = (desctype,type) => {
+export const workToday = (desctype,type,state) => {
     return axios.request({
         url: '/doctor_train/rest/H5Management/queryworktoday.do',
         data:{
             desc:desctype,
             traintype:type == 0 ? "":type,
-            state:""
+            state:state ? state : ''
         },  
         method: 'post'
     })

@@ -17,7 +17,7 @@
         title="选择时间"
         is-link
         @click.native="openPopup(3)"
-        :value="String(new Date().getFullYear())+'年'+ typeDate3[choice2Id].number"
+        :value="String(new Date().getFullYear())+'年'+choice2Number+'月'"
       ></mt-cell>
       <div class="main-content">
         <div class="nav-bar">
@@ -87,15 +87,16 @@
             <mt-cell title="专业基地" :value="alltype[firstId].majorname"></mt-cell>
             <mt-cell :title="alltype[firstId].majorname+'科室'" :value="secondName"></mt-cell>
             <div class="s-picker">
-              <mt-picker :slots="[{values:typeData}]" valueKey="officename" @change="onZyjdChange"></mt-picker>
+              <mt-picker :slots="[{values:typeData}]" defaultIndex="0" valueKey="officename" @change="onZyjdChange"></mt-picker>
             </div>
+            <div class="save" @click="onSave(2)">确定</div>
           </mt-tab-container-item>
           <mt-tab-container-item id="3">
             <mt-cell title="专业基地" :value="alltype[firstId].majorname"></mt-cell>
             <mt-cell :title="alltype[firstId].majorname+'科室'" :value="secondName"></mt-cell>
             <div class="s-picker">
               <!-- <mt-picker :slots="dateSlots" @change="onValuesChange"></mt-picker> -->
-              <mt-picker :slots="popDate" valueKey="number" @change="onValuesChange"></mt-picker>
+              <mt-picker :slots="popDate" valueKey="number"  :defaultIndex="new Date().getMonth()" @change="onValuesChange"></mt-picker>
             </div>
             <div class="save" @click="onSave()">确定</div>
           </mt-tab-container-item>
@@ -210,7 +211,7 @@ import {
   queryMajormanageOffice,
   queryTeacherTeachingdata
 } from "../../../api/teaching";
-import { Header, Cell, Popup, Picker, Navbar, TabItem } from "mint-ui";
+import {Indicator,Header, Cell, Popup, Picker, Navbar, TabItem } from "mint-ui";
 export default {
   data() {
     return {
@@ -255,6 +256,7 @@ export default {
         },
         {
           flex: 1,
+          defaultIndex:6,
           values: [
             {
               number: "12月",
@@ -309,7 +311,7 @@ export default {
           textAlign: "center"
         }
       ],
-      moment:12,
+      moment:6,
       selected: "1",
       zyjdPopup: false,
       selectWindow: false,
@@ -318,14 +320,14 @@ export default {
       firstId: 0,
       secondName: "呼吸科",
       secondId: 0,
-      thirdName: "12月",
+      thirdName: "6月",
       thirdId: 0,
       choice1Name: "呼吸科",
       choice1Id: 0,
-      choice2Name: "12月",
-      choice2Id: 0,
-      choice2Number: "12",
-      choice2Numbers: "12",
+      choice2Name: "6月",
+      choice2Id: 6,
+      choice2Number: "6",
+      choice2Numbers: "6",
       showSecond: true,
       showThird: true,
       typeDate1: [
@@ -475,7 +477,7 @@ export default {
   mounted(){
      if (moment().date() < 20) {
       if (moment().month() == 0) {
-        this.moment = 12;
+        this.moment = 6;
       } else {
         this.moment = moment().month();
       }
@@ -486,6 +488,7 @@ export default {
   },
   methods: {
     onZyjdChange(p, v) {
+       
       // console.log(p.getValues());
       if (p.getValues()[0]) {
         this.choice1(
@@ -499,6 +502,7 @@ export default {
     onValuesChange(p, v) {
       //s改变
       // console.log(p.getValues());
+      // p.setSlotValue(1, 0)
       this.choice2(p.getValues()[1].index, p.getValues()[1].number);
       this.slectType();
     },
@@ -507,11 +511,24 @@ export default {
       this.selected = String(val);
     },
 
-    onSave() {
-      this.zyjdPopup = false;
+    onSave(val) {
+      if(val){
+         if(val == 2){
+         this.selected = '3'
+      }
+      }else{
+        this.zyjdPopup = false;
+        
+      }
       this.slectType();
+     
+      
     },
     slectType() {
+      Indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
       this.secondName = this.choice1Name;
       this.thirdName = this.choice2Name;
       this.secondId = this.choice1Id;
@@ -536,6 +553,7 @@ export default {
             res => {
               // console.log(res);
               this.tableData = JSON.parse(res).teachingdatalist;
+              Indicator.close();
             }
           );
         });
@@ -558,16 +576,19 @@ export default {
             ).then(res => {
               // console.log(res);
               this.tableData = JSON.parse(res).teachingdatalist;
+              Indicator.close();
             });
           });
         } else if (this.choice2Id == 99) {
           queryTeacherTeachingdata(this.valueId, " ").then(res => {
             this.tableData = JSON.parse(res).teachingdatalist;
+            Indicator.close();
           });
         } else {
           queryTeacherTeachingdata(this.valueId, this.choice2Number).then(
             res => {
               this.tableData = JSON.parse(res).teachingdatalist;
+              Indicator.close();
             }
           );
         }
@@ -602,6 +623,10 @@ export default {
       }
     },
     handleFirst(id, name, ids, secendname) {
+      Indicator.open({
+          text: '加载中...',
+          spinnerType: 'fading-circle'
+        });
       // (this.firstName = name),
       (this.firstId = id),
         (this.secondName = secendname),
@@ -617,15 +642,28 @@ export default {
         (this.showThird = true),
         (this.showSecond = true),
         queryMajormanageOffice(name).then(res => {
-          let typeData = JSON.parse(res).majorlist[0].officelist;
+
+          if(JSON.parse(res).majorlist.length > 0){
+             let typeData = JSON.parse(res).majorlist[0].officelist.filter(n => n);
+            console.log(typeData)
+          
           for (let index = 0; index < typeData.length; index++) {
-            typeData[index].index = index;
+               typeData[index].index = index;
           }
           this.typeData = typeData;
+          
+          //判断当前筛选位置
+          if(this.selected == 1){
+            this.selected = '2'
+          }else if(this.selected == 2){
+            this.selected = '3'
 
+          }
+          }
+         Indicator.close();
           // console.log(JSON.parse(res));
-        });
-      queryTeacherTeachingdata(ids, "6").then(res => {
+        })
+      queryTeacherTeachingdata(ids, 6).then(res => {
         // console.log(res);
         this.tableData = JSON.parse(res).teachingdatalist;
       });
@@ -738,7 +776,7 @@ export default {
         this.valueId = JSON.parse(res).majorlist[0].officelist[0].officeid;
       }
 
-      queryTeacherTeachingdata(this.valueId, "12").then(res => {
+      queryTeacherTeachingdata(this.valueId, "6").then(res => {
         // console.log(JSON.parse(res));
         this.tableData = JSON.parse(res).teachingdatalist;
       });
