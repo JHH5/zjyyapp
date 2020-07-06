@@ -30,7 +30,7 @@
             v-show="showThird"
           >{{String(new Date().getFullYear())+'年'}}{{thirdName}}</p>
         </div>
-        <div class="main-table" v-if="tableData.length != 0">
+        <div class="main-table" v-if="tableData">
           <ul>
             <li>教师</li>
             <li>副主任医师</li>
@@ -205,6 +205,7 @@
 
 <script>
 import mainHeader from "../../../components/mainHeader.vue";
+import moment from "moment";
 import {
   queryMajormanageOffice,
   queryTeacherTeachingdata
@@ -308,6 +309,7 @@ export default {
           textAlign: "center"
         }
       ],
+      moment:12,
       selected: "1",
       zyjdPopup: false,
       selectWindow: false,
@@ -465,10 +467,22 @@ export default {
       ],
       typeData: "",
       alltype: "",
-      tableData: "",
+      tableData: [],
       valueId: 0,
       valueIds: 0
     };
+  },
+  mounted(){
+     if (moment().date() < 20) {
+      if (moment().month() == 0) {
+        this.moment = 12;
+      } else {
+        this.moment = moment().month();
+      }
+    } else {
+      this.moment = moment().month() + 1;
+    }
+    this.years = moment().year();
   },
   methods: {
     onZyjdChange(p, v) {
@@ -731,16 +745,7 @@ export default {
       // console.log(this.alltype);
       // console.log(JSON.parse(res).majorlist[0]);
     });
-    if (moment().date() < 20) {
-      if (moment().month() == 0) {
-        this.moment = 12;
-      } else {
-        this.moment = moment().month();
-      }
-    } else {
-      this.moment = moment().month() + 1;
-    }
-    this.years = moment().year();
+   
   },
   components: {
     // "header-main": mainHeader
