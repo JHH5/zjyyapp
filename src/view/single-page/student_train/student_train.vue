@@ -1,7 +1,14 @@
 <template>
   <div>
-    <header-main :message="'培训'"></header-main>
-    <div @click="popupVisible=true" class="select">筛选</div>
+    <!-- <header-main :message="'培训'"></header-main>
+    <div @click="popupVisible=true" class="select">筛选</div> -->
+<mt-header fixed title="培训">
+      <router-link to slot="left">
+        <mt-button icon="back" @click="$router.back(-1)"></mt-button>
+      </router-link>
+      <mt-button  slot="right" @click="popupVisible=true">筛选</mt-button>
+    </mt-header>
+
     <div class="studenttrain">
       <div class="student_train">
         <div class="student_train_top">
@@ -9,7 +16,7 @@
           <div class="end" v-for="(item, index) in tabledata" :key="index">
             <div class="pxtop">
               <p class="pxtitle">{{item.name}}——培训数据</p>
-              <p class="descs">数据截止时间：：{{years}}年/{{moment}}月</p>
+              <p class="descs">数据截止时间：{{years}}年{{moment}}月</p>
             </div>
             <div class="end_end">
               <div class="end_th">
@@ -30,31 +37,54 @@
       </div>
     </div>
     <mt-popup v-model="popupVisible" position="bottom">
-      <mt-navbar class="page-part" v-model="selected">
-        <mt-tab-item id="1">专业基地</mt-tab-item>
-        <mt-tab-item id="2">选择科室</mt-tab-item>
-      </mt-navbar>
-      <!-- tab-container -->
-      <mt-tab-container v-model="selected">
-        <mt-tab-container-item id="1">
-          <div class="wadu">
-            <ul>
+      <div class="popup-box">
+        <div class="popup-close" @click="popupVisible = false">
+          <img src="@/assets/images/close.png" alt />
+        </div>
+        <div class="popup-nav">
+          <mt-navbar v-model="selected" >
+            <mt-tab-item id="1">专业基地</mt-tab-item>
+            <mt-tab-item id="2">选择科室</mt-tab-item>
+          </mt-navbar>
+        </div>
+        <div style="width:3.75rem;height:0.01rem;background:rgba(242,242,243,1);margin-top:0.1rem"></div>
+
+        <mt-tab-container v-model="selected">
+          <mt-tab-container-item id="1">
+            <ul class="popup-down-items">
               <li
-                v-for="(item,index) in selectdata"
+              
+                :class="majorsubjectIndex == index ? 'popup-down-action':''"
+                v-for="(item, index) in selectdata"
                 :key="index"
                 @click="getValue(index,item.majorsubjectid)"
               >{{item.majorname}}</li>
+                <!-- :class="firstId == item.majorsubjectid ? 'popup-down-action':''" -->
+
+                <!-- @click="handleFirst(item.majorsubjectid,item.majorname,item.officelist)" -->
+
             </ul>
-          </div>
-        </mt-tab-container-item>
-        <mt-tab-container-item id="2">
-          <div class="wadu">
-            <ul>
-              <li v-for="(item,index) in  kswar" :key="index">{{item.name}}</li>
+          </mt-tab-container-item>
+          <mt-tab-container-item id="2"> 
+            <ul class="popup-down-items" v-if="kswar.length != 0">
+
+              <li
+              :class="selectId == index ? 'popup-down-action':''"
+                v-for="(item, index) in kswar"
+                :key="index"
+                @click="handleSelectName(index,item.name,kswar)"
+              >{{item.name}}</li>
+              
+
             </ul>
-          </div>
-        </mt-tab-container-item>
-      </mt-tab-container>
+            <p v-else style="line-height: 1rem;text-align: center;font-size: 12px;color: #999;">暂无数据</p>
+
+            <div class="save" @click="popupVisible = false">确定</div>
+          </mt-tab-container-item>
+        
+        </mt-tab-container>
+      </div>
+      
     </mt-popup>
   </div>
 </template>
@@ -66,15 +96,16 @@ import {
   queryStudenttraindata,
   queryMajormanageoffice
 } from "../../../api/studentcomment";
-import { Indicator, Popup, Navbar, TabItem, Search } from "mint-ui";
+import { Indicator, Popup, Navbar, TabItem, Search,Header  } from "mint-ui";
 import moment from "moment";
 export default {
   data() {
     return {
+      majorsubjectIndex:0,
       showRotation: false,
       tabIndex: 2,
-      selectId: -1,
-      kswar: "",
+      selectId: 0,
+      kswar: [],
       tabledata: [],
       selected: "1",
       popupVisible: false,
@@ -163,7 +194,11 @@ export default {
     };
   },
   methods: {
+    onNavBarChange(val){
+      console.log(val)
+    },
     getValue(index, majorsubjectid) {
+      this.majorsubjectIndex = index
       // console.log(index, majorsubjectid);
       queryMajormanageoffice().then(res => {
         // console.log(JSON.parse(res));
@@ -192,6 +227,8 @@ export default {
             // console.log(this.singledata[k])
           }
           Indicator.close();
+          this.selected = '2'
+          this.selectId = 0
         });
       });
     },
@@ -226,14 +263,13 @@ export default {
       // console.log(JSON.parse(res));
       this.selectdata = JSON.parse(res).majorlist;
       let ads = [];
-      // for (let i = 0; i < JSON.parse(res).majorlist[0].officelist.length; i++) {
-      //   ads.push(JSON.parse(res).majorlist[0].officelist[i].officeid);
-      // }
+       this.kswar = this.selectdata[0].officelist;
+        
       queryStudenttraindata(2, "", this.moment).then(res => {
         this.singledata = JSON.parse(res).officetrainsumlist;
         // this.showtab = true
-        this.tabledata .push(JSON.parse(res).officetrainsumlist[0]);
-    
+        this.tabledata.push(JSON.parse(res).officetrainsumlist[0]);
+          
         Indicator.close();
       });
     });
@@ -254,12 +290,614 @@ export default {
   components: {
     "header-main": mainHeader,
     // piebar
-    trainbar
+    trainbar,
+    Header 
   }
 };
 </script>
 
 <style lang="less" scoped>
+.s-picker {
+  margin-top: 0.51rem;
+}
+.save {
+  width: 3.75rem;
+  line-height: 0.49rem;
+  background: rgba(0, 150, 193, 1);
+
+  font-size: 0.15rem;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 1);
+  position: fixed;
+  text-align: center;
+  left: 0;
+  bottom: 0;
+}
+
+.popup-down-items {
+  background: #fff;
+  width: 3.6rem;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  display: flex;
+  padding-bottom: 0.1rem;
+  padding-left: 0.15rem;
+  padding-top: 0.15rem;
+  flex-flow: wrap;
+  border-top: 1px solid #f2f2f3;
+}
+.popup-down-items li {
+  width: 0.8rem;
+  line-height: 0.44rem;
+  text-align: center;
+  border-radius: 0.06rem;
+  background: rgba(242, 242, 243, 1);
+  font-size: 0.13rem;
+  margin-right: 0.08rem;
+  margin-bottom: 0.1rem;
+}
+.popup-down-action {
+  color: rgba(0, 150, 193, 1);
+}
+/deep/ .mint-navbar .mint-tab-item.is-selected {
+  font-size: 0.13rem;
+  font-weight: bold;
+  color: rgba(0, 150, 193, 1);
+  line-height: 0.18rem;
+  border-bottom: 2px solid rgba(0, 150, 193, 1);
+  margin-bottom: 2px;
+}
+/deep/ .mint-navbar .mint-tab-item {
+  margin-left: 10px;
+  padding: 10px 0;
+  color: #595959;
+}
+/deep/.mint-tab-item-label {
+  font-size: 0.13rem;
+  font-weight: bold;
+  line-height: 0.18rem;
+}
+.popup-close {
+  position: absolute;
+  right: 0.15rem;
+  top: 0.1rem;
+
+  img {
+    width: 0.15rem;
+    height: 0.15rem;
+  }
+}
+.popup-nav {
+  width: 2.8rem;
+  margin-top: 0.1rem;
+}
+.popup-box {
+  width: 3.75rem;
+  height: 5.22rem;
+  background: rgba(255, 255, 255, 1);
+  position: relative;
+}
+.screen-tap-box{
+  width: 3.3rem;
+  margin: 0.1rem auto;
+  .screen-tap{
+    display: inline-block;
+    padding: 0.05rem 0.1rem;
+    background:rgba(255,255,255,1);
+    border-radius:0.03rem;
+    border:0.01rem solid rgba(0,150,193,1);
+  margin-right: 0.08rem;
+  font-size:0.13rem;
+  color:rgba(0,150,193,1);
+  line-height:0.18rem;
+  }
+}
+.main-content{
+  width:3.45rem;
+  margin: 0 auto;
+  margin-top: 0.1rem;
+  background: #fff;
+  .nav-bar{
+      height:0.64rem;
+      border-radius:0.06rem 0.06rem 0rem 0rem;
+      color: #0096C1;
+      padding-top: 1px;
+      border-bottom:2px solid #f0f0f7 ;
+      .main-title{
+        margin-top: 0.12rem;
+        margin-left: 0.24rem;
+        font-size:0.15rem;
+        font-weight:bold;
+        line-height:0.21rem;
+      }
+      .main-title-sub{
+        margin-top: 0.04rem;
+        margin-left: 0.24rem;
+        font-size:0.11rem;
+        font-weight:400;
+        color:#0096C1;
+        line-height:0.16rem;
+      }
+  }
+  .main-table{
+    border:3px solid #f0f0f7 ;
+  }
+   .main-table li{
+    width:1.1rem;
+    border-left:2px solid #f0f0f7 ;
+    line-height:0.44rem;
+    font-size:0.13rem;
+    text-align: center;
+    background:rgba(255,255,255,1);
+    display:inline-block;
+    vertical-align: middle;
+    
+    }
+  .main-table ul{
+    border-bottom:2px solid #f0f0f7 ;
+  }
+  .main-table li:first-child{
+    border-left:0px !important;
+  }
+  .main-table ul:last-child{
+    border-bottom:0px !important;
+  }
+  .head-table li{
+    color: #0096C1;
+  }
+    
+}
+/deep/ .mint-cell-value.is-link{
+  margin-right: 0.05rem;
+  color: #000;
+  font-weight: bold;
+  font-size:0.15rem;
+}
+/deep/ .mint-cell-wrapper{
+  padding: 0rem 0.3rem;
+}
+.mint-cell{
+  border-bottom: 1px solid #f2f2f3;
+}
+.info-content{
+  width:3.55rem;
+background:rgba(255,255,255,1);
+border-radius:0.03rem;
+margin: 0.1rem auto;
+padding-bottom: 0.1rem;
+
+}
+.sumks-item{
+  position: relative;
+}
+.sum-right{
+  position: absolute;
+    width: 0.8rem;
+    height: 0.8rem;
+    
+    display: inline-block;
+    right: 0.33rem;
+    top: 0.09rem;
+}
+.sum-left{
+  width: 2.2rem;
+  display: inline-block;
+  margin-top: 0.2rem;
+  margin-left: 0.2rem;
+
+  p{
+font-size:0.13rem;
+font-weight:400;
+color:rgba(89,89,89,1);
+line-height:0.18rem;
+  }
+}
+.sum-item{
+font-size:0.13rem;
+font-weight:bold;
+color:rgba(0,0,0,1);
+line-height:0.18rem;
+border-left: 4px solid #0096C1;
+margin: 0.2rem 0rem 0 0.1rem;
+padding-left: 0.10rem;
+}
+.sum-content{
+  padding-top: 1px;
+  width:3.55rem;
+  height:2.5rem;
+  background:rgba(255,255,255,1);
+  border-radius:0.03rem;
+  margin: 0 auto;
+  margin-top: 0.1rem;
+}
+
+.main-box{
+  margin-top: 0.54rem;
+}
+.tab-page-btn{
+  margin: 0 auto;
+  line-height: 0.44rem;
+  border-radius: 10px;
+  width: 2.98rem;
+    font-size:0.15rem;
+    font-weight:bold;
+    color:rgba(0,150,193,1);
+  span{
+    width: 1.46rem;
+    display: inline-block;
+    text-align: center;
+    border-top: 2px solid #0096c1;
+    border-bottom: 2px solid #0096c1;
+    background: #FFF;
+  }
+}
+ .tab-action{
+  background: rgba(0,150,193,1) !important;
+  color: #FFF;
+}
+.mint-header {
+  background-color: #fff;
+  color: #000;
+  height: 44px;
+  border-bottom: 1px solid #f2f2f3;
+  z-index: 60;
+}
+/deep/ .mint-header-title {
+  font-size: 0.17rem;
+  font-weight: bold;
+}
+.student_examine{
+  background: rgba(242, 242, 243, 1);
+  min-height: 100vh;
+  padding-top: 1px;
+}
+
+
+
+// 列表开始
+.end {
+  background: #ffffff;
+  margin-top: 0.09rem;
+  padding-bottom: 0.1rem;
+
+  .end_top {
+    border-left: 3px solid #277fff;
+    margin-left: 0.15rem;
+    padding-left: 0.05rem;
+    margin-bottom: 0.1rem;
+
+    p {
+      font-family: PingFangSC-Medium;
+      font-size: 0.16rem;
+      color: #474c63;
+      letter-spacing: 0;
+      // line-height: 18px;
+    }
+  }
+
+  .end_end {
+    width: 3.25rem;
+    margin: 0 auto;
+
+    .end_th {
+      display: flex;
+      align-items: center;
+
+      p {
+        font-family: PingFangSC-Medium;
+        font-size: 0.13rem;
+        color: #212121;
+        letter-spacing: 0;
+        // line-height: 16px;
+        border: 1px solid #f0f0f7;
+        height: 0.35rem;
+        line-height: 0.35rem;
+        width: 2rem;
+        text-align: center;
+      }
+    }
+
+    .end_td {
+      display: flex;
+      align-items: center;
+
+      p {
+        font-family: PingFangSC-Regular;
+        font-size: 0.13rem;
+        color: #212121;
+        letter-spacing: 0;
+        // line-height: 16px;
+        border: 1px solid #f0f0f7;
+        height: 0.35rem;
+        line-height: 0.35rem;
+        width: 1.61rem;
+        text-align: center;
+      }
+    }
+  }
+}
+.endtable {
+  overflow: auto;
+  // height: 4rem;
+}
+// 列表结束
+.examine_top {
+  left: 0.1rem;
+  right: 0.1rem;
+  background: #ffffff;
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
+  border-radius: 5px;
+  overflow: hidden;
+  .containter {
+    border-top: 1px solid #f0f0f7;
+  }
+}
+.examine1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 0.26rem;
+  background: #ffffff;
+  .examine1_left_top {
+    font-family: PingFangSC-Regular;
+    font-size: 0.15rem;
+    color: #212121;
+    letter-spacing: 0;
+    text-align: center;
+    // line-height: 15px;
+    margin-top: 0.14rem;
+    margin-bottom: 0.25rem;
+  }
+}
+.examine1_left_end {
+  display: flex;
+  align-items: center;
+  .endleft {
+    margin-right: 0.15rem;
+    .number {
+      font-family: PingFangSC-Medium;
+      font-size: 0.3rem;
+      // color: #277FFF;
+      letter-spacing: 0;
+      text-align: center;
+      // line-height: 30px;
+    }
+    .desc {
+      font-family: PingFangSC-Regular;
+      font-size: 0.13rem;
+      color: #212121;
+      letter-spacing: 0;
+      text-align: center;
+      // line-height: 13px;
+    }
+  }
+}
+.examine1_left_end2 {
+  display: flex;
+  align-items: center;
+  .endleft {
+    margin-right: 0.15rem;
+    .number {
+      font-family: PingFangSC-Medium;
+      font-size: 0.15rem;
+      // color: #277FFF;
+      letter-spacing: 0;
+      text-align: center;
+      margin-bottom: 0.1rem;
+      // line-height: 30px;
+    }
+    .desc {
+      font-family: PingFangSC-Regular;
+      font-size: 0.13rem;
+      color: #212121;
+      letter-spacing: 0;
+      text-align: center;
+      // line-height: 13px;
+    }
+  }
+}
+.examine_middle {
+  
+  top: 2.6rem;
+  background: #ffffff;
+  width: 100%;
+  .end_top {
+    display: -webkit-flex;
+    // justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 3.55rem;
+    height: 0.8rem;
+    margin: 0 auto;
+    background: #f0f0f7;
+    border-radius: 2px;
+    border-radius: 2px;
+    position: relative;
+    p {
+      font-family: PingFangSC-Regular;
+      font-size: 0.13rem;
+      color: #212121;
+      letter-spacing: 0;
+      // line-height: 13px;
+      margin-left: 0.1rem;
+      margin-right: 0.1rem;
+      line-height: 0.4rem;
+    }
+  }
+  .end_button {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    right: 0.12rem;
+    p {
+      font-family: PingFangSC-Regular;
+      font-size: 0.13rem;
+      color: #277fff;
+      letter-spacing: 0;
+      margin: 0;
+      // line-height: 13px;
+    }
+  }
+  .examine_middle_top {
+    .black_block {
+      width: 100%;
+      height: 0.1rem;
+      background: #f0f0f7;
+    }
+    .tops {
+      display: flex;
+      align-items: center;
+      margin-top: 0.2rem;
+      margin-bottom: 0.1rem;
+      img {
+        width: 0.16rem;
+        height: 0.16rem;
+        position: absolute;
+        right: 0.2rem;
+      }
+    }
+    .top {
+      background: #f0f0f7;
+      display: -webkit-flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      // padding-top: 0.15rem;
+      padding-bottom: 0.08rem;
+      border-radius: 5px 5px 0px 0px;
+      padding-left: 0.05rem;
+      width: 3.55rem;
+      margin: 0 auto;
+
+      overflow: hidden;
+      position: relative;
+      background: #f0f0f7;
+      p {
+        font-family: PingFangSC-Regular;
+        font-size: 0.13rem;
+        color: #212121;
+        letter-spacing: 0;
+        text-align: center;
+        margin: 0 0.1rem;
+        margin-top: 0.15rem;
+        // line-height: 15px;
+      }
+      .open {
+        display: flex;
+        align-items: center;
+        // margin-left: auto;
+        // margin-right: 0.15rem;
+        color: #277fff;
+        margin-top: 0.15rem;
+        position: absolute;
+        bottom: 0.1rem;
+        right: 0.1rem;
+        background: #f0f0f7;
+        p {
+          margin: 0;
+          color: #277fff;
+        }
+        span {
+          font-size: 0.1rem;
+          margin-left: 0.05rem;
+        }
+        img {
+          width: 0.1rem;
+          height: 0.1rem;
+          margin-left: 0.05rem;
+        }
+        .flex {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+    .title {
+      font-family: PingFangSC-Regular;
+      font-size: 0.15rem;
+      color: #212121;
+      letter-spacing: 0;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      // line-height: 15px;
+    }
+  }
+}
+.mint-navbar {
+  // width: 3.55rem;
+  margin: 0 auto;
+  background: #fff;
+  border-top-left-radius: 0.05rem;
+  border-top-right-radius: 0.05rem;
+  .mint-tab-item:nth-child(1) {
+    // width: 1.1rem;
+  }
+  .mint-tab-item:nth-child(2) {
+    // width: 1.6rem;
+  }
+  .mint-tab-item:nth-child(3) {
+    // width: 1rem;
+    overflow: hidden;
+  }
+}
+
+/deep/.mint-tab-item-label {
+  color: #9397ad;
+  font-size: 0.15rem;
+  height: 0.45rem;
+  line-height: 0.45rem;
+  span {
+    font-size: 0.12rem;
+    color: #9397ad;
+    letter-spacing: 0;
+    text-align: center;
+    line-height: 0.12rem;
+    opacity: 0.5;
+  }
+}
+/deep/ .is-selected .mint-tab-item-label {
+  font-size: 0.18rem;
+  color: #212121;
+  span {
+    color: #9397ad;
+    opacity: 1;
+  }
+}
+
+.mint-navbar {
+  position: relative;
+  box-sizing: border-box;
+  padding: 0 0.1rem;
+}
+
+/deep/ .mint-navbar .mint-tab-item {
+  // width: 1.3rem;
+  padding: 0;
+  // height: 0.48rem;
+  background: transparent;
+  // margin-bottom: 0.01rem;
+  margin-bottom: 0;
+  // flex: initial;
+}
+/deep/ .mint-tab-container {
+  overflow: inherit;
+}
+/deep/ .mint-tab-item-label {
+  position: relative;
+}
+
+.popup-close {
+  position: absolute;
+  right: 0.15rem;
+  top: 0.1rem;
+
+  img {
+    width: 0.15rem;
+    height: 0.15rem;
+  }
+}
 .end {
   background: #ffffff;
   margin-top: 0.09rem;
@@ -327,9 +965,11 @@ export default {
 .studenttrain {
   position: absolute;
   width: 100%;
+  margin-top: 0.5rem;
   /deep/ .pie_single {
     margin-left: 0.1rem;
     margin-right: 0.1rem;
+    
   }
   .student_train {
     width: 3.55rem;
