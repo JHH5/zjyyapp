@@ -863,7 +863,7 @@ export default {
           transitionStart: function(event) {
             self.$refs.mySwiper2.swiper.slideToLoop(
               this.activeIndex - 3,
-              1800,
+              1000,
               false
             );
           },
@@ -963,9 +963,7 @@ export default {
       if (id == 0) {
         this.hadleTeacherTrain();
       }
-      // if (id == 3) {
-      //   this.handleTeachingStudent()
-      // }
+  
     },
     handleClickSelect() {
       this.showModal = true;
@@ -1012,6 +1010,7 @@ export default {
     },
     hadleStudentTrain() {
       this.$router.push("/student_train");
+
     },
     handleSkill() {
       this.$router.push("/skill_center");
@@ -1043,7 +1042,7 @@ export default {
       this.$forceUpdate();
     },
     jumpStudentTop(ins) {
-      this.$refs.mySwiper2.swiper.slideToLoop(ins - 3, 1000, false); //切换到第一个slide，速度为1秒
+      this.$refs.mySwiper2.swiper.slideToLoop(ins, 100, false); //切换到第一个slide，速度为1秒
       this.$forceUpdate();
     },
     handLogout() {
@@ -1251,7 +1250,7 @@ export default {
       const mySwiper4 = this.$refs.mySwiper4;
       const mySwiper2 = this.$refs.mySwiper2;
       const mySwiper = this.$refs.mySwiper;
-    }, 1000);
+    }, 2000);
     this.teacherVal(1, this.moment, this.moment);
     workToday("", "").then(res => {
       if (JSON.parse(res).code == 1) {

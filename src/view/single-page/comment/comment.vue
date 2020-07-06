@@ -15,7 +15,7 @@
         <div class="yqtop" @click="popupVisiblemid=true">
           <mt-cell>
             <mt-cell v-for="(item,index) in singledata" :key="index">
-              <span>{{(item.typename)*100}}</span>
+              <span>{{item.typename}}</span>
             </mt-cell>
           </mt-cell>
         </div>

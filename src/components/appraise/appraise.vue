@@ -14,7 +14,7 @@
             <div class="descbox">
               <div class="desc">
                 评价平均分：
-                <span>{{item.pjpjf}}</span>
+                <span>{{(item.pjpjf)*100}}</span>
               </div>
             </div>
           </div>
