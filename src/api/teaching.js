@@ -30,7 +30,7 @@ export const queryTeacherTeachingdata = (id,time) => {
     return axios.request({
         url: '/doctor_train/rest/H5Management/queryteacherteachingdata.do',
         data:{
-            datatype:'round',
+            // datatype:'round',
             starttime:time == " " ? "":year+"-"+time+"-01 00:00:00",
             endtime:time == " "? "":year+"-"+time+"-"+ moment(year + "-" + time,"YYYY-MM").daysInMonth() +" 00:00:00",
             officeids:id

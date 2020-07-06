@@ -179,7 +179,7 @@
                       <p class="more">更多</p>
                       <img src="../../../assets/images/right_arrow.png" alt />
                     </div>
-                    <p class="descs">数据截止时间：：{{years}}年/06月</p>
+                    <p class="descs">数据统计时间：：{{years}}年/06月</p>
                     <div style="width: 3rem;display:none;">
                       <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
                     </div>
@@ -209,10 +209,8 @@
                   <div class="student_exam boxshadow">
                     <div class="student_train_top box2_top">
                       <p style="margin-right:0.1rem" class="title">师资培训</p>
-                      <!-- <p  @click="hadleTeacherTrain" class="more">更多</p> -->
-                      <!-- <img src="../../../assets/images/right_arrow.png" alt /> -->
                     </div>
-                    <p class="descs">数据截止时间：：{{years}}年/06月</p>
+                    <p class="descs">数据统计时间：：{{years}}年/06月</p>
                     <div style="width: 3rem;display:none;">
                       <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
                     </div>
@@ -259,7 +257,7 @@
                       <p class="more">更多</p>
                       <img src="../../../assets/images/right_arrow.png" alt />
                     </div>
-                    <p class="descs">数据截止时间：：{{years}}年/{{moment}}月</p>
+                    <p class="descs">数据统计时间：：{{years}}年/{{moment}}月</p>
                     <div style="width: 3rem;display:none;">
                       <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
                     </div>
@@ -353,7 +351,7 @@
                       <p class="more">更多</p>
                       <img src="../../../assets/images/right_arrow.png" alt />
                     </div>
-                    <p class="descs">数据截止时间：：{{years}}年/{{moment}}月</p>
+                    <p class="descs">数据统计时间：：{{years}}年/{{moment}}月</p>
                     <div style="width: 3rem;display:none;">
                       <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
                     </div>
@@ -363,7 +361,8 @@
                         <p>人均（次）</p>
                         <div class="bannertext">
                           <p class="number">
-                            <span>≈</span>{{studenttrain.trainrjcs.rjpxcs}}
+                            <span>≈</span>
+                            {{studenttrain.trainrjcs.rjpxcs}}
                           </p>
                           <p class="title">{{moment}}月人均培训次数</p>
                         </div>
@@ -371,7 +370,7 @@
                       <div class="bannerright">
                         <ul>
                           <li>
-                            总人数
+                            接受培训总人数
                             <span>{{studenttrain.trainrjcs.zrs}}</span>
                           </li>
                           <li>
@@ -425,7 +424,7 @@
                       <p class="more">更多</p>
                       <img src="../../../assets/images/right_arrow.png" alt />
                     </div>
-                    <p class="descs">数据截止时间：：{{years}}年/{{moment}}月</p>
+                    <p class="descs">数据统计时间：：{{years}}年/{{moment}}月</p>
                     <div style="width: 3rem;display:none;">
                       <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
                     </div>
@@ -434,7 +433,7 @@
                       <div class="khbox">
                         <ul>
                           <li>
-                            <p class="title">发布场次</p>
+                            <p class="title">考试次数</p>
                             <p class="number">{{item.kscc}}</p>
                           </li>
                           <li>
@@ -479,7 +478,7 @@
                             :key="index"
                           >
                             <div class="radechart_desc_detial" v-if="item.typename !='共有学员'">
-                              <div :style="randomRgb(item)" class="block"></div>
+                              <div  class="block"></div>
                               <p class="title">{{item.typename}}</p>
                               <p class="newnumber">{{item.studentsum}}</p>
                               <p class="desc">{{item.slbl}}</p>
@@ -544,7 +543,7 @@
                       <p class="more">更多</p>
                       <img src="../../../assets/images/right_arrow.png" alt />
                     </div>
-                    <p class="descs">数据截止时间：：{{years}}年/{{moment}}月</p>
+                    <p class="descs">数据统计时间：：{{years}}年/{{moment}}月</p>
                     <div style="width: 3rem;display:none;">
                       <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
                     </div>
@@ -590,7 +589,7 @@
                       <p class="more">更多</p>
                       <img src="../../../assets/images/right_arrow.png" alt />
                     </div>
-                    <p class="descs">数据截止时间：：{{years}}年/{{moment}}月</p>
+                    <p class="descs">数据统计时间：：{{years}}年/{{moment}}月</p>
                     <div style="width: 3rem;display:none;">
                       <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
                     </div>
@@ -643,7 +642,7 @@
               <!-- <p class="more">更多</p> -->
               <!-- <img src="../../../assets/images/right_arrow.png" alt /> -->
             </div>
-            <p class="descs">数据截止时间：{{years}}年/{{moment}}月</p>
+            <p class="descs">数据统计时间：{{years}}年/{{moment}}月</p>
             <div style="width: 3rem;display:none;">
               <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
             </div>
@@ -869,114 +868,26 @@ export default {
             );
           },
           transitionEnd: function(event) {}
-          // click: function() {
-          //   const realIndex = this.realIndex;
-          //   self.handleClickSlide(realIndex);
-          // }
         }
       },
 
       swiperOption4: {
-        // slidesOffsetAfter : 200,
         slidesPerView: 3,
         spaceBetween: 5,
-        // centeredSlides: true,
+        centeredSlides: true,
         loop: true,
         observer: true,
         observeParents: true,
-        // loopedSlides: 5,
+        loopedSlides: 5,
         centeredSlides: true,
-        // slideToClickedSlide: true,
+        slideToClickedSlide: true,
         noSwiping: true,
         speed: 300,
-
         on: {
           transitionEnd: function(event) {}
         }
       },
 
-      swiperOption5: {
-        // slidesOffsetAfter : 200,
-        slidesPerView: 5,
-        spaceBetween: 3,
-        // centeredSlides: true,
-        loop: true,
-        observer: true,
-        observeParents: true,
-        // loopedSlides: 5,
-        centeredSlides: true,
-        // slideToClickedSlide: true,
-        noSwiping: true,
-        speed: 800,
-
-        on: {
-          transitionEnd: function(event) {}
-        }
-      },
-      swiperOption2: {
-        // slidesOffsetAfter : 200,
-        slidesPerView: 2,
-        spaceBetween: 340,
-        // centeredSlides: true,
-        loop: false,
-        observer: true,
-        observeParents: true,
-        on: {}
-      },
-      swiperOption3: {
-        // scrollbar: '.wrap-scroll',
-        direction: "vertical",
-        slidesPerView: 1,
-        speed: 300,
-        on: {
-          touchStart: function(event) {
-            self.typedd = this.activeIndex;
-          },
-          transitionEnd: function(event) {
-            if (this.activeIndex == 0 && self.typedd == 0) {
-              // console.log(2222222);
-              workToday("", "").then(res => {
-                if (JSON.parse(res).code == 1) {
-                  this.workTodaydata = JSON.parse(res).worktodaylist;
-                } else {
-                  console.log("暂无数据");
-                }
-              });
-            }
-          }
-        }
-        // spaceBetween: 1,
-        // mousewheelControl: false,
-        // freeMode: true
-      },
-      selfchartdata: [
-        {
-          left: 34,
-          right: 32,
-          time: 2015
-        },
-        {
-          left: 298,
-          right: 31,
-          time: 2016
-        },
-
-        {
-          left: 380,
-          right: 48,
-          time: 2017
-        },
-        {
-          left: 458,
-          right: 46,
-          time: 2018
-        },
-        {
-          left: 379,
-          right: 48,
-          time: 2019
-        }
-      ],
       skilldata: [
         {
           desc: "本月活动次数",
@@ -995,23 +906,6 @@ export default {
           number: "600m²"
         }
       ],
-      // datacharts: [
-      //   {
-      //     name: "数据1",
-      //     value: 36,
-      //     rate: 12
-      //   },
-      //   {
-      //     name: "数据2",
-      //     value: 20,
-      //     rate: 20
-      //   },
-      //   {
-      //     name: "数据3",
-      //     value: 16,
-      //     rate: -40
-      //   }
-      // ],
       teacherValuate: "",
       teacherBardata: "",
       workTodaydata: "",
@@ -1028,7 +922,7 @@ export default {
       },
       studentround: "",
       studenttype: "",
-      
+
       studentsubject: "",
       studentpie: false,
       studenttrain: {
@@ -1048,23 +942,14 @@ export default {
       }
     };
   },
-  // watch:{
-  //   flag1(){
-  //     setTimeout(() => {
-  //       this.$refs.radar1.drawLine()
-  //     }, 3000);
-  //   }
-  // },
+  watch: {
+    flag1() {
+      setTimeout(() => {
+        this.$refs.radar1.drawLine();
+      }, 3000);
+    }
+  },
   methods: {
-    randomRgb(item) {
-      let R = Math.floor(Math.random() * 130 + 110);
-      let G = Math.floor(Math.random() * 130 + 110);
-      let B = Math.floor(Math.random() * 130 + 110);
-      return {
-        background: "rgb(" + R + "," + G + "," + B + ")"
-      };
-    },
-
     handleClickSlide(id) {
       // console.log(id);
       if (id == 0) {
@@ -1219,9 +1104,6 @@ export default {
     teacherVal(type, start, end) {
       teachereValuate(type, start, end)
         .then(res => {
-          // console.log(JSON.parse(res));
-
-          // console.log(moment(moment().year() + "-" + start,"YYYY-MM").daysInMonth(),moment(moment().year() + "-" + end,"YYYY-MM").daysInMonth());
           if (JSON.parse(res).code == 1) {
             (this.teacherValuate = JSON.parse(res).evaluateoverview),
               (this.teacherBardata = JSON.parse(res).dimensionevaluatelist);
@@ -1295,117 +1177,11 @@ export default {
     drawLine() {
       // 基于准备好的dom，初始化echarts实例
       let myChart = myCharts.init(document.getElementById("myChart2"));
-      // let myChart3 = myCharts.init(document.getElementById("myChart3"));
-      // let myChart4 = myCharts.init(document.getElementById("myChart4"));
       window.onresize = myChart.resize;
       var vms = this;
 
       // 绘制图表
       myChart.setOption({
-        // legend: {
-        //   // selectedMode: false, // 取消图例上的点击事件
-        //   type: "plain",
-        //   icon: "circle",
-        //   orient: "vertical",
-        //   left: "0%",
-        //   top: "15%",
-        //   align: "right",
-        //   itemGap: 15,
-        //   itemWidth: 10, // 设置宽度
-        //   itemHeight: 10, // 设置高度
-        //   symbolKeepAspect: false,
-        //   textStyle: {
-        //     color: "#000",
-        //     rich: {
-        //       name: {
-        //         verticalAlign: "right",
-        //         align: "left",
-        //         width: 35,
-        //         fontSize: 12
-        //       },
-        //       value: {
-        //         align: "left",
-        //         width: 60,
-        //         fontSize: 12
-        //       },
-        //       count: {
-        //         align: "left",
-        //         width: 80,
-        //         fontSize: 12
-        //       },
-        //       upRate: {
-        //         align: "left",
-        //         fontSize: 12,
-        //         color: "#00cf90"
-        //       },
-        //       downRate: {
-        //         align: "left",
-        //         fontSize: 12,
-        //         color: "#ff5722"
-        //       }
-        //     }
-        //   },
-        //   data: vms.datacharts.map(item => item.name),
-        //   formatter: function(name) {
-        //     let className = "upRate";
-        //     // let rateIcon = "▲";
-        //     // console.log(this.data)
-        //     if (vms.datacharts && vms.datacharts.length) {
-        //       for (var i = 0; i < vms.datacharts.length; i++) {
-        //         if (name === vms.datacharts[i].name) {
-        //           return (
-        //             "{name| " +
-        //             name +
-        //             "}  | " +
-        //             "{value| " +
-        //             vms.datacharts[i].value +
-        //             "%}"
-        //           );
-        //         }
-        //       }
-        //     }
-        //   }
-        // },
-        // series: [
-        //   {
-        //     name: "数量",
-        //     type: "pie",
-        //     radius: ["35%", "53%"],
-        //     center: ["65%", "30%"],
-        //     data: vms.datacharts,
-        //     label: {
-        //       normal: {
-        //         show: false,
-        //         position: "center",
-        //         formatter: "{text|{c}}\n{b}",
-        //         rich: {
-        //           text: {
-        //             align: "center",
-        //             verticalAlign: "middle",
-        //             padding: 8,
-        //             fontSize: 30
-        //           },
-        //           value: {
-        //             align: "center",
-        //             verticalAlign: "middle",
-        //             fontSize: 20
-        //           }
-        //         }
-        //       },
-        //       emphasis: {
-        //         show: true,
-        //         textStyle: {
-        //           fontSize: "12"
-        //         }
-        //       }
-        //     },
-        //     labelLine: {
-        //       normal: {
-        //         show: true
-        //       }
-        //     }
-        //   }
-        // ]
         series: [
           {
             type: "pie",
@@ -3873,7 +3649,7 @@ export default {
     width: 50%;
     text-align: left;
     ul li {
-      height: 0.4rem;
+      height: 0.3rem;
       margin-left: 10px;
       background: rgba(247, 247, 247, 1);
       border-radius: 0.06rem;
@@ -3892,6 +3668,7 @@ export default {
       }
     }
     ul li:nth-child(1) {
+      height: 0.8rem;
       font-size: 0.12rem;
       font-family: PingFangSC-Medium, PingFang SC;
       font-weight: 600;

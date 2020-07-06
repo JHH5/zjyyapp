@@ -14,7 +14,7 @@
             <div class="descbox">
               <div class="desc">
                 评价平均分：
-                <span>{{topnumber}}</span>
+                <span>{{item.pjpjf}}</span>
               </div>
             </div>
           </div>
@@ -30,7 +30,7 @@
               <p class="titletxt">{{itemtext.itemtitle}}</p>
               <hr />
               <div class="end_desc">
-                <p>满分{{itemtext.itemff}}分，得分{{itemtext.pjf}}%，{{itemtext.zz}}</p>
+                <p>满分{{itemtext.itemff}}分，得分{{((itemtext.pjdel)*100)}}%，{{itemtext.zz}}</p>
               </div>
             </div>
           </div>
@@ -158,13 +158,13 @@ export default {
     },
     teacherFunc() {
       this.selectdata = this.singledata;
-      // console.log(this.selectdata);
-      // queryTeachereValuationitem(0,this.moment).then(res => {
-      //   // console.log(JSON.p  arse(this.users));
-      //   this.selectdata = JSON.parse(res).teacherevaluationitem
-      //   // this.selectdatatext = JSON.parse(res).itemtypeconfiglist
-      //   this.topnumber = JSON.parse(res).pjpjf
-      // })
+      console.log(this.selectdata);
+      queryTeachereValuationitem(0,this.moment).then(res => {
+        // console.log(JSON.p  arse(this.users));
+        // this.selectdata = JSON.parse(res).teacherevaluationitem
+        // this.selectdatatext = JSON.parse(res).itemtypeconfiglist
+        this.topnumber = JSON.parse(res).pjpjf
+      })
       // console.log(this.selectdata)
     },
     studentFunc() {
