@@ -3922,19 +3922,21 @@ export default {
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: rgba(89, 89, 89, 1);
-    line-height: 0.16rem;
+    line-height: 0.36rem;
   }
   .number {
     font-size: 0.2rem;
     font-family: DINAlternate-Bold, DINAlternate;
     font-weight: bold;
     color: rgba(89, 89, 89, 1);
-    line-height: 0.24rem;
+    line-height: 0.54rem;
   }
   .block {
     width: 10px;
     height: 10px;
     float: left;
+    margin: 5px;
+    border-radius: 3px;
   }
 }
 </style>
