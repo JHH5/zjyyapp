@@ -1,12 +1,12 @@
 <template>
   <div>
     <!-- <header-main :message="'培训'"></header-main>
-    <div @click="popupVisible=true" class="select">筛选</div> -->
-<mt-header fixed title="培训">
+    <div @click="popupVisible=true" class="select">筛选</div>-->
+    <mt-header fixed title="培训">
       <router-link to slot="left">
         <mt-button icon="back" @click="$router.back(-1)"></mt-button>
       </router-link>
-      <mt-button  slot="right" @click="popupVisible=true">筛选</mt-button>
+      <mt-button slot="right" @click="popupVisible=true">筛选</mt-button>
     </mt-header>
 
     <div class="studenttrain">
@@ -24,14 +24,20 @@
                 <p>发布次数</p>
                 <p>参与人数</p>
               </div>
-              <div class="endtable" v-if="item.traintypesumlist && item.traintypesumlist.length != 0">
+              <div
+                class="endtable"
+          
+              >
                 <div class="end_td" v-for="(student,index) in item.traintypesumlist" :key="index">
                   <p>{{student.traintypename}}</p>
                   <p>{{student. trainsum}}</p>
                   <p>{{student. studentsum}}</p>
                 </div>
               </div>
-              <p v-else style="line-height: 1rem;text-align: center;font-size: 12px;color: #999;">暂无数据</p>
+              <!-- <p
+                v-else
+                style="line-height: 1rem;text-align: center;font-size: 12px;color: #999;"
+              >暂无数据</p> -->
             </div>
           </div>
         </div>
@@ -43,7 +49,7 @@
           <img src="@/assets/images/close.png" alt />
         </div>
         <div class="popup-nav">
-          <mt-navbar v-model="selected" >
+          <mt-navbar v-model="selected">
             <mt-tab-item id="1">专业基地</mt-tab-item>
             <mt-tab-item id="2">选择科室</mt-tab-item>
           </mt-navbar>
@@ -59,32 +65,26 @@
                 :key="index"
                 @click="getValue(index,item.majorsubjectid,item.majorname)"
               >{{item.majorname}}</li>
-                <!-- :class="firstId == item.majorsubjectid ? 'popup-down-action':''" -->
+              <!-- :class="firstId == item.majorsubjectid ? 'popup-down-action':''" -->
 
-                <!-- @click="handleFirst(item.majorsubjectid,item.majorname,item.officelist)" -->
-
+              <!-- @click="handleFirst(item.majorsubjectid,item.majorname,item.officelist)" -->
             </ul>
           </mt-tab-container-item>
-          <mt-tab-container-item id="2"> 
+          <mt-tab-container-item id="2">
             <ul class="popup-down-items" v-if="kswar.length != 0">
-
               <li
-              :class="selectId == index ? 'popup-down-action':''"
+                :class="selectId == index ? 'popup-down-action':''"
                 v-for="(item, index) in kswar"
                 :key="index"
                 @click="handleSelectName(index,item.name,item)"
               >{{item.name}}</li>
-              
-
             </ul>
             <p v-else style="line-height: 1rem;text-align: center;font-size: 12px;color: #999;">暂无数据</p>
 
             <div class="save" @click="popupVisible = false">确定</div>
           </mt-tab-container-item>
-        
         </mt-tab-container>
       </div>
-      
     </mt-popup>
   </div>
 </template>
@@ -96,12 +96,12 @@ import {
   queryStudenttraindata,
   queryMajormanageoffice
 } from "../../../api/studentcomment";
-import { Indicator, Popup, Navbar, TabItem, Search,Header  } from "mint-ui";
+import { Indicator, Popup, Navbar, TabItem, Search, Header } from "mint-ui";
 import moment from "moment";
 export default {
   data() {
     return {
-      majorsubjectIndex:null,
+      majorsubjectIndex: null,
       showRotation: false,
       tabIndex: 2,
       selectId: null,
@@ -194,12 +194,12 @@ export default {
     };
   },
   methods: {
-    onNavBarChange(val){
-      console.log(val)
+    onNavBarChange(val) {
+      console.log(val);
     },
-    getValue(index, majorsubjectid,name) {
-      this.majorsubjectIndex = index
-      this.majorsubjectName = name
+    getValue(index, majorsubjectid, name) {
+      this.majorsubjectIndex = index;
+      this.majorsubjectName = name;
 
       // console.log(index, majorsubjectid);
       queryMajormanageoffice().then(res => {
@@ -210,17 +210,20 @@ export default {
             this.kswar = this.selectdata[t].officelist;
           }
         }
+        this.ksid = []
         for (var e = 0; e < this.kswar.length; e++) {
           if (this.kswar[e].officeid == null) {
             console.log("暂无数据");
           } else {
-            this.ksid = []
+            
             this.ksid.push(this.kswar[e].officeid);
           }
         }
 
+        // console.log(this.ksid);
         queryStudenttraindata(this.moment, this.ksid).then(res => {
           this.singledata = JSON.parse(res).officetrainsumlist;
+          console.log(  this.singledata)
           this.tabledata = [];
           // console.log(this.singledata);
           for (var k = 0; k < this.singledata.length; k++) {
@@ -230,7 +233,7 @@ export default {
             // console.log(this.singledata[k])
           }
           Indicator.close();
-          this.selected = '2'
+          this.selected = "2";
           // this.handleSelectName(0,this.kswar[0].name,this.kswar[0])
         });
       });
@@ -248,15 +251,16 @@ export default {
       Indicator.open("加载中...");
       this.selectId = index;
       this.selectName = name;
-      
+
       let add = [];
       // for (let i = 0; i < datas.length; i++) {
       //   add.push(datas[i].officeid);
       // }
       // console.log(datas.officeid)
-      queryStudenttraindata(this.moment,datas.officeid).then(res => {
+      queryStudenttraindata(this.moment, datas.officeid).then(res => {
         // console.log(JSON.parse(res));
         this.singledata = JSON.parse(res).studenttraindata;
+      
         // this.singledata = JSON.parse(res).officetrainsumlist;
         this.showtab = true;
         Indicator.close();
@@ -269,13 +273,13 @@ export default {
       // console.log(JSON.parse(res));
       this.selectdata = JSON.parse(res).majorlist;
       let ads = [];
-       this.kswar = this.selectdata[0].officelist;
-        
+      this.kswar = this.selectdata[0].officelist;
+
       queryStudenttraindata(this.moment).then(res => {
         this.singledata = JSON.parse(res).officetrainsumlist;
         // this.showtab = true
         this.tabledata.push(JSON.parse(res).officetrainsumlist[0]);
-          
+
         Indicator.close();
       });
     });
@@ -293,14 +297,14 @@ export default {
 
     this.years = moment().year();
   },
-  destroyed: function () {
-   console.log('12456')
-},
+  destroyed: function() {
+    console.log("12456");
+  },
   components: {
     "header-main": mainHeader,
     // piebar
     trainbar,
-    Header 
+    Header
   }
 };
 </script>
@@ -386,163 +390,160 @@ export default {
   background: rgba(255, 255, 255, 1);
   position: relative;
 }
-.screen-tap-box{
+.screen-tap-box {
   width: 3.3rem;
   margin: 0.1rem auto;
-  .screen-tap{
+  .screen-tap {
     display: inline-block;
     padding: 0.05rem 0.1rem;
-    background:rgba(255,255,255,1);
-    border-radius:0.03rem;
-    border:0.01rem solid rgba(0,150,193,1);
-  margin-right: 0.08rem;
-  font-size:0.13rem;
-  color:rgba(0,150,193,1);
-  line-height:0.18rem;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 0.03rem;
+    border: 0.01rem solid rgba(0, 150, 193, 1);
+    margin-right: 0.08rem;
+    font-size: 0.13rem;
+    color: rgba(0, 150, 193, 1);
+    line-height: 0.18rem;
   }
 }
-.main-content{
-  width:3.45rem;
+.main-content {
+  width: 3.45rem;
   margin: 0 auto;
   margin-top: 0.1rem;
   background: #fff;
-  .nav-bar{
-      height:0.64rem;
-      border-radius:0.06rem 0.06rem 0rem 0rem;
-      color: #0096C1;
-      padding-top: 1px;
-      border-bottom:2px solid #f0f0f7 ;
-      .main-title{
-        margin-top: 0.12rem;
-        margin-left: 0.24rem;
-        font-size:0.15rem;
-        font-weight:bold;
-        line-height:0.21rem;
-      }
-      .main-title-sub{
-        margin-top: 0.04rem;
-        margin-left: 0.24rem;
-        font-size:0.11rem;
-        font-weight:400;
-        color:#0096C1;
-        line-height:0.16rem;
-      }
-  }
-  .main-table{
-    border:3px solid #f0f0f7 ;
-  }
-   .main-table li{
-    width:1.1rem;
-    border-left:2px solid #f0f0f7 ;
-    line-height:0.44rem;
-    font-size:0.13rem;
-    text-align: center;
-    background:rgba(255,255,255,1);
-    display:inline-block;
-    vertical-align: middle;
-    
+  .nav-bar {
+    height: 0.64rem;
+    border-radius: 0.06rem 0.06rem 0rem 0rem;
+    color: #0096c1;
+    padding-top: 1px;
+    border-bottom: 2px solid #f0f0f7;
+    .main-title {
+      margin-top: 0.12rem;
+      margin-left: 0.24rem;
+      font-size: 0.15rem;
+      font-weight: bold;
+      line-height: 0.21rem;
     }
-  .main-table ul{
-    border-bottom:2px solid #f0f0f7 ;
+    .main-title-sub {
+      margin-top: 0.04rem;
+      margin-left: 0.24rem;
+      font-size: 0.11rem;
+      font-weight: 400;
+      color: #0096c1;
+      line-height: 0.16rem;
+    }
   }
-  .main-table li:first-child{
-    border-left:0px !important;
+  .main-table {
+    border: 3px solid #f0f0f7;
   }
-  .main-table ul:last-child{
-    border-bottom:0px !important;
+  .main-table li {
+    width: 1.1rem;
+    border-left: 2px solid #f0f0f7;
+    line-height: 0.44rem;
+    font-size: 0.13rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 1);
+    display: inline-block;
+    vertical-align: middle;
   }
-  .head-table li{
-    color: #0096C1;
+  .main-table ul {
+    border-bottom: 2px solid #f0f0f7;
   }
-    
+  .main-table li:first-child {
+    border-left: 0px !important;
+  }
+  .main-table ul:last-child {
+    border-bottom: 0px !important;
+  }
+  .head-table li {
+    color: #0096c1;
+  }
 }
-/deep/ .mint-cell-value.is-link{
+/deep/ .mint-cell-value.is-link {
   margin-right: 0.05rem;
   color: #000;
   font-weight: bold;
-  font-size:0.15rem;
+  font-size: 0.15rem;
 }
-/deep/ .mint-cell-wrapper{
+/deep/ .mint-cell-wrapper {
   padding: 0rem 0.3rem;
 }
-.mint-cell{
+.mint-cell {
   border-bottom: 1px solid #f2f2f3;
 }
-.info-content{
-  width:3.55rem;
-background:rgba(255,255,255,1);
-border-radius:0.03rem;
-margin: 0.1rem auto;
-padding-bottom: 0.1rem;
-
+.info-content {
+  width: 3.55rem;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 0.03rem;
+  margin: 0.1rem auto;
+  padding-bottom: 0.1rem;
 }
-.sumks-item{
+.sumks-item {
   position: relative;
 }
-.sum-right{
+.sum-right {
   position: absolute;
-    width: 0.8rem;
-    height: 0.8rem;
-    
-    display: inline-block;
-    right: 0.33rem;
-    top: 0.09rem;
+  width: 0.8rem;
+  height: 0.8rem;
+
+  display: inline-block;
+  right: 0.33rem;
+  top: 0.09rem;
 }
-.sum-left{
+.sum-left {
   width: 2.2rem;
   display: inline-block;
   margin-top: 0.2rem;
   margin-left: 0.2rem;
 
-  p{
-font-size:0.13rem;
-font-weight:400;
-color:rgba(89,89,89,1);
-line-height:0.18rem;
+  p {
+    font-size: 0.13rem;
+    font-weight: 400;
+    color: rgba(89, 89, 89, 1);
+    line-height: 0.18rem;
   }
 }
-.sum-item{
-font-size:0.13rem;
-font-weight:bold;
-color:rgba(0,0,0,1);
-line-height:0.18rem;
-border-left: 4px solid #0096C1;
-margin: 0.2rem 0rem 0 0.1rem;
-padding-left: 0.10rem;
+.sum-item {
+  font-size: 0.13rem;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 1);
+  line-height: 0.18rem;
+  border-left: 4px solid #0096c1;
+  margin: 0.2rem 0rem 0 0.1rem;
+  padding-left: 0.1rem;
 }
-.sum-content{
+.sum-content {
   padding-top: 1px;
-  width:3.55rem;
-  height:2.5rem;
-  background:rgba(255,255,255,1);
-  border-radius:0.03rem;
+  width: 3.55rem;
+  height: 2.5rem;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 0.03rem;
   margin: 0 auto;
   margin-top: 0.1rem;
 }
 
-.main-box{
+.main-box {
   margin-top: 0.54rem;
 }
-.tab-page-btn{
+.tab-page-btn {
   margin: 0 auto;
   line-height: 0.44rem;
   border-radius: 10px;
   width: 2.98rem;
-    font-size:0.15rem;
-    font-weight:bold;
-    color:rgba(0,150,193,1);
-  span{
+  font-size: 0.15rem;
+  font-weight: bold;
+  color: rgba(0, 150, 193, 1);
+  span {
     width: 1.46rem;
     display: inline-block;
     text-align: center;
     border-top: 2px solid #0096c1;
     border-bottom: 2px solid #0096c1;
-    background: #FFF;
+    background: #fff;
   }
 }
- .tab-action{
-  background: rgba(0,150,193,1) !important;
-  color: #FFF;
+.tab-action {
+  background: rgba(0, 150, 193, 1) !important;
+  color: #fff;
 }
 .mint-header {
   background-color: #fff;
@@ -555,13 +556,11 @@ padding-left: 0.10rem;
   font-size: 0.17rem;
   font-weight: bold;
 }
-.student_examine{
+.student_examine {
   background: rgba(242, 242, 243, 1);
   min-height: 100vh;
   padding-top: 1px;
 }
-
-
 
 // 列表开始
 .end {
@@ -707,7 +706,6 @@ padding-left: 0.10rem;
   }
 }
 .examine_middle {
-  
   top: 2.6rem;
   background: #ffffff;
   width: 100%;
@@ -978,7 +976,6 @@ padding-left: 0.10rem;
   /deep/ .pie_single {
     margin-left: 0.1rem;
     margin-right: 0.1rem;
-    
   }
   .student_train {
     width: 3.55rem;
@@ -1197,8 +1194,8 @@ padding-left: 0.10rem;
   color: rgba(255, 255, 255, 1);
   line-height: 0.21rem;
 }
-/deep/ .is-selected .mint-tab-item-label{
+/deep/ .is-selected .mint-tab-item-label {
   font-size: 0.13rem;
-    color: #0096c1;
+  color: #0096c1;
 }
 </style>
