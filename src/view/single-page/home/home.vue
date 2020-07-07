@@ -2,7 +2,7 @@
   <div>
     <div class="main_header"></div>
     <div class="main_top">
-      <img class="icon" src="../../../assets/images/logo.png" alt />
+      <!-- <img class="icon" src="../../../assets/images/logo.png" alt /> -->
       <p class="title">{{hospitalName}}</p>
       <img class="select" src="../../../assets/images/icon_down.png" alt @click="handleClickSelect" />
       <div v-show="userdels != 0" class="point">
@@ -125,7 +125,7 @@
                     <div style="margin-top:0.25rem">
                       <div class="teacherrs">
                         <p class="title">老师总数量（人）</p>
-                        <p class="number">{{ teacherDatalist[4].rs}}</p>
+                        <span class="number">{{ teacherDatalist[4].rs}}</span>
                       </div>
                       <div class="teacherlistplan">
                         <ul>
@@ -201,7 +201,7 @@
                       <p class="more">更多</p>
                       <img src="../../../assets/images/right_arrow.png" alt />
                     </div>
-                    <p class="descs">数据统计时间：：{{years}}年/{{moment}}月</p>
+
                     <div style="width: 3rem;display:none;">
                       <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
                     </div>
@@ -215,10 +215,10 @@
                         <p class="title">教学活动数量</p>
                         <p class="number">{{teacherWorkData.djhds}}</p>
                         <span class="bfb">教学活动好评度</span>
-                        <span class="bfbnum">
+                        <p class="bfbnum">
                           {{(teacherWorkData.djhdhpl2*100).toFixed(2)}}
                           <span>%</span>
-                        </span>
+                        </p>
                         <span class="cycy">
                           <cycle
                             :cycleValue="((teacherWorkData.djhdhpl2)*100).toFixed(2)"
@@ -238,6 +238,7 @@
                         </ul>
                       </div>
                     </div>
+                    <p class="descs">数据统计时间：：{{years}}年/{{moment}}月</p>
                   </div>
                 </swiper-slide>
                 <!-- 师资培训 -->
@@ -1602,7 +1603,6 @@ export default {
     letter-spacing: 0;
     text-align: center;
     // line-height: 0.22rem;
-    margin-left: 0.2rem;
   }
   .select {
     width: 0.28rem;
@@ -1713,7 +1713,7 @@ export default {
       // line-height: 0.3rem;
       .title {
         font-family: PingFangSC-Regular;
-        font-size: 0.13rem;
+        font-size: 0.15rem;
         color: #212121;
         font-weight: 600;
         letter-spacing: 0;
@@ -3456,6 +3456,7 @@ export default {
 }
 .teacherrs {
   height: 0.6rem;
+  background: rgba(247, 247, 247, 1);
   width: 2.38rem;
   border-radius: 0.1rem 0.1rem 0rem 0rem;
   padding-left: 0.22rem;
@@ -3467,12 +3468,16 @@ export default {
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: rgba(89, 89, 89, 1);
+    float: left;
   }
   .number {
+     padding-top: 0.1rem;
+     padding-right:0.1rem ;
     font-family: DINAlternate-Bold, DINAlternate;
     font-weight: bold;
     color: rgba(0, 150, 193, 1);
     font-size: 20px;
+    float: right;
   }
 }
 .teachernumjx {
@@ -3525,7 +3530,7 @@ export default {
     line-height: 0.16rem;
   }
   .bfbnum {
-    font-size: 0.15rem;
+    font-size: 0.18rem;
     font-family: DINAlternate-Bold, DINAlternate;
     font-weight: bold;
     color: rgba(0, 150, 193, 1);
@@ -3534,7 +3539,7 @@ export default {
 }
 .teacherlist ul li {
   width: 1.28rem;
-  height: 0.6rem;
+  height: 1rem;
   background: rgba(247, 247, 247, 1);
   display: inline-block;
   margin: 0.02rem;
@@ -3543,7 +3548,7 @@ export default {
     font-family: DINAlternate-Bold, DINAlternate;
     font-weight: bold;
     color: rgba(89, 89, 89, 1);
-    line-height: 0.24rem;
+    line-height: 0.6rem;
   }
   .title {
     font-size: 0.11rem;
@@ -3575,13 +3580,15 @@ export default {
   }
 }
 .descs {
-  text-align: left;
+  text-align: center;
   font-size: 0.11rem;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
-  color: rgba(140, 140, 140, 1);
+  color: #8c8c8c;
   line-height: 0.16rem;
-  margin-left: 0.2rem;
+  margin-left: 0.75rem;
+  position: absolute;
+  bottom: 5px;
 }
 
 .bannerbox2 {
