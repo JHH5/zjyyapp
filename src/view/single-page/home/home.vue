@@ -358,9 +358,9 @@
                       </div>
                       <div class="bannerright">
                         <ul>
-                          <li>
-                            接受培训总人数
-                            <span>{{studenttrain.trainrjcs.zrs}}</span>
+                          <li style="display: flex;align-items: center;line-height: 0.2rem;">
+                            <p>接受培训总人数</p>
+                            <span style="display: block; padding: 0 0.06rem;">{{studenttrain.trainrjcs.zrs}}</span>
                           </li>
                           <li>
                             一年级
@@ -3633,6 +3633,8 @@ export default {
       padding-left: 10px;
       line-height: 0.4rem;
       margin-top: 0.02rem;
+      display: flex;
+    align-items: center;
       span {
         font-size: 0.2rem;
         font-family: DINAlternate-Bold, DINAlternate;
