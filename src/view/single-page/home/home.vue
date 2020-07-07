@@ -3922,7 +3922,7 @@ export default {
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: rgba(89, 89, 89, 1);
-    line-height: 0.36rem;
+    line-height: 0.26rem;
   }
   .number {
     font-size: 0.2rem;
