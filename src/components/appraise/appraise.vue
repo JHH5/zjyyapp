@@ -2,15 +2,15 @@
   <div class="arrowimg">
     <div class="right_block">
       <div class="top">
-        <img
+        <!-- <img
           class="left_arrow"
           :style="this.open == 5?'height:3rem':'height:5rem'"
           src="../../assets/images/appraise/toparrow.png"
           alt
-        />
-        <div v-for="(item, index) in selectdata.slice(0,irs)" :key="index">
+        /> -->
+        <div v-for="(item, index) in selectdata" :key="index">
           <div class="right_block_top">
-            <p class="title">最佳评价项</p>
+            <!-- <p class="title">最佳评价项</p> -->
             <div class="descbox">
               <div class="desc">
                 评价得分率：
@@ -19,7 +19,7 @@
             </div>
           </div>
           <div
-            v-for="(itemtext,index) in item.itemlist.slice(0,irs)"
+            v-for="(itemtext,index) in item.itemlist"
             :key="index"
             class="single_block"
           >
@@ -37,13 +37,13 @@
         </div>
       </div>
       <div class="end">
-        <img
+        <!-- <img
           class="right_arrow"
           :style="this.open == 5?'height:3rem':'height:5rem'"
           src="../../assets/images/appraise/endarrow.png"
           alt
-        />
-        <div v-for="(item, index) in selectdata" :key="index">
+        /> -->
+        <!-- <div v-for="(item, index) in selectdata" :key="index">
           <div
             v-for="(itemtext,index) in item.itemlist.slice(ids,10)"
             :key="index"
@@ -58,9 +58,9 @@
                 <p>满分{{itemtext.itemff}}分，得分率{{((itemtext.pjdel)*100).toFixed(2)}}%，{{itemtext.zz}}</p>
               </div>
             </div>
-          </div>
-          <p class="end_title">最差评价项</p>
-        </div>
+          </div> -->
+          <!-- <p class="end_title">最差评价项</p> -->
+        <!-- </div>  -->
       </div>
     </div>
     <div v-show="showBar" class="line_bar">

@@ -122,13 +122,13 @@
                     <div class="montent">
                       <ul>
                         <li :class="{active:showa==1}">
-                          <p @click.stop="changeValue('月度',1)" @click="today_a">月度</p>
+                          <p @click.stop="changeValue('月度',1)" @click="today_a">上月度</p>
                         </li>
                         <li :class="{active:showa==2}">
-                          <p @click.stop="changeValue('季度',2)" @click="today_b">季度</p>
+                          <p @click.stop="changeValue('季度',2)" @click="today_b">上季度</p>
                         </li>
                         <li :class="{active:showa==3}">
-                          <p @click.stop="changeValue('年度',3)" @click="today_c">年度</p>
+                          <p @click.stop="changeValue('年度',3)" @click="today_c">上年度</p>
                         </li>
                       </ul>
                     </div>
@@ -610,7 +610,7 @@
                             </div>
                           </div>
                           <div class="lzbottom">
-                            <p class="title">上年度</p>
+                            <!-- <p class="title">上年度</p> -->
                             <div class="lzbox2">
                               <div class="lzleft">
                                 <p class="number">{{studentround.tprs}}</p>
