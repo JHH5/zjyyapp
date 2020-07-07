@@ -306,11 +306,12 @@ export default {
 }
 .toptitle {
   height: 0.16rem;
-  font-size: 0.11rem;
+  font-size: 0.1.6rem;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: rgba(89, 89, 89, 1);
   line-height: 0.16rem;
+  margin: 0.1rem 0px;
 }
 .end {
   background: #ffffff;

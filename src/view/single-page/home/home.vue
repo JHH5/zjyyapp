@@ -463,7 +463,7 @@
                         </div>
                       </div>
 
-                      <div id="myChart2" :style="{width: '3.2rem', height: '1.2rem',}"></div>
+                  
                       <div class="chartsbox">
                         <ul>
                           <li>
@@ -485,16 +485,13 @@
                             <!-- <p class="desc">{{item.slbl}}</p> -->
                           </li>
                         </ul>
+                            <div id="myChart2" :style="{width: '1.2rem', height: '1.2rem',display:'inline-block'}"></div>
                       </div>
                       <div class="pointchart">
                         <p class="title">招收人数统计图</p>
                         <div class="selfchart">
                           <p class="xray">人数</p>
-                          <p class="yray">
-                            <span>时</span>
-                            <br />
-                            <span>间</span>
-                          </p>
+                        
                           <div class="selfchart_main">
                             <div
                               v-for="(item, index) in studentsubject"
@@ -516,7 +513,7 @@
                           </div>
                         </div>
                         <div class="selfchart_end">
-                          <p style="margin-right:0.06rem">0</p>
+                          <!-- <p style="margin-right:0.06rem">0</p> -->
                           <p v-for="(item2, index2) in studentsubject" :key="index2">{{item2.nian}}</p>
                         </div>
 
@@ -3376,8 +3373,6 @@ export default {
 }
 
 .mint-navbar {
-  width: 2.25rem;
-  // margin: 0 auto;
   padding: 0px;
   background: #fff;
   border-top-left-radius: 0.05rem;
@@ -3915,13 +3910,15 @@ export default {
   position: absolute;
   top: 0;
 }
+.chartsbox ul{
+  display: inline-block;
+}
 .chartsbox ul li {
   width: 0.8rem;
   height: 0.6rem;
   background: rgba(247, 247, 247, 1);
   border-radius: 0.06rem;
-  display: inline-block;
-  margin: 0px 5px;
+  margin: 5px 0px;
   .title {
     height: 0.16rem;
     font-size: 0.11rem;
