@@ -283,23 +283,29 @@ export default {
     },
     handleSelectName(index, name, datas) {
       Indicator.open("加载中...");
-      console.log(this.slots);
-
       this.selectId = index;
       this.selectName = name.majorname;
       this.datas = name.majorsubjectid;
+      // console.log(this.selectId);
       let add = [];
       add.push(this.datas);
       this.officelist = name.officelist;
+      console.log(this.officelist);
       this.slots[0].values = [];
       for (var u = 0; u < this.officelist.length; u++) {
-        this.slots[0].values.push(this.officelist[u].name);
+
+        if (this.officelist[u] != null) {
+          this.slots[0].values.push(this.officelist[u].name);
+        }
+
       }
       getmajor(add, this.moment).then(res => {
         //基地
         this.swipeTopData = JSON.parse(res).majorlist;
+        // console.log(this.swipeTopData)
         Indicator.close();
       });
+
       queryMajorTeacherevaluatedata(this.datas, this.moment).then(
         //雷达图
         res => {
@@ -322,6 +328,15 @@ export default {
             });
           }
           this.winrainbardata = arrsd;
+          Indicator.close();
+        }
+      );
+      this.singledata = [];
+
+      queryTeachereValuationitem(this.officelist[0].officeid, this.moment).then(
+        res => {
+          this.singledata = JSON.parse(res).teacherevaluationitem;
+          this.showchildren = true;
           Indicator.close();
         }
       );

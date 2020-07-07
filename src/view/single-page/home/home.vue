@@ -591,7 +591,7 @@
                         <p class="title">当前轮转人员分布</p>
                         <div class="lzbanner">
                           <div class="lztop">
-                            <p class="title">上季度</p>
+                            <!-- <p class="title">上季度</p> -->
                             <div class="lzbox">
                               <div class="lzleft">
                                 <p class="number">{{studentround.dqlzrs}}</p>
