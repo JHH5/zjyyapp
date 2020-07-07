@@ -24,13 +24,14 @@
                 <p>发布次数</p>
                 <p>参与人数</p>
               </div>
-              <div class="endtable">
+              <div class="endtable" v-if="item.traintypesumlist && item.traintypesumlist.length != 0">
                 <div class="end_td" v-for="(student,index) in item.traintypesumlist" :key="index">
                   <p>{{student.traintypename}}</p>
                   <p>{{student. trainsum}}</p>
                   <p>{{student. studentsum}}</p>
                 </div>
               </div>
+              <p v-else style="line-height: 1rem;text-align: center;font-size: 12px;color: #999;">暂无数据</p>
             </div>
           </div>
         </div>
@@ -53,11 +54,10 @@
           <mt-tab-container-item id="1">
             <ul class="popup-down-items">
               <li
-              
                 :class="majorsubjectIndex == index ? 'popup-down-action':''"
                 v-for="(item, index) in selectdata"
                 :key="index"
-                @click="getValue(index,item.majorsubjectid)"
+                @click="getValue(index,item.majorsubjectid,item.majorname)"
               >{{item.majorname}}</li>
                 <!-- :class="firstId == item.majorsubjectid ? 'popup-down-action':''" -->
 
@@ -72,7 +72,7 @@
               :class="selectId == index ? 'popup-down-action':''"
                 v-for="(item, index) in kswar"
                 :key="index"
-                @click="handleSelectName(index,item.name,kswar)"
+                @click="handleSelectName(index,item.name,item)"
               >{{item.name}}</li>
               
 
@@ -101,10 +101,10 @@ import moment from "moment";
 export default {
   data() {
     return {
-      majorsubjectIndex:0,
+      majorsubjectIndex:null,
       showRotation: false,
       tabIndex: 2,
-      selectId: 0,
+      selectId: null,
       kswar: [],
       tabledata: [],
       selected: "1",
@@ -197,8 +197,10 @@ export default {
     onNavBarChange(val){
       console.log(val)
     },
-    getValue(index, majorsubjectid) {
+    getValue(index, majorsubjectid,name) {
       this.majorsubjectIndex = index
+      this.majorsubjectName = name
+
       // console.log(index, majorsubjectid);
       queryMajormanageoffice().then(res => {
         // console.log(JSON.parse(res));
@@ -212,6 +214,7 @@ export default {
           if (this.kswar[e].officeid == null) {
             console.log("暂无数据");
           } else {
+            this.ksid = []
             this.ksid.push(this.kswar[e].officeid);
           }
         }
@@ -228,7 +231,7 @@ export default {
           }
           Indicator.close();
           this.selected = '2'
-          this.selectId = 0
+          // this.handleSelectName(0,this.kswar[0].name,this.kswar[0])
         });
       });
     },
@@ -245,13 +248,16 @@ export default {
       Indicator.open("加载中...");
       this.selectId = index;
       this.selectName = name;
+      
       let add = [];
-      for (let i = 0; i < datas.length; i++) {
-        add.push(datas[i].officeid);
-      }
-      queryStudenttraindata(2, add, this.moment).then(res => {
+      // for (let i = 0; i < datas.length; i++) {
+      //   add.push(datas[i].officeid);
+      // }
+      // console.log(datas.officeid)
+      queryStudenttraindata(this.moment,datas.officeid).then(res => {
         // console.log(JSON.parse(res));
         this.singledata = JSON.parse(res).studenttraindata;
+        // this.singledata = JSON.parse(res).officetrainsumlist;
         this.showtab = true;
         Indicator.close();
       });
@@ -265,7 +271,7 @@ export default {
       let ads = [];
        this.kswar = this.selectdata[0].officelist;
         
-      queryStudenttraindata(2, "", this.moment).then(res => {
+      queryStudenttraindata(this.moment).then(res => {
         this.singledata = JSON.parse(res).officetrainsumlist;
         // this.showtab = true
         this.tabledata.push(JSON.parse(res).officetrainsumlist[0]);
@@ -287,6 +293,9 @@ export default {
 
     this.years = moment().year();
   },
+  destroyed: function () {
+   console.log('12456')
+},
   components: {
     "header-main": mainHeader,
     // piebar
