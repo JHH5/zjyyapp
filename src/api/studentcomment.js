@@ -56,18 +56,14 @@ export const queryMajorstudentrounddata = (val) => {
 
 
 export const queryStudenttraindata = (time,officeid) => {
-    let data = {
-        officeid: officeid ,
-        // studenttype: ids,
-        starttime: year + "-" + time + "-01 00:00:00",
-        endtime: year + "-" + time + "-" + moment(year + "-" + time, "YYYY-MM").daysInMonth() + " 23:59:59",
-    }
-    if(!officeid){
-        delete data.officeid
-    }
     return axios.request({
         url: '/doctor_train/rest/H5Management/querystudenttraindata.do',
-        data: data,
+        data: {
+            // officeid: 101,
+            // studenttype: ids,
+            starttime: year + "-" + time + "-01 00:00:00",
+            endtime: year + "-" + time + "-" + moment(year + "-" + time, "YYYY-MM").daysInMonth() + " 23:59:59",
+        },
         method: 'post'
     })
 }
