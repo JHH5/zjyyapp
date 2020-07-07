@@ -84,14 +84,10 @@
                 ref="mySwiper2"
                 style="width:3.5rem;height:10%;"
                 class="student_top_box swiper-no-swiping"
-                :options="swiperOption4"
+                :options="swiperOption1"
               >
                 <swiper-slide>
-                  <p>师资介绍</p>
-                  <div class="swiperborder"></div>
-                </swiper-slide>
-                <swiper-slide>
-                  <p>师资培训</p>
+                  <p>师资评价</p>
                   <div class="swiperborder"></div>
                 </swiper-slide>
                 <swiper-slide>
@@ -99,7 +95,11 @@
                   <div class="swiperborder"></div>
                 </swiper-slide>
                 <swiper-slide>
-                  <p>师资评价</p>
+                  <p>师资培训</p>
+                  <div class="swiperborder"></div>
+                </swiper-slide>
+                <swiper-slide>
+                  <p>师资介绍</p>
                   <div class="swiperborder"></div>
                 </swiper-slide>
               </swiper>
@@ -109,6 +109,39 @@
                 class="student_main_box"
                 :options="swiperOptionteacher"
               >
+                <!-- 师资介绍-->
+                <swiper-slide>
+                  <div @click="hadleTeacherIntroduce" class="student_exam boxshadow">
+                    <div class="student_train_top box2_top">
+                      <p style="margin-right:0.1rem" class="title">师资介绍</p>
+                      <p class="more">更多</p>
+                      <img src="../../../assets/images/right_arrow.png" alt />
+                    </div>
+                    <p class="descs">数据统计时间：：{{years}}年/06月</p>
+                    <div style="width: 3rem;display:none;">
+                      <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
+                    </div>
+                    <!-- 师资介绍内容 -->
+                    <div style="margin-top:0.25rem">
+                      <div class="teacherrs">
+                        <p class="title">老师总数量（人）</p>
+                        <p class="number">{{ teacherDatalist[4].rs}}</p>
+                      </div>
+                      <div class="teacherlistplan">
+                        <ul>
+                          <li
+                            v-for="(item,index) in teacherDatalist"
+                            :key="index"
+                            v-if="item.professionaltitle !='999'"
+                          >
+                            <p class="number">{{item.rs}}</p>
+                            <p class="title">{{item.professionaltitle}}</p>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </swiper-slide>
                 <!-- 师资评价-->
                 <swiper-slide>
                   <div class="boxshadow">
@@ -160,33 +193,47 @@
                     </div>
                   </div>
                 </swiper-slide>
-                <!-- 师资介绍-->
+                <!-- 师资绩效-->
                 <swiper-slide>
-                  <div @click="hadleTeacherIntroduce" class="student_exam boxshadow">
+                  <div @click="handleTeachingStudent()" class="student_exam boxshadow">
                     <div class="student_train_top box2_top">
-                      <p style="margin-right:0.1rem" class="title">师资介绍</p>
+                      <p style="margin-right:0.1rem" class="title">师资绩效</p>
                       <p class="more">更多</p>
                       <img src="../../../assets/images/right_arrow.png" alt />
                     </div>
-                    <p class="descs">数据统计时间：：{{years}}年/06月</p>
+                    <p class="descs">数据统计时间：：{{years}}年/{{moment}}月</p>
                     <div style="width: 3rem;display:none;">
                       <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
                     </div>
-                    <!-- 师资介绍内容 -->
+                    <!-- 师资绩效内容 -->
                     <div style="margin-top:0.25rem">
-                      <div class="teacherrs">
-                        <p class="title">老师总数量（人）</p>
-                        <p class="number">{{ teacherDatalist[4].rs}}</p>
+                      <div class="teachernumjx">
+                        <p class="title">本月入科数量</p>
+                        <p class="number">{{teacherWorkData.byrksl}}</p>
                       </div>
-                      <div class="teacherlistplan">
+                      <div class="teachernum2">
+                        <p class="title">教学活动数量</p>
+                        <p class="number">{{teacherWorkData.djhds}}</p>
+                        <span class="bfb">教学活动好评度</span>
+                        <span class="bfbnum">
+                          {{(teacherWorkData.djhdhpl2*100).toFixed(2)}}
+                          <span>%</span>
+                        </span>
+                        <span class="cycy">
+                          <cycle
+                            :cycleValue="((teacherWorkData.djhdhpl2)*100).toFixed(2)"
+                            :cyclewidth="cyclewidth"
+                            cycleColor="#0096C1"
+                            :borderWidth="8"
+                            :isShowBgBorder="true"
+                          ></cycle>
+                        </span>
+                      </div>
+                      <div class="teacherlist">
                         <ul>
-                          <li
-                            v-for="(item,index) in teacherDatalist"
-                            :key="index"
-                            v-if="item.professionaltitle !='999'"
-                          >
-                            <p class="number">{{item.rs}}</p>
-                            <p class="title">{{item.professionaltitle}}</p>
+                          <li v-for="(item,index) in teachertraintypeworkload" :key="index">
+                            <p class="number">{{item.typesum }}</p>
+                            <p class="title">{{item.traintypename }}</p>
                           </li>
                         </ul>
                       </div>
@@ -232,53 +279,6 @@
                           <li>
                             <p class="number" style="color:#0096C1">{{teacherStringData.sjpxrs}}</p>
                             <p class="title">目前培训人次</p>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </swiper-slide>
-                <!-- 师资绩效-->
-                <swiper-slide>
-                  <div @click="handleTeachingStudent()" class="student_exam boxshadow">
-                    <div class="student_train_top box2_top">
-                      <p style="margin-right:0.1rem" class="title">师资绩效</p>
-                      <p class="more">更多</p>
-                      <img src="../../../assets/images/right_arrow.png" alt />
-                    </div>
-                    <p class="descs">数据统计时间：：{{years}}年/{{moment}}月</p>
-                    <div style="width: 3rem;display:none;">
-                      <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
-                    </div>
-                    <!-- 师资绩效内容 -->
-                    <div style="margin-top:0.25rem">
-                      <div class="teachernumjx">
-                        <p class="title">本月入科数量</p>
-                        <p class="number">{{teacherWorkData.byrksl}}</p>
-                      </div>
-                      <div class="teachernum2">
-                        <p class="title">教学活动数量</p>
-                        <p class="number">{{teacherWorkData.djhds}}</p>
-                        <span class="bfb">教学活动好评度</span>
-                        <span class="bfbnum">
-                          {{(teacherWorkData.djhdhpl2*100).toFixed(2)}}
-                          <span>%</span>
-                        </span>
-                        <span class="cycy">
-                          <cycle
-                            :cycleValue="((teacherWorkData.djhdhpl2)*100).toFixed(2)"
-                            :cyclewidth="cyclewidth"
-                            cycleColor="#0096C1"
-                            :borderWidth="8"
-                            :isShowBgBorder="true"
-                          ></cycle>
-                        </span>
-                      </div>
-                      <div class="teacherlist">
-                        <ul>
-                          <li v-for="(item,index) in teachertraintypeworkload" :key="index">
-                            <p class="number">{{item.typesum }}</p>
-                            <p class="title">{{item.traintypename }}</p>
                           </li>
                         </ul>
                       </div>
@@ -360,7 +360,9 @@
                         <ul>
                           <li style="display: flex;align-items: center;line-height: 0.2rem;">
                             <p>接受培训总人数</p>
-                            <span style="display: block; padding: 0 0.06rem;">{{studenttrain.trainrjcs.zrs}}</span>
+                            <span
+                              style="display: block; padding: 0 0.06rem;"
+                            >{{studenttrain.trainrjcs.zrs}}</span>
                           </li>
                           <li>
                             一年级
@@ -588,7 +590,7 @@
                     </div>
                     <div v-if="showbar" class="student_rotation_main">
                       <div class="rotation_desc">
-                        <p class="title">当前轮转人员分布</p>
+                        <!-- <p class="title">当前轮转人员分布</p> -->
                         <div class="lzbanner">
                           <div class="lztop">
                             <!-- <p class="title">上季度</p> -->
@@ -850,6 +852,10 @@ export default {
         observeParents: true,
         speed: 500,
         longSwipes: false,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true
+        },
         on: {
           transitionStart: function(event) {
             self.$refs.mySwiper2.swiper.slideToLoop(
@@ -861,7 +867,6 @@ export default {
           transitionEnd: function(event) {},
           click: function() {
             const realIndex = this.realIndex;
-            // self.handleClickSlide(realIndex);
           }
         }
       },
@@ -874,7 +879,18 @@ export default {
         observer: true,
         observeParents: true,
         loopedSlides: 5,
+        slideToClickedSlide: true,
+        noSwiping: true,
+        speed: 300
+      },
+      swiperOption1: {
+        slidesPerView: 3,
+        spaceBetween: 5,
         centeredSlides: true,
+        loop: true,
+        observer: true,
+        observeParents: true,
+        loopedSlides: 3,
         slideToClickedSlide: true,
         noSwiping: true,
         speed: 300
@@ -1014,18 +1030,15 @@ export default {
       });
     },
     jumpStudent(ins) {
-      this.$refs.mySwiper.swiper.slideToLoop(ins - 4, 1000, false); //切换到第一个slide，速度为1秒
+      this.$refs.mySwiper.swiper.slideToLoop(ins, 1000, false); //切换到第一个slide，速度为1秒
       this.$forceUpdate();
     },
     jumpStudentTop(ins) {
-      console.log(ins);
       this.$refs.mySwiper4.swiper.slideToLoop(ins - 5, 1000, false); //切换到第一个slide，速度为1秒
       this.$forceUpdate();
     },
     jumpTeacherTop(ins) {
-      console.log(ins);
-
-      this.$refs.mySwiper2.swiper.slideToLoop(ins - 4, 1000, false); //切换到第一个slide，速度为1秒
+      this.$refs.mySwiper2.swiper.slideToLoop(ins - 3, 1000, false); //切换到第一个slide，速度为1秒
       this.$forceUpdate();
     },
     handLogout() {
@@ -1034,9 +1047,7 @@ export default {
       Cookies.remove("hos_name");
       this.$router.push("/login");
     },
-    changeTab() {
-      this.student = "8";
-    },
+
     changeValue(type, state) {
       Indicator.open("加载中...");
       this.selectcomp = false;
@@ -1722,136 +1733,127 @@ export default {
     }
   }
 }
-.teacher {
-  // /deep/ .mint-tab-item-label{
-  //   // font-family: PingFangSC-Medium;
-  //   font-size: 0.18rem;
-  //   color: #212121;
-  //   letter-spacing: 0;
-  //   // line-height: 18px;
-  // }
-  // height: 4.3rem;
-  margin-top: 1.779%;
-  background: #ffffff;
-  /deep/ .swiper-slide {
-    margin-left: 1px;
-  }
-  .teacher_header {
+
+.student {
+  height: 100%;
+  .student_header {
     display: flex;
     align-items: center;
-    // padding-top: 0.1rem;
-    // padding-bottom: 0.1rem;
     border-bottom: 1px solid #f0f0f7;
-    // background: #ffffff;
-    // background: url("../../../assets/images/maintial.png") no-repeat;
+    background: #ffffff;
     background-size: 1rem 0.3rem;
     margin-left: 0.15rem;
-    // padding-left: 0.15rem;
+    padding-left: 0.15rem;
     width: 1rem;
     height: 0.3rem;
-    position: absolute;
     p {
       font-family: PingFangSC-Medium;
       font-size: 0.18rem;
       color: #ffffff;
       letter-spacing: 0;
       text-align: center;
-      // line-height: 18px;
-      position: absolute;
-      // width: 1rem;
-      left: 0.15rem;
-    }
-    img {
-      width: 1rem;
     }
   }
-  .teacher_main_box {
-    // width: 3.55rem;
-    // height: 3.51rem;
-    // background: #ffffff;
-    // box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.08);
-    // border-radius: 5px;
-    // border-radius: 5px;
-    // margin: 0 auto;
-    margin-left: 0.1rem;
-    // margin-top: 0.05rem;
-    // margin-bottom: 0.1rem;
-    // /deep/ .swiper-slide{
-    //   width: auto !important;
-    // }
-    .box1_top {
+  .student_main {
+    height: 95%;
+    /deep/ .swiper-container {
+      width: 100%;
+      height: 100%;
+    }
+    /deep/ .swiper-slide {
+      text-align: center;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
       display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
       align-items: center;
-      padding-top: 0.1rem;
-      // margin-bottom: 0.2rem;
-      margin-right: 0.15rem;
-      .title {
-        border-left: 3px solid #277fff;
-        margin-left: 0.1rem;
-        display: flex;
-        align-items: center;
-        height: 0.18rem;
-        line-height: 0.18rem;
-        p {
-          font-family: PingFangSC-Medium;
-          font-size: 0.16rem;
-          color: #474c63;
-          margin-left: 0.1rem;
-          letter-spacing: 0;
-          // line-height: 18px;
-        }
-        a {
-          font-family: PingFangSC-Medium;
-          font-size: 0.16rem;
-          color: #474c63;
-          margin-left: 0.1rem;
-          letter-spacing: 0;
-        }
+      transition: 300ms;
+      transform: scale(0.75);
+      height: 100%;
+    }
+    /deep/ .swiper-slide-active,
+    .swiper-slide-duplicate-active {
+      transform: scale(1);
+    }
+    .swiper_box {
+      display: flex;
+      // align-items: center;
+      .box_left {
+        height: 3.76rem;
+        width: 0.23rem;
+        background: #ffffff;
+        box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.08);
+        border-radius: 5px;
+        border-radius: 5px;
+        margin-top: 0.22rem;
       }
-      p {
-        font-family: PingFangSC-Regular;
-        font-size: 0.15rem;
-        color: #474c63;
-        letter-spacing: 0;
-        text-align: right;
-        // line-height: 15px;
-        margin-left: auto;
-      }
-      a {
-        font-family: PingFangSC-Regular;
-        font-size: 0.15rem;
-        color: #474c63;
-        letter-spacing: 0;
-        text-align: right;
-        // line-height: 15px;
-        margin-left: auto;
-      }
-      img {
-        width: 0.15rem;
-        height: 0.15rem;
+      .box_right {
+        height: 3.76rem;
+        width: 0.23rem;
+        background: #ffffff;
+        box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.08);
+        border-radius: 5px;
+        border-radius: 5px;
+        margin-top: 0.22rem;
       }
     }
 
-    .box1_img {
-      width: 2.8rem;
-      display: block;
-      margin: 0 auto;
-      // padding-bottom: 0.2rem;
-      // height: 80%;
-    }
-    .boxshadow {
-      width: 3.3rem;
-      background: #ffffff;
-      box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.08);
+    .student_main_box {
+      width: 3.8rem;
       border-radius: 5px;
-      margin-bottom: 0.1rem;
+      margin: 0 auto;
+      overflow: hidden;
       margin-top: 0.1rem;
-      // overflow: hidden;
+      .box1_top {
+        display: flex;
+        align-items: center;
+        margin-top: 0.1rem;
+        margin-bottom: 0.1rem;
+        width: 3rem;
+        p {
+          font-family: PingFangSC-Regular;
+          font-size: 0.15rem;
+          color: #474c63;
+          letter-spacing: 0;
+          text-align: right;
+          // line-height: 15px;
+          margin-left: auto;
+        }
+        img {
+          width: 0.15rem;
+          height: 0.15rem;
+          margin-right: 0.15rem;
+        }
+      }
+      .box1_img {
+        width: 2.8rem;
+        height: 3.41rem;
+        display: block;
+        margin: 0 auto;
+        // padding-bottom: 0.2rem;
+        // height: 80%;
+      }
+      .boxshadow {
+        position: relative;
+        width: 3rem;
+        height: 100%;
+        background: #ffffff;
+        box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.08);
+        border-radius: 5px;
+        border-radius: 5px;
+        margin: 0 auto;
+      }
     }
   }
 }
-.student {
-  // padding-top: 0.1rem;
+.teacher {
   height: 100%;
   .student_header {
     display: flex;
@@ -1860,7 +1862,6 @@ export default {
     // padding-bottom: 0.1rem;
     border-bottom: 1px solid #f0f0f7;
     background: #ffffff;
-    background: url("../../../assets/images/maintial.png") no-repeat;
     background-size: 1rem 0.3rem;
     margin-left: 0.15rem;
     padding-left: 0.15rem;
@@ -1905,8 +1906,7 @@ export default {
       transform: scale(0.75);
       height: 100%;
     }
-    /deep/ .swiper-slide-active,
-    .swiper-slide-duplicate-active {
+    /deep/ .swiper-slide-active {
       transform: scale(1);
     }
     .swiper_box {
@@ -3457,7 +3457,6 @@ export default {
 .teacherrs {
   height: 0.6rem;
   width: 2.38rem;
-  background: rgba(247, 247, 247, 1);
   border-radius: 0.1rem 0.1rem 0rem 0rem;
   padding-left: 0.22rem;
   margin: 0 auto;
@@ -3634,7 +3633,7 @@ export default {
       line-height: 0.4rem;
       margin-top: 0.02rem;
       display: flex;
-    align-items: center;
+      align-items: center;
       span {
         font-size: 0.2rem;
         font-family: DINAlternate-Bold, DINAlternate;
