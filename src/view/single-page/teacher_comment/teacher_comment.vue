@@ -290,14 +290,12 @@ export default {
       let add = [];
       add.push(this.datas);
       this.officelist = name.officelist;
-      console.log(this.officelist);
+      // console.log(this.officelist);
       this.slots[0].values = [];
       for (var u = 0; u < this.officelist.length; u++) {
-
         if (this.officelist[u] != null) {
           this.slots[0].values.push(this.officelist[u].name);
         }
-
       }
       getmajor(add, this.moment).then(res => {
         //基地
