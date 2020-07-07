@@ -24,27 +24,20 @@
                 <p>发布次数</p>
                 <p>参与人数</p>
               </div>
-<<<<<<< HEAD
-              <div class="endtable">
-=======
               <div
                 class="endtable"
           
               >
->>>>>>> 0b063521dd23e0abd53622dd74f2074fb177b489
                 <div class="end_td" v-for="(student,index) in item.traintypesumlist" :key="index">
                   <p>{{student.traintypename}}</p>
                   <p>{{student. trainsum}}</p>
                   <p>{{student. studentsum}}</p>
                 </div>
               </div>
-<<<<<<< HEAD
-=======
               <!-- <p
                 v-else
                 style="line-height: 1rem;text-align: center;font-size: 12px;color: #999;"
               >暂无数据</p> -->
->>>>>>> 0b063521dd23e0abd53622dd74f2074fb177b489
             </div>
           </div>
         </div>
@@ -109,11 +102,7 @@ import moment from "moment";
 export default {
   data() {
     return {
-<<<<<<< HEAD
-      majorsubjectIndex:0,
-=======
       majorsubjectIndex: null,
->>>>>>> 0b063521dd23e0abd53622dd74f2074fb177b489
       showRotation: false,
       tabIndex: 2,
       selectId: 0,
@@ -209,15 +198,10 @@ export default {
     onNavBarChange(val) {
       console.log(val);
     },
-<<<<<<< HEAD
-    getValue(index, majorsubjectid) {
-      this.majorsubjectIndex = index
-=======
     getValue(index, majorsubjectid, name) {
       this.majorsubjectIndex = index;
       this.majorsubjectName = name;
 
->>>>>>> 0b063521dd23e0abd53622dd74f2074fb177b489
       // console.log(index, majorsubjectid);
       queryMajormanageoffice().then(res => {
         // console.log(JSON.parse(res));
@@ -232,10 +216,7 @@ export default {
           if (this.kswar[e].officeid == null) {
             console.log("暂无数据");
           } else {
-<<<<<<< HEAD
-=======
             
->>>>>>> 0b063521dd23e0abd53622dd74f2074fb177b489
             this.ksid.push(this.kswar[e].officeid);
           }
         }
@@ -253,13 +234,8 @@ export default {
             // console.log(this.singledata[k])
           }
           Indicator.close();
-<<<<<<< HEAD
-          this.selected = '2'
-          this.selectId = 0
-=======
           this.selected = "2";
           // this.handleSelectName(0,this.kswar[0].name,this.kswar[0])
->>>>>>> 0b063521dd23e0abd53622dd74f2074fb177b489
         });
       });
     },
@@ -276,15 +252,6 @@ export default {
       Indicator.open("加载中...");
       this.selectId = index;
       this.selectName = name;
-<<<<<<< HEAD
-      let add = [];
-      for (let i = 0; i < datas.length; i++) {
-        add.push(datas[i].officeid);
-      }
-      queryStudenttraindata(2, add, this.moment).then(res => {
-        // console.log(JSON.parse(res));
-        this.singledata = JSON.parse(res).studenttraindata;
-=======
 
       let add = [];
       // for (let i = 0; i < datas.length; i++) {
@@ -296,7 +263,6 @@ export default {
         this.singledata = JSON.parse(res).studenttraindata;
       
         // this.singledata = JSON.parse(res).officetrainsumlist;
->>>>>>> 0b063521dd23e0abd53622dd74f2074fb177b489
         this.showtab = true;
         Indicator.close();
       });
@@ -308,15 +274,9 @@ export default {
       // console.log(JSON.parse(res));
       this.selectdata = JSON.parse(res).majorlist;
       let ads = [];
-<<<<<<< HEAD
-       this.kswar = this.selectdata[0].officelist;
-        
-      queryStudenttraindata(2, "", this.moment).then(res => {
-=======
       this.kswar = this.selectdata[0].officelist;
 
       queryStudenttraindata(this.moment).then(res => {
->>>>>>> 0b063521dd23e0abd53622dd74f2074fb177b489
         this.singledata = JSON.parse(res).officetrainsumlist;
         // this.showtab = true
         this.tabledata.push(JSON.parse(res).officetrainsumlist[0]);
@@ -338,12 +298,9 @@ export default {
 
     this.years = moment().year();
   },
-<<<<<<< HEAD
-=======
   destroyed: function() {
     console.log("12456");
   },
->>>>>>> 0b063521dd23e0abd53622dd74f2074fb177b489
   components: {
     "header-main": mainHeader,
     // piebar
