@@ -103,104 +103,7 @@
         </mt-tab-container>
       </div>
     </mt-popup>
-    <!-- 老版本 -->
-    <!-- <header-main :message="'带教学员'"></header-main> -->
-    <!-- <div class="teaching_student">
-      <div style="background:#f0f0f7; text-align: center;border-radius: 5px 5px 0px 0px;">
-        <u>专业基地</u>
-      </div>
-      <div id="teachingtop" :style="!openList ?'height: 0.68rem':'height: auto'" class="top">
-        <p
-          @click="handleFirst(index,item.majorname,item.officelist[0].officeid,item.officelist[0].name)"
-          :style="firstId == index ? 'color: #277FFF;':'color: #212121;'"
-          v-for="(item, index) in alltype"
-          :key="index"
-        >{{item.majorname}}</p>
-        <div class="open">
-          <div class="flex" v-show="!openList" @click="handleOpenList(1)">
-            <p>展开</p>
-            <img src="../../../assets/images/downarrow.png" alt />
-          </div>
-          <div class="flex" @click="handleOpenList(2)" v-show="openList">
-            <p>收起</p>
-            <img src="../../../assets/images/uparrow.png" alt />
-          </div>
-        </div>
-      </div>
-      <div class="middle">
-        <div v-show="showSecond" class="single">
-          <p>{{secondName}}</p>
-          <img @click="closeSecond()" src="../../../assets/images/blueclose.png" alt />
-        </div>
-        <div v-show="showThird" class="single">
-          <p>{{thirdName}}</p>
-          <img @click="closeThird()" src="../../../assets/images/blueclose.png" alt />
-        </div>
-        <div class="right">
-          <p>筛选</p>
-          <img @click="selectWindow = true" src="../../../assets/images/todaywork/select.png" alt />
-        </div>
-      </div>
-      <div class="end">
-        <div class="end_top">
-          <p>
-            {{firstName}}
-            <span v-show="showSecond">-{{secondName}}</span>
-            <span v-show="showThird">-{{thirdName}}</span>
-          </p>
-        </div>
-        <div class="end_end">
-          <div class="end_th">
-            <p>带教老师</p>
-            <p>带教学员</p>
-          </div>
-          <div class="endtable">
-            <div v-for="(item, index) in tableData" :key="index" class="end_td">
-              <p>{{item.personname}} {{item.professionaltitle}}</p>
-              <p>
-                <span v-for="(student,index) in item.studentlist" :key="index">
-                  {{student.personname}}
-                  <br />
-                </span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-show="selectWindow" class="select_main">
-      <div @click="hideWindow()" style="height: 100%;width: 1.75rem;" class="select_window_black"></div>
-      <div class="select_window">
-        <div class="select_window_main">
-          <div class="select_window_first">
-            <p class="title">{{firstName}}科室：</p>
-            <div class="flex">
-              <p
-                @click="choice1(index,item2.officename,item2.officeid)"
-                :style="item2.officename.length>6?'line-height: 0.13rem;':''"
-                :class="choice1Id == index ? 'active':'less'"
-                v-for="(item2, index) in typeData"
-                :key="index"
-              >{{item2.officename}}</p>
-            </div>
-          </div>
-          <div class="select_window_third">
-            <p class="title">选择时间：</p>
-            <div class="flex2">
-              <p
-                @click="choice2(index,item3.number)"
-                :class="choice2Id == index ? 'active':'less'"
-                v-for="(item3, index) in typeDate3"
-                :key="index"
-              >20/{{item3.number}}</p>
-            </div>
-          </div>
-        </div>
-        <div @click="slectType()" class="select_window_btn">
-          <p>确定</p>
-        </div>
-      </div>
-    </div>-->
+
   </div>
 </template>
 
@@ -627,7 +530,7 @@ export default {
           text: '加载中...',
           spinnerType: 'fading-circle'
         });
-      // (this.firstName = name),
+      (this.firstName = name),
       (this.firstId = id),
         (this.secondName = secendname),
         (this.choice1Name = secendname),
