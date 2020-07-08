@@ -360,10 +360,8 @@
                       <div class="bannerright">
                         <ul>
                           <li style="display: flex;align-items: center;line-height: 0.2rem;">
-                            <p>接受培训总人数</p>
-                            <span
-                              style="display: block; padding: 0 0.06rem;"
-                            >{{studenttrain.trainrjcs.zrs}}</span>
+                            <p style="width:0.4rem">接受培训总数</p>
+                            <span>{{studenttrain.trainrjcs.zrs}}</span>
                           </li>
                           <li>
                             一年级
@@ -456,42 +454,49 @@
                       <p style="text-align: center; line-height: 4rem; color: #dddddd;">暂无数据</p>
                     </div>
                     <div class="charts">
-                      <div class="radechart" v-for="(item,index) in studenttype" :key="index">
+                      <div
+                        class="radechart"
+                        v-for="(item,index) in studenttype"
+                        :key="index"
+                        style=" position: absolute;right: 0.68rem;top: 1.3rem;"
+                      >
                         <div class="radechart_desc_top" v-if="item.typeid=='999'">
                           <p class="title">{{item.typename}}</p>
                           <p class="number">{{item.studentsum}}</p>
                         </div>
                       </div>
 
-                  
                       <div class="chartsbox">
                         <ul>
                           <li>
                             <div style="background:#53C8D1" class="block"></div>
                             <p class="title">{{studenttype[1].typename}}</p>
-                            <p class="number">{{studenttype[1].studentsum}}</p>
+                            <p class="number" style="color:#53C8D1">{{studenttype[1].studentsum}}</p>
                             <!-- <p class="desc">{{item.slbl}}</p> -->
                           </li>
                           <li>
                             <div style="background:#59CB74" class="block"></div>
                             <p class="title">{{studenttype[2].typename}}</p>
-                            <p class="number">{{studenttype[2].studentsum}}</p>
+                            <p class="number" style="color:#59CB74">{{studenttype[2].studentsum}}</p>
                             <!-- <p class="desc">{{item.slbl}}</p> -->
                           </li>
                           <li>
                             <div style="background:#FBD444" class="block"></div>
                             <p class="title">{{studenttype[3].typename}}</p>
-                            <p class="number">{{studenttype[3].studentsum}}</p>
+                            <p class="number" style="color:#FBD444">{{studenttype[3].studentsum}}</p>
                             <!-- <p class="desc">{{item.slbl}}</p> -->
                           </li>
                         </ul>
-                            <div id="myChart2" :style="{width: '1.2rem', height: '1.2rem',display:'inline-block'}"></div>
+                        <div
+                          id="myChart2"
+                          :style="{width: '1.8rem', height: '2.2rem',display:'inline-block'}"
+                        ></div>
                       </div>
                       <div class="pointchart">
                         <p class="title">招收人数统计图</p>
                         <div class="selfchart">
                           <p class="xray">人数</p>
-                        
+
                           <div class="selfchart_main">
                             <div
                               v-for="(item, index) in studentsubject"
@@ -500,12 +505,12 @@
                             >
                               <div class="left">
                                 <p style="color:#00C290">{{item.zszs}}</p>
-                                <div :style="{ 'height': item.zszs*0.0015 + 'rem' }" class="block"></div>
+                                <div :style="{ 'height': item.zszs*0.009 + 'rem' }" class="block"></div>
                               </div>
                               <div class="right">
                                 <p style="color:#FF9B00;">{{item.jqzyzss}}</p>
                                 <div
-                                  :style="{ 'height': item.jqzyzss*0.0015 + 'rem' }"
+                                  :style="{ 'height': item.jqzyzss*0.009 + 'rem' }"
                                   class="block"
                                 ></div>
                               </div>
@@ -590,22 +595,20 @@
                       <div class="rotation_desc">
                         <!-- <p class="title">当前轮转人员分布</p> -->
                         <div class="lzbanner">
+                          <div class="lzleft1">
+                            <p class="title">轮转人数</p>
+                            <p class="number">{{studentround.dqlzrs}}</p>
+                          </div>
                           <div class="lztop">
                             <!-- <p class="title">上季度</p> -->
                             <div class="lzbox">
                               <div class="lzleft">
-                                <p class="number">{{studentround.dqlzrs}}</p>
-                                <p class="title">轮转人数</p>
+                                <p class="number" style="color:#FF9B00">{{studentround.wajhlz}}</p>
+                                <p class="title">未按计划轮转</p>
                               </div>
                               <div class="lzright">
                                 <p class="number">{{studentround.waplzxys}}</p>
                                 <p class="title">未排轮转人数</p>
-                              </div>
-                            </div>
-                            <div class="lzbox">
-                              <div class="lzleft">
-                                <p class="number" style="color:#FF9B00">{{studentround.wajhlz}}</p>
-                                <p class="title">未按计划轮转</p>
                               </div>
                             </div>
                           </div>
@@ -1171,8 +1174,8 @@ export default {
             ],
             legendHoverLink: false,
             hoverAnimation: false,
-            radius: [40, 50],
-            center: ["50%", "50%"],
+            radius: [60, 70],
+            center: ["60%", "50%"],
             avoidLabelOverlap: false,
             label: {
               normal: {
@@ -1204,6 +1207,7 @@ export default {
     }
   },
   mounted() {
+    document.documentElement.scrol1Top = 380;
     if (moment().date() < 20) {
       if (moment().month() == 0) {
         this.moment = 12;
@@ -2789,7 +2793,6 @@ export default {
     margin-bottom: 0.3rem;
     margin-top: 0.18rem;
     .title {
-      font-size: 0.12rem;
       font-family: PingFangSC-Medium, PingFang SC;
       font-weight: 600;
       color: rgba(0, 0, 0, 1);
@@ -2841,7 +2844,6 @@ export default {
   margin-top: 0.1rem;
   .radechart {
     .radechart_desc_top {
-      display: flex;
       align-items: center;
       margin-bottom: 0.1rem;
       margin-left: 0.1rem;
@@ -3431,7 +3433,7 @@ export default {
   height: 0.4rem;
 }
 .teachernum {
-  height: 0.6rem;
+  height: 0.7rem;
   width: 2.38rem;
   background: rgba(247, 247, 247, 1);
   border-radius: 0.1rem 0.1rem 0rem 0rem;
@@ -3442,7 +3444,7 @@ export default {
     font-size: 0.15rem;
     line-height: 0.7rem;
     color: rgba(89, 89, 89, 1);
-    font-weight: 500;
+    font-weight: 600;
   }
   .number {
     color: #0096c1;
@@ -3450,24 +3452,25 @@ export default {
   }
 }
 .teacherrs {
-  height: 0.6rem;
-  background: rgba(247, 247, 247, 1);
+  height: 1rem;
+  background: #f7f7f7;
   width: 2.38rem;
   border-radius: 0.1rem 0.1rem 0rem 0rem;
   padding-left: 0.22rem;
-  margin: 0 auto;
+  margin: 0.01rem auto;
   text-align: left;
+  line-height: 0.8rem;
   .title {
     padding-top: 0.1rem;
-    font-size: 11px;
+    font-size: 16px;
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
-    color: rgba(89, 89, 89, 1);
+    color: #595959;
     float: left;
   }
   .number {
-     padding-top: 0.1rem;
-     padding-right:0.1rem ;
+    padding-top: 0.1rem;
+    padding-right: 0.1rem;
     font-family: DINAlternate-Bold, DINAlternate;
     font-weight: bold;
     color: rgba(0, 150, 193, 1);
@@ -3475,13 +3478,16 @@ export default {
     float: right;
   }
 }
+.teacherlistplan {
+  margin: 0.01rem 0px;
+}
 .teachernumjx {
   height: 0.6rem;
   width: 2.38rem;
   background: rgba(247, 247, 247, 1);
   border-radius: 0.1rem 0.1rem 0rem 0rem;
   padding-left: 0.22rem;
-  margin: 0 auto;
+  margin: 0.01rem auto;
   text-align: left;
   .title {
     line-height: 0.3rem;
@@ -3499,11 +3505,11 @@ export default {
 }
 .teachernum2 {
   position: relative;
-  height: 1rem;
+  height: 1.2rem;
   width: 2.38rem;
   background: rgba(247, 247, 247, 1);
   padding-left: 0.22rem;
-  margin: 0 auto;
+  margin: 0.01rem auto;
   text-align: left;
   .title {
     font-size: 0.11rem;
@@ -3522,14 +3528,13 @@ export default {
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: rgba(89, 89, 89, 1);
-    line-height: 0.16rem;
+    line-height: 0.3rem;
   }
   .bfbnum {
     font-size: 0.18rem;
     font-family: DINAlternate-Bold, DINAlternate;
     font-weight: bold;
     color: rgba(0, 150, 193, 1);
-    line-height: 0.17rem;
   }
 }
 .teacherlist ul li {
@@ -3537,7 +3542,7 @@ export default {
   height: 1rem;
   background: rgba(247, 247, 247, 1);
   display: inline-block;
-  margin: 0.02rem;
+  margin: 0.01rem;
   .number {
     font-size: 0.2rem;
     font-family: DINAlternate-Bold, DINAlternate;
@@ -3558,7 +3563,7 @@ export default {
   height: 1.2rem;
   background: rgba(247, 247, 247, 1);
   display: inline-block;
-  margin: 0.02rem;
+  margin: 0.01rem;
   .number {
     font-size: 0.2rem;
     font-family: DINAlternate-Bold, DINAlternate;
@@ -3623,7 +3628,7 @@ export default {
     width: 50%;
     text-align: left;
     ul li {
-      height: 0.3rem;
+      height: 0.36rem;
       margin-left: 10px;
       background: rgba(247, 247, 247, 1);
       border-radius: 0.06rem;
@@ -3640,11 +3645,12 @@ export default {
         font-size: 0.2rem;
         font-family: DINAlternate-Bold, DINAlternate;
         font-weight: bold;
+        padding-left: 20px;
         color: rgba(89, 89, 89, 1);
       }
     }
     ul li:nth-child(1) {
-      height: 0.8rem;
+      height: 0.6rem;
       font-size: 0.12rem;
       font-family: PingFangSC-Medium, PingFang SC;
       font-weight: 600;
@@ -3653,6 +3659,7 @@ export default {
         font-size: 0.2rem;
         font-family: DINAlternate-Bold, DINAlternate;
         font-weight: bold;
+        padding-left: 20px;
         color: rgba(0, 150, 193, 1);
       }
     }
@@ -3673,10 +3680,12 @@ export default {
     color: rgba(89, 89, 89, 1);
     padding-left: 10px;
     margin-top: 0.02rem;
+
     span {
       font-size: 0.2rem;
       font-family: DINAlternate-Bold, DINAlternate;
       font-weight: bold;
+      padding-left: 15px;
       color: rgba(89, 89, 89, 1);
     }
   }
@@ -3685,8 +3694,9 @@ export default {
   text-align: left;
   width: 80%;
   margin: auto;
-  margin-top: 0.37rem;
+  margin-top: 0.57rem;
 }
+
 .listtype {
   font-size: 0.12rem;
   font-family: PingFangSC-Medium, PingFang SC;
@@ -3711,10 +3721,11 @@ export default {
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: rgba(89, 89, 89, 1);
+    line-height: 0.25rem;
   }
 
   .number {
-    font-size: 0.2rem;
+    font-size: 0.18rem;
     font-family: DINAlternate-Bold, DINAlternate;
     font-weight: bold;
     color: rgba(0, 150, 193, 1);
@@ -3730,12 +3741,33 @@ export default {
   margin: auto;
 }
 .lztop {
-  height: 1.8rem;
+  height: 1.2rem;
   background: rgba(247, 247, 247, 1);
   border-radius: 0.06rem;
   padding: 10px;
+  margin-top: 0.15rem;
   .title {
     text-align: left;
+  }
+}
+.lzleft1 {
+  text-align: left;
+  background: #f7f7f7;
+  border-radius: 0.06rem;
+  padding: 10px;
+  line-height: 0.5rem;
+  height: 0.5rem;
+  .title {
+    font-size: 0.14rem;
+    display: inline-block;
+  }
+  .number {
+    float: right;
+    font-size: 0.2rem;
+    font-family: DINAlternate-Bold, DINAlternate;
+    font-weight: bold;
+    color: rgba(0, 150, 193, 1);
+    display: inline-block;
   }
 }
 .lzbox {
@@ -3896,7 +3928,7 @@ export default {
 }
 .cycy {
   position: absolute;
-  top: -20px;
+  top: 20px;
   right: 10px;
   border-radius: 50%;
   overflow: hidden;
@@ -3910,7 +3942,7 @@ export default {
   position: absolute;
   top: 0;
 }
-.chartsbox ul{
+.chartsbox ul {
   display: inline-block;
 }
 .chartsbox ul li {
@@ -3919,6 +3951,7 @@ export default {
   background: rgba(247, 247, 247, 1);
   border-radius: 0.06rem;
   margin: 5px 0px;
+  border-radius: 10px;
   .title {
     height: 0.16rem;
     font-size: 0.11rem;
