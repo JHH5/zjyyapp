@@ -12,11 +12,11 @@
     <div class="studenttrain">
       <div class="student_train">
         <div class="student_train_top">
+            <p class="descs">数据截止时间：{{years}}年{{moment}}月</p>
           <!-- <mt-search v-model="value"></mt-search> -->
           <div class="end" v-for="(item, index) in tabledata" :key="index">
             <div class="pxtop">
               <p class="pxtitle">{{item.name}}——培训数据</p>
-              <p class="descs">数据截止时间：{{years}}年{{moment}}月</p>
             </div>
             <div class="end_end">
               <div class="end_th">
@@ -1168,10 +1168,10 @@ export default {
 }
 .descs {
   height: 0.16rem;
-  font-size: 0.11rem;
+  font-size: 0.15rem;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
-  color: rgba(255, 255, 255, 1);
+  color: #212121;
   line-height: 0.16rem;
 }
 .select {
@@ -1192,7 +1192,7 @@ export default {
   font-family: PingFangSC-Medium, PingFang SC;
   font-weight: 500;
   color: rgba(255, 255, 255, 1);
-  line-height: 0.21rem;
+  line-height: 0.45rem;
 }
 /deep/ .is-selected .mint-tab-item-label {
   font-size: 0.13rem;

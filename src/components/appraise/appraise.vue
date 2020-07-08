@@ -26,8 +26,8 @@
             <div class="block"></div>
             <div style="border-right:0.1rem solid rgb(0 150 193 / 20%);" class="square"></div>
             <div style="background:rgb(0 150 193 / 20%);" class="single_block_right">
-              <p class="single_title">{{index + 1}}. {{itemtext.typename}}</p>
-              <p class="titletxt">{{itemtext.itemtitle}}</p>
+              <p class="single_title">{{index + 1}}. {{itemtext.itemtitle}}</p>
+              <!-- <p class="titletxt">{{itemtext.itemtitle}}</p> -->
               <hr />
               <div class="end_desc">
                 <p>满分{{itemtext.itemff}}分，得分率{{((itemtext.pjdel)*100).toFixed(2)}}%，{{itemtext.zz}}</p>

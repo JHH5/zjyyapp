@@ -458,7 +458,7 @@
                         class="radechart"
                         v-for="(item,index) in studenttype"
                         :key="index"
-                        style=" position: absolute;right: 0.68rem;top: 1.3rem;"
+                        style=" position: absolute;right: 0.5rem;top: 1.45rem;"
                       >
                         <div class="radechart_desc_top" v-if="item.typeid=='999'">
                           <p class="title">{{item.typename}}</p>
@@ -470,26 +470,29 @@
                         <ul>
                           <li>
                             <div style="background:#53C8D1" class="block"></div>
-                            <p class="title">{{studenttype[1].typename}}</p>
-                            <p class="number" style="color:#53C8D1">{{studenttype[1].studentsum}}</p>
-                            <!-- <p class="desc">{{item.slbl}}</p> -->
+                            <div class="chartsbox2">
+                              <p class="title">{{studenttype[1].typename}}</p>
+                              <p class="number" style="color:#53C8D1">{{studenttype[1].studentsum}}</p>
+                            </div>
                           </li>
                           <li>
                             <div style="background:#59CB74" class="block"></div>
-                            <p class="title">{{studenttype[2].typename}}</p>
-                            <p class="number" style="color:#59CB74">{{studenttype[2].studentsum}}</p>
-                            <!-- <p class="desc">{{item.slbl}}</p> -->
+                            <div class="chartsbox2">
+                              <p class="title">{{studenttype[2].typename}}</p>
+                              <p class="number" style="color:#59CB74">{{studenttype[2].studentsum}}</p>
+                            </div>
                           </li>
                           <li>
                             <div style="background:#FBD444" class="block"></div>
-                            <p class="title">{{studenttype[3].typename}}</p>
-                            <p class="number" style="color:#FBD444">{{studenttype[3].studentsum}}</p>
-                            <!-- <p class="desc">{{item.slbl}}</p> -->
+                            <div class="chartsbox2">
+                              <p class="title">{{studenttype[3].typename}}</p>
+                              <p class="number" style="color:#FBD444">{{studenttype[3].studentsum}}</p>
+                            </div>
                           </li>
                         </ul>
                         <div
                           id="myChart2"
-                          :style="{width: '1.8rem', height: '2.2rem',display:'inline-block'}"
+                          :style="{width: '1.6rem', height: '2rem',display:'inline-block'}"
                         ></div>
                       </div>
                       <div class="pointchart">
@@ -612,15 +615,21 @@
                               </div>
                             </div>
                           </div>
-                          <div class="lzbottom">
-                            <!-- <p class="title">上年度</p> -->
+                          <div class="lzleft1" style="margin-top:0.15rem">
+                            <p class="title">历史退培人数</p>
+                            <p
+                              class="number"
+                              style="color:rgba(255, 74, 74, 1);"
+                            >{{studentround.tprs}}</p>
+                          </div>
+                          <!-- <div class="lzbottom">
                             <div class="lzbox2">
                               <div class="lzleft">
                                 <p class="number">{{studentround.tprs}}</p>
-                                <p class="title">退培人数</p>
+                                <p class="title">历史退培人数</p>
                               </div>
                             </div>
-                          </div>
+                          </div>-->
                         </div>
                       </div>
                     </div>
@@ -1174,8 +1183,8 @@ export default {
             ],
             legendHoverLink: false,
             hoverAnimation: false,
-            radius: [60, 70],
-            center: ["60%", "50%"],
+            radius: [50, 60],
+            center: ["60%", "60%"],
             avoidLabelOverlap: false,
             label: {
               normal: {
@@ -3743,9 +3752,8 @@ export default {
 .lztop {
   height: 1.2rem;
   background: rgba(247, 247, 247, 1);
-  border-radius: 0.06rem;
   padding: 10px;
-  margin-top: 0.15rem;
+  border-top: 1px solid #f1f1f1;
   .title {
     text-align: left;
   }
@@ -3754,7 +3762,7 @@ export default {
   text-align: left;
   background: #f7f7f7;
   border-radius: 0.06rem;
-  padding: 10px;
+  padding: 10px 40px;
   line-height: 0.5rem;
   height: 0.5rem;
   .title {
@@ -3808,7 +3816,6 @@ export default {
 }
 .lzbottom {
   margin-top: 0.15rem;
-  width: 1.09rem;
   height: 1.2rem;
   padding: 10px;
   background: rgba(247, 247, 247, 1);
@@ -3942,30 +3949,37 @@ export default {
   position: absolute;
   top: 0;
 }
+
 .chartsbox ul {
   display: inline-block;
+  // padding-left: 0.2rem;
 }
 .chartsbox ul li {
-  width: 0.8rem;
+  width: 1.2rem;
   height: 0.6rem;
   background: rgba(247, 247, 247, 1);
   border-radius: 0.06rem;
   margin: 5px 0px;
   border-radius: 10px;
+  .chartsbox2 {
+    padding: 10px;
+    line-height: 0.5rem;
+  }
   .title {
-    height: 0.16rem;
     font-size: 0.11rem;
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: rgba(89, 89, 89, 1);
-    line-height: 0.26rem;
+    display: inline-block;
+    float: left;
   }
   .number {
     font-size: 0.2rem;
     font-family: DINAlternate-Bold, DINAlternate;
     font-weight: bold;
     color: rgba(89, 89, 89, 1);
-    line-height: 0.54rem;
+    display: inline-block;
+    float: right;
   }
   .block {
     width: 10px;
