@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="header">
-      <img class="backicon" @click="goback" src="../assets/images/header/backup.png" alt />
+    <div class="header" @click="goback" >
+      <img class="backicon" src="../assets/images/header/backup.png" alt />
       <p>{{message}}</p>
     </div>
     <div class="block"></div>

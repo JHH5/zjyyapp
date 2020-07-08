@@ -3579,6 +3579,7 @@ export default {
     font-weight: bold;
     color: rgba(89, 89, 89, 1);
     line-height: 0.6rem;
+    padding-top: 20px;
   }
   .title {
     font-size: 0.11rem;
