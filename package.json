@@ -12,7 +12,7 @@
     "start": "cd public && pm2 start --name=zj2y_app_test test.js"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel": "^6.23.0",
     "echarts": "^4.3.0",
     "element-ui": "^2.13.2",
